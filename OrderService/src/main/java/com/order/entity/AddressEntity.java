@@ -1,18 +1,37 @@
 package com.order.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="address")
 public class AddressEntity {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="address_id")
 	private int addressId;
+	
+	@Column(name="street_name")
 	private String streetName;
+	
+	@Column(name="city")
 	private String city;
+	
+	@Column(name="state")
 	private String state;
+	
+	@Column(name="pinCode")
 	private long pinCode;
+	
+	@Column(name="user_id")
 	private int userId;
+	
+	@Column(name="status")
 	private String status;
 
 	public AddressEntity() {

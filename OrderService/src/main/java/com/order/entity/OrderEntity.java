@@ -2,12 +2,32 @@ package com.order.entity;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="orders")
 public class OrderEntity {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="order_id")
 	private int orderId;
+	
+	@Column(name="ordered_date")
 	private Date orderedDate;
+	
+	@Column(name="status")
 	private String status;
+	
+	@Column(name="address_id")
 	private int addressId;
+	
+	@Column(name="cart_id")
 	private int cartId;
 
 	public OrderEntity() {
