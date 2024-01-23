@@ -9,11 +9,13 @@ public interface AddressService {
 	
 	void save(Address address);
 
-	Address findById(int id);
+	Address findById(int id) throws AddressNotFoundException;
 
 	List<Address> findAll();
 
-	void delete(int id) throws AddressNotFoundException;
+	void deactivateAddress(int id) throws AddressNotFoundException;
+
+	void update(int id, Address updatedAddress) throws AddressNotFoundException;
 
 
 }

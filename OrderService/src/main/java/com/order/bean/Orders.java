@@ -2,7 +2,7 @@ package com.order.bean;
 
 import java.util.Date;
 
-public class Order {
+public class Orders {
 
 	private int orderId;
 	private Date orderedDate;
@@ -10,11 +10,11 @@ public class Order {
 	private int addressId;
 	private int cartId;
 
-	public Order() {
+	public Orders() {
 		super();
 	}
 
-	public Order(int orderId, Date orderedDate, String status, int addressId, int cartId) {
+	public Orders(int orderId, Date orderedDate, String status, int addressId, int cartId) {
 		super();
 		this.orderId = orderId;
 		this.orderedDate = orderedDate;
