@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.ooms.entity.bean.Cart;
+import com.ooms.entity.bean.CartBean;
 import com.ooms.entity.bean.UserBean;
 import com.ooms.util.ResponseStructure;
 
@@ -16,14 +16,16 @@ public interface UserService {
 	public ResponseEntity<ResponseStructure<UserBean>> delete(int userId);
 	public ResponseEntity<ResponseStructure<UserBean>> getById(int userId);
 	public ResponseEntity<ResponseStructure<List<UserBean>>> getAll();
+	public ResponseEntity<ResponseStructure<String>> userLogin(UserBean user);
 	
 	
-	public ResponseEntity<ResponseStructure<Cart>> save(Cart cart);
-	public ResponseEntity<ResponseStructure<Cart>> update(Cart cart);
-	public ResponseEntity<ResponseStructure<Cart>> deleteCart(int cartId);
-	public ResponseEntity<ResponseStructure<Cart>> getCartById(int cartId);
-	public ResponseEntity<ResponseStructure<List<Cart>>> getAllCarts();
 	
+//	public ResponseEntity<ResponseStructure<CartBean>> save(CartBean cart);
+//	public ResponseEntity<ResponseStructure<CartBean>> update(CartBean cart);
+//	public ResponseEntity<ResponseStructure<CartBean>> deleteCart(int cartId);
+//	public ResponseEntity<ResponseStructure<CartBean>> getCartById(int cartId);
+//	public ResponseEntity<ResponseStructure<List<CartBean>>> getAllProcuctsFromCartId(int cartId);
+//	
 	
 
 }

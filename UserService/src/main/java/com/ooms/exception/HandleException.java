@@ -22,5 +22,27 @@ public class HandleException extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<ErrorStructure>(structure,HttpStatus.NOT_FOUND);
 		
 	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure> emailIdNotFoundException(EmailIdNotFoundException exception){
+		
+		ErrorStructure structure = new ErrorStructure();
+		structure.setMessage("Email Not Found");
+		structure.setRootCause(exception.getMessage());
+		structure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<ErrorStructure>(structure,HttpStatus.NOT_FOUND);
+		
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure> invalidPasswordExceptio(InvalidPasswordException exception){
+		
+		ErrorStructure structure = new ErrorStructure();
+		structure.setMessage("Password Mismatch");
+		structure.setRootCause(exception.getMessage());
+		structure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<ErrorStructure>(structure,HttpStatus.NOT_FOUND);
+		
+	}
 
 }

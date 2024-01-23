@@ -17,9 +17,15 @@ public class Cart {
 	private int quantity;
 	@NotNull
 	private double amount;
+	
 	@NotNull
 	@OneToOne
 	private User user;
+	
+//	private 
+	
+	private String status;
+	
 	public int getCart_id() {
 		return cart_id;
 	}
@@ -38,6 +44,14 @@ public class Cart {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
+	
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public User getUser() {
 		return user;
 	}
@@ -46,9 +60,9 @@ public class Cart {
 	}
 	@Override
 	public String toString() {
-		return "Cart [cart_id=" + cart_id + ", quantity=" + quantity + ", amount=" + amount + ", user=" + user + "]";
+		return "Cart [cart_id=" + cart_id + ", quantity=" + quantity + ", amount=" + amount + ", user=" + user
+				+ ", status=" + status + "]";
 	}
-	
 	
 
 }

@@ -49,4 +49,8 @@ public class UserController {
 		return service.getAll();
 	}
 	
+	@PostMapping("/users/login")
+	public ResponseEntity<ResponseStructure<String>> userLogin(@RequestBody UserBean user) {
+		return service.userLogin(user);		
+	}
 }

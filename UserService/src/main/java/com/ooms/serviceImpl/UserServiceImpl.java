@@ -12,10 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import com.ooms.entity.Cart;
 import com.ooms.entity.User;
-import com.ooms.entity.bean.Cart;
+import com.ooms.entity.bean.CartBean;
 import com.ooms.entity.bean.UserBean;
+import com.ooms.exception.EmailIdNotFoundException;
+import com.ooms.exception.InvalidPasswordException;
 import com.ooms.exception.UserNotFoundByIdException;
+import com.ooms.repository.CartRepo;
 import com.ooms.repository.UserRepo;
 import com.ooms.service.UserService;
 import com.ooms.util.ResponseStructure;
@@ -25,8 +29,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepo userRepo;
-	
-	
+		
+	@Autowired
+	private CartRepo cartRepo;
+		
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
@@ -43,6 +49,13 @@ public class UserServiceImpl implements UserService {
 		userEntity.setStatus(user.getUserStatus());
 	
 		userRepo.save(userEntity);
+		
+		Cart cart = new Cart();
+		cart.setAmount(0);
+		
+		cart.setQuantity(0);
+		cart.setUser(userEntity);
+		cartRepo.save(cart);
 		sendMail(user);
 		
 		ResponseStructure<UserBean> structure = new ResponseStructure<>();
@@ -70,8 +83,10 @@ public class UserServiceImpl implements UserService {
 		
 		
 		Optional<User> optional = userRepo.findById(user.getUserId());
-		User userEntity = optional.get();
-		if(optional.get()!=null) {	
+		
+		if(optional.isPresent()) {	
+			
+			User userEntity = optional.get();
 			
 			userEntity.setName(user.getUserName());
 			userEntity.setEmail(user.getUserEmail());
@@ -106,8 +121,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<UserBean>> getById(int userId) {
-		User user = userRepo.findById(userId).get();
-		if(user!=null){		
+		 Optional<User> optional = userRepo.findById(userId);
+		if(optional.isPresent()){
+			
+			User user = optional.get();
 			UserBean bean = new UserBean();
 			
 		    bean.setUserName(user.getName()); 
@@ -131,13 +148,13 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public ResponseEntity<ResponseStructure<UserBean>> delete(int userId) {
-		User user = userRepo.findById(userId).get();
-		
-		
-		if(user!=null){	
-			userRepo.deleteById(userId);
-			
+		 Optional<User> optional = userRepo.findById(userId);
+		 
+		if(optional.isPresent()){
+				
+			User user = optional.get();				
 			UserBean bean = new UserBean();
+			userRepo.deleteById(userId);
 			
 		    bean.setUserName(user.getName()); 
 		    bean.setUserEmail(user.getEmail());
@@ -184,30 +201,31 @@ public class UserServiceImpl implements UserService {
 		return new ResponseEntity<ResponseStructure<List<UserBean>>>(structure, HttpStatus.FOUND);
 	}
 
-	@Override
-	public ResponseEntity<ResponseStructure<Cart>> save(Cart cart) {
-		return null;
-	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<Cart>> update(Cart cart) {
-		return null;
+	public ResponseEntity<ResponseStructure<String>> userLogin(UserBean user) {
+				
+		String email = user.getUserEmail();
+		
+		User user2 = userRepo.getUserByEmail(email);
+		ResponseStructure<String> structure;
+		if(user2!=null) {
+			System.out.println("User email exist");
+			if(user2.getPassword().equals(user.getUserPassword())) {
+				System.out.println("Login successfull");
+				user.setUserName(user2.getName());
+				structure = new ResponseStructure<>();
+				structure.setData(user.getUserName());
+				structure.setMessage("Hello "+user.getUserName()+" login successfully !!!");
+				structure.setStatusCode(HttpStatus.ACCEPTED.value());
+				
+				}else {
+					throw new InvalidPasswordException("Invalid Password");
+				}
+		}else{ 
+			throw new EmailIdNotFoundException("This "+email+" Email Doesnot Exist ");
+		}		
+		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.ACCEPTED);
 	}
-
-	@Override
-	public ResponseEntity<ResponseStructure<Cart>> deleteCart(int cartId) {
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<ResponseStructure<Cart>> getCartById(int cartId) {
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<ResponseStructure<List<Cart>>> getAllCarts() {
-		return null;
-	}
-
 	
 }

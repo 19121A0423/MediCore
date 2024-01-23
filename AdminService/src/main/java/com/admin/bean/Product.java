@@ -1,7 +1,5 @@
 package com.admin.bean;
 
-
-
 public class Product {
 	private Integer productId;
 	private String name;

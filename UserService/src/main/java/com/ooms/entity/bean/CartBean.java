@@ -1,11 +1,15 @@
 package com.ooms.entity.bean;
 
-public class Cart {
+public class CartBean {
 	
 	private int cartId;
 	private int quantity;
 	private double amount;
 	private UserBean user;
+	
+	private String status;
+	
+	
 	public int getCartId() {
 		return cartId;
 	}
@@ -27,13 +31,25 @@ public class Cart {
 	public UserBean getUser() {
 		return user;
 	}
+		
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public void setUser(UserBean user) {
 		this.user = user;
 	}
+	
+	
 	@Override
 	public String toString() {
-		return "Cart [cartId=" + cartId + ", quantity=" + quantity + ", amount=" + amount + ", user=" + user + "]";
+		return "CartBean [cartId=" + cartId + ", quantity=" + quantity + ", amount=" + amount + ", user=" + user
+				+ ", status=" + status + "]";
 	}
+	
+	
 	
 	
 	
