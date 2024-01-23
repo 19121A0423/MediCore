@@ -1,8 +1,8 @@
 package com.order.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,17 +21,22 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Override
 	public void save(Payment payment) {
-		PaymentEntity paymentEntity = new PaymentEntity();
-		beanToEntity(payment, paymentEntity);
-		paymentRepository.save(paymentEntity);
-
+	    if (payment.getAmount() <= 0 || payment.getOrderId() <= 0) {
+	        throw new IllegalArgumentException("Invalid payment information");
+	    }
+	    PaymentEntity paymentEntity = new PaymentEntity();
+	    beanToEntity(payment, paymentEntity);
+	    paymentRepository.save(paymentEntity);
 	}
 
+
 	@Override
-	public Payment findById(int id) {
-		Optional<PaymentEntity> paymentEntity = paymentRepository.findById(id);
+	public Payment findById(int id) throws PaymentNotFoundException {
+		PaymentEntity paymentEntity = paymentRepository.findById(id)
+				.orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + id));
+
 		Payment payment = new Payment();
-		entityToBean(payment, paymentEntity.get());
+		entityToBean(payment, paymentEntity);
 		return payment;
 	}
 
@@ -43,21 +48,11 @@ public class PaymentServiceImpl implements PaymentService {
 		return payments;
 	}
 
-//	@Override
-//	public void delete(int id) throws PaymentNotFoundException {
-//		if(paymentRepository.existsById(id)) {
-//			paymentRepository.updateStatusById(id);
-//		}else {
-//			throw new PaymentNotFoundException();
-//		}
-//
-//	}
-
 	public void beanToEntity(Payment payment, PaymentEntity paymentEntity) {
 
 		paymentEntity.setAmount(payment.getAmount());
 		paymentEntity.setOrderId(payment.getOrderId());
-//		paymentEntity.setPaymentDate();
+		paymentEntity.setPaymentDate(new Date());
 		paymentEntity.setPaymentMode(payment.getPaymentMode());
 		paymentEntity.setStatus(payment.getStatus());
 

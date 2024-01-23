@@ -14,57 +14,77 @@ import com.order.repository.AddressRepository;
 import com.order.service.AddressService;
 
 @Service
-public class AddressServiceImpl implements AddressService{
-	
+public class AddressServiceImpl implements AddressService {
+
 	@Autowired
 	private AddressRepository addressRepository;
-	
+
 	@Override
 	public void save(Address address) {
+		if (address == null) {
+			throw new IllegalArgumentException("Address cannot be null");
+		}
+
 		AddressEntity addressEntity = new AddressEntity();
 		beanToEntity(address, addressEntity);
 		addressRepository.save(addressEntity);
-		
+
 	}
-	
+
 	@Override
-	public Address findById(int id) {
-		Optional<AddressEntity> addressEntity = addressRepository.findById(id);
+	public Address findById(int id) throws AddressNotFoundException {
+		AddressEntity addressEntity = addressRepository.findById(id)
+				.orElseThrow(() -> new AddressNotFoundException("Address not found with ID: " + id));
+
 		Address address = new Address();
-		entityToBean(address, addressEntity.get());
+		entityToBean(address, addressEntity);
 		return address;
 	}
-	
+
 	@Override
 	public List<Address> findAll() {
 		List<AddressEntity> addressEntities = addressRepository.findAll();
 		List<Address> addresses = new ArrayList<>();
 		entitiesToBeans(addresses, addressEntities);
 		return addresses;
-		
+
 	}
 	
 	@Override
-	public void delete(int id) throws AddressNotFoundException {
-		if(addressRepository.existsById(id)) {
-			addressRepository.updateStatusById(id);
-		}else {
-			throw new AddressNotFoundException();
-		}
-		
+	public void update(int id, Address updatedAddress) throws AddressNotFoundException {
+	    Optional<AddressEntity> optionalAddressEntity = addressRepository.findById(id);
+	    
+	    if (optionalAddressEntity.isPresent()) {
+	        AddressEntity addressEntity = optionalAddressEntity.get();
+	        addressEntity.setAddressId(id);
+	        beanToEntity(updatedAddress, addressEntity);
+	        addressRepository.save(addressEntity);
+	    } else {
+	        throw new AddressNotFoundException("Address not found with ID: " + id);
+	    }
 	}
-	
-	public void beanToEntity(Address address , AddressEntity addressEntity) {
+
+	@Override
+	public void deactivateAddress(int id) throws AddressNotFoundException {
+		if (addressRepository.existsById(id)) {
+			addressRepository.updateStatusById(id);
+		} else {
+			throw new AddressNotFoundException("Address not found with ID: " + id);
+		}
+
+	}
+
+	public void beanToEntity(Address address, AddressEntity addressEntity) {
 		addressEntity.setStreetName(address.getStreetName());
 		addressEntity.setCity(address.getCity());
 		addressEntity.setState(address.getState());
 		addressEntity.setPinCode(address.getPinCode());
 		addressEntity.setUserId(address.getUserId());
 		addressEntity.setStatus("active");
-		
+
 	}
-	
-	public void entityToBean(Address address , AddressEntity addressEntity) {
+
+	public void entityToBean(Address address, AddressEntity addressEntity) {
 		address.setAddressId(addressEntity.getAddressId());
 		address.setStreetName(addressEntity.getStreetName());
 		address.setCity(addressEntity.getCity());
@@ -72,11 +92,11 @@ public class AddressServiceImpl implements AddressService{
 		address.setPinCode(addressEntity.getPinCode());
 		address.setUserId(addressEntity.getUserId());
 		address.setStatus(addressEntity.getStatus());
-		
+
 	}
-	
-	public void entitiesToBeans(List<Address> addresses , List<AddressEntity> addressEntities) {
-		
+
+	public void entitiesToBeans(List<Address> addresses, List<AddressEntity> addressEntities) {
+
 		addressEntities.stream().forEach(addressEntity -> {
 			Address address = new Address();
 			address.setAddressId(addressEntity.getAddressId());
@@ -88,7 +108,7 @@ public class AddressServiceImpl implements AddressService{
 			address.setStatus(addressEntity.getStatus());
 			addresses.add(address);
 		});
-		
+
 	}
 
 }

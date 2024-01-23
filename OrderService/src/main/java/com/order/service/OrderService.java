@@ -2,17 +2,17 @@ package com.order.service;
 
 import java.util.List;
 
-import com.order.bean.Order;
+import com.order.bean.Orders;
 import com.order.exceptions.OrderNotFoundException;
 
 public interface OrderService {
 	
-	void save(Order order);
+	void save(Orders order);
 
-	Order findById(int id);
+	Orders findById(int id) throws OrderNotFoundException;
 
-	List<Order> findAll();
+	List<Orders> findAll();
 
-	void delete(int id) throws OrderNotFoundException;
+	void updateStatusById(int id) throws OrderNotFoundException;
 
 }

@@ -9,10 +9,7 @@ public interface PaymentService {
 	
 	void save(Payment payment);
 
-	Payment findById(int id);
+	Payment findById(int id) throws PaymentNotFoundException;
 
 	List<Payment> findAll();
-
-//	void delete(int id) throws PaymentNotFoundException;
-
 }

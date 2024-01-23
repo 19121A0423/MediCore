@@ -1,13 +1,13 @@
 package com.order.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.order.bean.Order;
+import com.order.bean.Orders;
 import com.order.entity.OrderEntity;
 import com.order.exceptions.OrderNotFoundException;
 import com.order.repository.OrderRepository;
@@ -21,7 +21,11 @@ public class OrderServiceImpl implements OrderService{
 	private OrderRepository orderRepository;
 	
 	@Override
-	public void save(Order order) {
+	public void save(Orders order) {
+		if (order == null) {
+			throw new IllegalArgumentException("Order cannot be null");
+		}
+
 		OrderEntity orderEntity = new OrderEntity();
 		beanToEntity(order, orderEntity);
 		orderRepository.save(orderEntity);
@@ -29,41 +33,43 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	@Override
-	public Order findById(int id) {
-		Optional<OrderEntity> orderEntity = orderRepository.findById(id);
-		Order order = new Order();
-		entityToBean(order, orderEntity.get());
+	public Orders findById(int id) throws OrderNotFoundException {
+		OrderEntity orderEntity = orderRepository.findById(id)
+				.orElseThrow(() -> new OrderNotFoundException("Address not found with ID: " + id));
+
+		Orders order = new Orders();
+		entityToBean(order, orderEntity);
 		return order;
 	}
 	
 	@Override
-	public List<Order> findAll() {
+	public List<Orders> findAll() {
 		List<OrderEntity> orderEntities = orderRepository.findAll();
-		List<Order> orders = new ArrayList<>();
+		List<Orders> orders = new ArrayList<>();
 		entitiesToBeans(orders, orderEntities);
 		return orders;
 		
 	}
 	
 	@Override
-	public void delete(int id) throws OrderNotFoundException {
+	public void updateStatusById(int id) throws OrderNotFoundException {
 		if(orderRepository.existsById(id)) {
 			orderRepository.updateStatusById(id);
 		}else {
-			throw new OrderNotFoundException("Order not found");
+			throw new OrderNotFoundException("Order not found with ID: " + id);
 		}
 		
 	}
 	
-	public void beanToEntity(Order order , OrderEntity orderEntity) {
+	public void beanToEntity(Orders order , OrderEntity orderEntity) {
 		orderEntity.setAddressId(order.getAddressId());
 		orderEntity.setCartId(order.getCartId());
-		orderEntity.setOrderedDate(null);
+		orderEntity.setOrderedDate(new Date());
 		orderEntity.setStatus("in progress");
 		
 	}
 	
-	public void entityToBean(Order order , OrderEntity orderEntity) {
+	public void entityToBean(Orders order , OrderEntity orderEntity) {
 		order.setOrderId(orderEntity.getOrderId());
 		order.setAddressId(orderEntity.getAddressId());
 		order.setCartId(orderEntity.getCartId());
@@ -72,10 +78,10 @@ public class OrderServiceImpl implements OrderService{
 		
 	}
 	
-	public void entitiesToBeans(List<Order> orders , List<OrderEntity> orderEntities) {
+	public void entitiesToBeans(List<Orders> orders , List<OrderEntity> orderEntities) {
 		
 		orderEntities.stream().forEach(orderEntity -> {
-			Order order = new Order();
+			Orders order = new Orders();
 			order.setOrderId(orderEntity.getOrderId());
 			order.setAddressId(orderEntity.getAddressId());
 			order.setCartId(orderEntity.getCartId());
