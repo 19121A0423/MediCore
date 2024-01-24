@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.admin.bean.Category;
 import com.admin.entity.CategoryEntity;
+import com.admin.exception.CategoryNotFoundException;
 import com.admin.repository.CategoryRepository;
 
 @Service
@@ -60,7 +61,12 @@ public class CategoryServiceImplementation implements CategoryService{
 			categoryRepository.save(entity);
 		}
 		else {
-			System.out.println("Id is not there");
+			try {
+			 throw new CategoryNotFoundException();
+			}
+			catch(CategoryNotFoundException exception) {
+				  exception.getMessage();
+			}
 		}
 		
 		
@@ -74,7 +80,12 @@ public class CategoryServiceImplementation implements CategoryService{
      
 	}
 	else {
-		System.out.println("Id is not present");
+		try {
+			 throw new CategoryNotFoundException();
+			}
+			catch(CategoryNotFoundException exception) {
+				  exception.getMessage();
+			}
 	}
 	return categoryEntity;
 	}
