@@ -1,13 +1,15 @@
 package com.admin.entity;
 
-import java.util.List;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,22 +33,13 @@ public class ProductEntity {
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "category_id")
-	private Integer categoryId;
+	@ManyToOne
+    @JoinColumn(name="category_id", referencedColumnName = "category_id")
+	private CategoryEntity category;
 	
 	public ProductEntity() {
 		
 	}
-		
-	public ProductEntity(Integer productId, String name, Double price, Integer quantity, String description,Integer categoryId) {
-		super();
-		this.productId = productId;
-		this.name = name;
-		this.price = price;
-		this.quantity = quantity;
-		this.description = description;
-		this.categoryId=categoryId;
-			}
 
 	public Integer getProductId() {
 		return productId;
@@ -88,17 +81,20 @@ public class ProductEntity {
 		this.description = description;
 	}
 
-	public Integer getCategoryId() {
-		return categoryId;
+	public CategoryEntity getCategory() {
+		return category;
 	}
 
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
+	public void setCategory(CategoryEntity category) {
+		this.category = category;
 	}
 
 	@Override
 	public String toString() {
-		return "ProductBean [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity=" + quantity
-				+ ", description=" + description +"categoryId"+categoryId+"]";
+		return "ProductEntity [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity="
+				+ quantity + ", description=" + description + ", category=" + category + "]";
 	}
+		
+	
+
 }

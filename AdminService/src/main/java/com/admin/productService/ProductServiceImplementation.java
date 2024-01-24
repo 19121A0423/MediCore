@@ -2,12 +2,16 @@ package com.admin.productService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.admin.bean.Category;
 import com.admin.bean.Product;
+import com.admin.entity.CategoryEntity;
 import com.admin.entity.ProductEntity;
+import com.admin.exception.ProductNotFoundException;
 import com.admin.repository.ProductRepository;
 
 @Service
@@ -24,7 +28,9 @@ public class ProductServiceImplementation implements ProductService{
 		entity.setPrice(product.getPrice());
 		entity.setQuantity(product.getQuantity());
 		entity.setDescription(product.getDescription());
-		entity.setCategoryId(product.getCategoryId());
+		CategoryEntity categoryEntity=new CategoryEntity();
+		categoryEntity.setCategoryId(product.getCategory().getCategoryId());
+		entity.setCategory(categoryEntity);
 		productRepository.save(entity);
 	
 	}
@@ -51,8 +57,14 @@ public 	List<Product> convert(List<ProductEntity> productEntities) {
 			product.setName(entity.getName());	
 			product.setPrice(entity.getPrice());	
 			product.setQuantity(entity.getQuantity());	
-			product.setDescription(entity.getDescription());	
-			product.setCategoryId(entity.getCategoryId());	
+			product.setDescription(entity.getDescription());
+			
+			CategoryEntity category = new CategoryEntity();
+	        category.setCategoryId(entity.getCategory().getCategoryId());
+	        category.setCategoryName(entity.getCategory().getCategoryName());
+
+	        product.setCategory(category);
+			
 			products.add(product);
 		}
 		return products;
@@ -63,25 +75,40 @@ public 	List<Product> convert(List<ProductEntity> productEntities) {
 
 	@Override
 	public void update(Integer productId, ProductEntity entity) {
-		ProductEntity  productEntity=productRepository.findById(productId).get();
-		if(productEntity!=null) {
+	Optional<ProductEntity> productOptional=productRepository.findById(productId);
+		if(productOptional.isPresent()) {
+		ProductEntity productEntity =productOptional.get();
 			productRepository.save(entity);
 		}
 		else {
-			System.out.println("Id is not present");
+			try {
+			throw new ProductNotFoundException("Product not found");
+			}
+			catch(ProductNotFoundException exception) {
+				exception.getMessage();
+			}
 		}
 	}
 
 	@Override
 	public ProductEntity delete(Integer productId) {
-		ProductEntity  productEntity=productRepository.findById(productId).get();
-		if(productEntity!=null) {
-			productRepository.delete(productEntity);;
+		Optional<ProductEntity> productOptional=productRepository.findById(productId);
+		if(productOptional.isPresent()) {
+		ProductEntity productEntity =productOptional.get();
+			productRepository.delete(productEntity);
+			
+			return productEntity;
 		}
 		else {
-			System.out.println("Id is not present");
+			try {
+				throw new ProductNotFoundException("Product not found");
+				}
+				catch(ProductNotFoundException exception) {
+					exception.getMessage();
+				}
+			return null;
 		}
-		return null;
+		
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.admin.bean;
 
-
+import com.admin.entity.CategoryEntity;
 
 public class Product {
 	private Integer productId;
@@ -8,20 +8,22 @@ public class Product {
 	private Double price;
 	private Integer quantity;
 	private String description;
-	private Integer categoryId;
+	private CategoryEntity category;
+
 	public Product() {
 
 	}
 
-	public Product(Integer productId, String name, Double price, Integer quantity, String description,Integer categoryId) {
+	public Product(Integer productId, String name, Double price, Integer quantity, String description,
+			CategoryEntity category) {
 		super();
 		this.productId = productId;
 		this.name = name;
 		this.price = price;
 		this.quantity = quantity;
 		this.description = description;
-		this.categoryId=categoryId;
-			}
+		this.category = category;
+	}
 
 	public Integer getProductId() {
 		return productId;
@@ -63,19 +65,18 @@ public class Product {
 		this.description = description;
 	}
 
-	public Integer getCategoryId() {
-		return categoryId;
+	public CategoryEntity getCategory() {
+		return category;
 	}
 
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
+	public void setCategory(CategoryEntity category) {
+		this.category = category;
 	}
 
 	@Override
 	public String toString() {
-		return "ProductBean [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity=" + quantity
-				+ ", description=" + description +"categoryId"+categoryId+"]";
+		return "Product [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity=" + quantity
+				+ ", description=" + description + ", category=" + category + "]";
 	}
-
 
 }
