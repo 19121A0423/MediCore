@@ -14,7 +14,7 @@ public class AddressEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="address_id")
-	private int addressId;
+	private Integer addressId;
 	
 	@Column(name="street_name")
 	private String streetName;
@@ -26,10 +26,10 @@ public class AddressEntity {
 	private String state;
 	
 	@Column(name="pinCode")
-	private long pinCode;
+	private Long pinCode;
 	
 	@Column(name="user_id")
-	private int userId;
+	private Integer userId;
 	
 	@Column(name="status")
 	private String status;
@@ -38,7 +38,7 @@ public class AddressEntity {
 		super();
 	}
 
-	public AddressEntity(int addressId, String streetName, String city, String state, long pinCode, int userId,
+	public AddressEntity(Integer addressId, String streetName, String city, String state, Long pinCode, Integer userId,
 			String status) {
 		super();
 		this.addressId = addressId;
@@ -50,11 +50,11 @@ public class AddressEntity {
 		this.status = status;
 	}
 
-	public int getAddressId() {
+	public Integer getAddressId() {
 		return addressId;
 	}
 
-	public void setAddressId(int addressId) {
+	public void setAddressId(Integer addressId) {
 		this.addressId = addressId;
 	}
 
@@ -82,19 +82,19 @@ public class AddressEntity {
 		this.state = state;
 	}
 
-	public long getPinCode() {
+	public Long getPinCode() {
 		return pinCode;
 	}
 
-	public void setPinCode(long pinCode) {
+	public void setPinCode(Long pinCode) {
 		this.pinCode = pinCode;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

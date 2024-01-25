@@ -27,9 +27,7 @@ public class OrderController {
 	
 	@PostMapping("/save")
 	public ResponseEntity<Orders> save(@RequestBody Orders order){
-	    System.out.println("Received Order: " + order);
-	    orderService.save(order);
-	    System.out.println("Order saved successfully: " + order);
+	    orderService.placeOrder(order);
 	    return new ResponseEntity<Orders>(order, HttpStatus.CREATED);
 	}
 	

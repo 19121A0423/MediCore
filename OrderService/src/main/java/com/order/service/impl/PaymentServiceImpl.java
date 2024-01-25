@@ -1,13 +1,15 @@
 package com.order.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.order.bean.Orders;
 import com.order.bean.Payment;
+import com.order.entity.OrderEntity;
 import com.order.entity.PaymentEntity;
 import com.order.exceptions.PaymentNotFoundException;
 import com.order.repository.PaymentRepository;
@@ -18,13 +20,17 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Autowired
 	private PaymentRepository paymentRepository;
+	
+	private OrderServiceImpl orderService = new OrderServiceImpl();
 
 	@Override
-	public void save(Payment payment) {
-	    if (payment.getAmount() <= 0 || payment.getOrderId() <= 0) {
+	public void save(Payment payment,OrderEntity orderEntity) {
+	    if (payment.getAmount() <= 0 ) {
 	        throw new IllegalArgumentException("Invalid payment information");
 	    }
+	    
 	    PaymentEntity paymentEntity = new PaymentEntity();
+	    paymentEntity.setOrder(orderEntity);
 	    beanToEntity(payment, paymentEntity);
 	    paymentRepository.save(paymentEntity);
 	}
@@ -51,8 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
 	public void beanToEntity(Payment payment, PaymentEntity paymentEntity) {
 
 		paymentEntity.setAmount(payment.getAmount());
-		paymentEntity.setOrderId(payment.getOrderId());
-		paymentEntity.setPaymentDate(new Date());
+		paymentEntity.setPaymentDate(LocalDate.now());
 		paymentEntity.setPaymentMode(payment.getPaymentMode());
 		paymentEntity.setStatus(payment.getStatus());
 
@@ -62,7 +67,8 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		payment.setPaymentId(paymentEntity.getPaymentId());
 		payment.setAmount(paymentEntity.getAmount());
-		payment.setOrderId(paymentEntity.getOrderId());
+		Orders order = new Orders();
+		orderService.entityToBean(order, paymentEntity.getOrder());
 		payment.setPaymentDate(paymentEntity.getPaymentDate());
 		payment.setPaymentMode(paymentEntity.getPaymentMode());
 		payment.setStatus(paymentEntity.getStatus());
@@ -75,7 +81,8 @@ public class PaymentServiceImpl implements PaymentService {
 			Payment payment = new Payment();
 			payment.setPaymentId(paymentEntity.getPaymentId());
 			payment.setAmount(paymentEntity.getAmount());
-			payment.setOrderId(paymentEntity.getOrderId());
+			Orders order = new Orders();
+			orderService.entityToBean(order, paymentEntity.getOrder());
 			payment.setPaymentDate(paymentEntity.getPaymentDate());
 			payment.setPaymentMode(paymentEntity.getPaymentMode());
 			payment.setStatus(paymentEntity.getStatus());
@@ -85,5 +92,5 @@ public class PaymentServiceImpl implements PaymentService {
 		});
 		
 	}
-
+	
 }

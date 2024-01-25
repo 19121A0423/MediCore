@@ -2,19 +2,19 @@ package com.order.bean;
 
 public class Address {
 
-	private int addressId;
+	private Integer addressId;
 	private String streetName;
 	private String city;
 	private String state;
-	private long pinCode;
-	private int userId;
+	private Long pinCode;
+	private Integer userId;
 	private String status;
 
 	public Address() {
 		super();
 	}
 
-	public Address(int addressId, String streetName, String city, String state, long pinCode, int userId,
+	public Address(Integer addressId, String streetName, String city, String state, Long pinCode, Integer userId,
 			String status) {
 		super();
 		this.addressId = addressId;
@@ -26,11 +26,11 @@ public class Address {
 		this.status = status;
 	}
 
-	public int getAddressId() {
+	public Integer getAddressId() {
 		return addressId;
 	}
 
-	public void setAddressId(int addressId) {
+	public void setAddressId(Integer addressId) {
 		this.addressId = addressId;
 	}
 
@@ -58,19 +58,19 @@ public class Address {
 		this.state = state;
 	}
 
-	public long getPinCode() {
+	public Long getPinCode() {
 		return pinCode;
 	}
 
-	public void setPinCode(long pinCode) {
+	public void setPinCode(Long pinCode) {
 		this.pinCode = pinCode;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

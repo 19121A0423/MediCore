@@ -7,7 +7,7 @@ import com.order.exceptions.OrderNotFoundException;
 
 public interface OrderService {
 	
-	void save(Orders order);
+	void placeOrder(Orders order);
 
 	Orders findById(int id) throws OrderNotFoundException;
 

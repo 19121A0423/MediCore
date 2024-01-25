@@ -1,41 +1,46 @@
 package com.order.bean;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-public class Orders {
+public class Orders implements Serializable{
 
-	private int orderId;
-	private Date orderedDate;
+	private static final long serialVersionUID = 4226841471917030749L;
+	
+	private Integer orderId;
+	private LocalDate orderedDate;
 	private String status;
-	private int addressId;
-	private int cartId;
+	private Integer addressId;
+	private Integer cartId;
+	private Payment payment;
 
 	public Orders() {
 		super();
 	}
 
-	public Orders(int orderId, Date orderedDate, String status, int addressId, int cartId) {
+	public Orders(Integer orderId, LocalDate orderedDate, String status, Integer addressId, Integer cartId, Payment payment) {
 		super();
 		this.orderId = orderId;
 		this.orderedDate = orderedDate;
 		this.status = status;
 		this.addressId = addressId;
 		this.cartId = cartId;
+		this.payment = payment;
 	}
 
-	public int getOrderId() {
+	public Integer getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(int orderId) {
+	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
 
-	public Date getOrderedDate() {
+	public LocalDate getOrderedDate() {
 		return orderedDate;
 	}
 
-	public void setOrderedDate(Date orderedDate) {
+	public void setOrderedDate(LocalDate orderedDate) {
 		this.orderedDate = orderedDate;
 	}
 
@@ -51,22 +56,32 @@ public class Orders {
 		return addressId;
 	}
 
-	public void setAddressId(int addressId) {
+	public void setAddressId(Integer addressId) {
 		this.addressId = addressId;
 	}
 
-	public int getCartId() {
+	public Integer getCartId() {
 		return cartId;
 	}
 
-	public void setCartId(int cartId) {
+	public void setCartId(Integer cartId) {
 		this.cartId = cartId;
+	}
+
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
 
 	@Override
 	public String toString() {
-		return "Order [orderId=" + orderId + ", orderedDate=" + orderedDate + ", status=" + status + ", addressId="
-				+ addressId + ", cartId=" + cartId + "]";
+		return "Orders [orderId=" + orderId + ", orderedDate=" + orderedDate + ", status=" + status + ", addressId="
+				+ addressId + ", cartId=" + cartId + ", payment=" + payment + "]";
 	}
+
+	
 
 }
