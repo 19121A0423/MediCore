@@ -1,11 +1,20 @@
 package com.order.service.impl;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.order.bean.Address;
 import com.order.entity.AddressEntity;
@@ -18,6 +27,9 @@ public class AddressServiceImpl implements AddressService {
 
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Override
 	public void save(Address address) {
@@ -49,19 +61,19 @@ public class AddressServiceImpl implements AddressService {
 		return addresses;
 
 	}
-	
+
 	@Override
 	public void update(int id, Address updatedAddress) throws AddressNotFoundException {
-	    Optional<AddressEntity> optionalAddressEntity = addressRepository.findById(id);
-	    
-	    if (optionalAddressEntity.isPresent()) {
-	        AddressEntity addressEntity = optionalAddressEntity.get();
-	        addressEntity.setAddressId(id);
-	        beanToEntity(updatedAddress, addressEntity);
-	        addressRepository.save(addressEntity);
-	    } else {
-	        throw new AddressNotFoundException("Address not found with ID: " + id);
-	    }
+		Optional<AddressEntity> optionalAddressEntity = addressRepository.findById(id);
+
+		if (optionalAddressEntity.isPresent()) {
+			AddressEntity addressEntity = optionalAddressEntity.get();
+			addressEntity.setAddressId(id);
+			beanToEntity(updatedAddress, addressEntity);
+			addressRepository.save(addressEntity);
+		} else {
+			throw new AddressNotFoundException("Address not found with ID: " + id);
+		}
 	}
 
 	@Override
