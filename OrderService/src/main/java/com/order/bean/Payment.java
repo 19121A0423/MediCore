@@ -1,35 +1,39 @@
 package com.order.bean;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-public class Payment {
+public class Payment implements Serializable {
 
-	private int paymentId;
+	private static final long serialVersionUID = -1318822591980769570L;
+	
+	private Integer paymentId;
 	private String paymentMode;
-	private double amount;
+	private Double amount;
 	private String status;
-	private Date paymentDate;
-	private int orderId;
+	private LocalDate paymentDate;
+//	private int orderId;
+	private Orders order;
 
 	public Payment() {
 		super();
 	}
-
-	public Payment(int paymentId, String paymentMode, double amount, String status, Date paymentDate, int orderId) {
+	
+	public Payment(Integer paymentId, String paymentMode, Double amount, String status, LocalDate paymentDate, Orders order) {
 		super();
 		this.paymentId = paymentId;
 		this.paymentMode = paymentMode;
 		this.amount = amount;
 		this.status = status;
 		this.paymentDate = paymentDate;
-		this.orderId = orderId;
+		this.order = order;
 	}
 
-	public int getPaymentId() {
+	public Integer getPaymentId() {
 		return paymentId;
 	}
 
-	public void setPaymentId(int paymentId) {
+	public void setPaymentId(Integer paymentId) {
 		this.paymentId = paymentId;
 	}
 
@@ -41,11 +45,11 @@ public class Payment {
 		this.paymentMode = paymentMode;
 	}
 
-	public double getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
@@ -57,26 +61,28 @@ public class Payment {
 		this.status = status;
 	}
 
-	public Date getPaymentDate() {
+	public LocalDate getPaymentDate() {
 		return paymentDate;
 	}
 
-	public void setPaymentDate(Date paymentDate) {
+	public void setPaymentDate(LocalDate paymentDate) {
 		this.paymentDate = paymentDate;
 	}
 
-	public int getOrderId() {
-		return orderId;
+	public Orders getOrder() {
+		return order;
 	}
 
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
+	public void setOrder(Orders order) {
+		this.order = order;
 	}
 
 	@Override
 	public String toString() {
 		return "Payment [paymentId=" + paymentId + ", paymentMode=" + paymentMode + ", amount=" + amount + ", status="
-				+ status + ", paymentDate=" + paymentDate + ", orderId=" + orderId + "]";
+				+ status + ", paymentDate=" + paymentDate + ", order=" + order + "]";
 	}
+	
+	
 
 }
