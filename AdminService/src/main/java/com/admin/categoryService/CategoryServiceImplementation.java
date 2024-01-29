@@ -55,37 +55,29 @@ public class CategoryServiceImplementation implements CategoryService{
 	
 	
 	@Override
-	public void update(Integer categoryId, CategoryEntity entity) {
+	public void update(Integer categoryId, CategoryEntity entity) throws CategoryNotFoundException {
 		CategoryEntity categoryEntity=categoryRepository.findById(categoryId).get();
 		if(categoryEntity!=null) {
 			categoryRepository.save(entity);
 		}
 		else {
-			try {
-			 throw new CategoryNotFoundException();
-			}
-			catch(CategoryNotFoundException exception) {
-				  exception.getMessage();
+			 throw new CategoryNotFoundException("Category not found with Id- "+categoryId);
 			}
 		}
 		
 		
-	}
+	
 
 	@Override
-	public CategoryEntity delete(Integer categoryId) {
+	public CategoryEntity delete(Integer categoryId) throws CategoryNotFoundException {
 	CategoryEntity categoryEntity=	categoryRepository.findById(categoryId).get();
 	if(categoryEntity!=null) {
      categoryRepository.deleteById(categoryId);
      
 	}
 	else {
-		try {
-			 throw new CategoryNotFoundException();
-			}
-			catch(CategoryNotFoundException exception) {
-				  exception.getMessage();
-			}
+		 throw new CategoryNotFoundException("Category not found with Id- "+categoryId);
+		
 	}
 	return categoryEntity;
 	}
