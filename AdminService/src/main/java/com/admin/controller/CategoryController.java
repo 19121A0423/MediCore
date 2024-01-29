@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.admin.bean.Category;
 import com.admin.categoryService.CategoryService;
 import com.admin.entity.CategoryEntity;
+import com.admin.exception.CategoryNotFoundException;
 
 @RestController
 @RequestMapping("/categoryController")
@@ -58,7 +59,7 @@ public class CategoryController {
 	
 	
 	@DeleteMapping("/delete/{categoryId}")
-	public ResponseEntity<CategoryEntity> deleteById(@PathVariable Integer categoryId){
+	public ResponseEntity<CategoryEntity> deleteById(@PathVariable Integer categoryId) throws CategoryNotFoundException{
 	CategoryEntity category=categoryService.delete(categoryId);
 		log.info("Category details{}",category);
 		ResponseEntity<CategoryEntity> entity=new ResponseEntity<CategoryEntity>
@@ -67,7 +68,7 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/update/{categoryId}")
-	public ResponseEntity<CategoryEntity> updateById(@RequestBody CategoryEntity categoryEntity, @PathVariable Integer categoryId){
+	public ResponseEntity<CategoryEntity> updateById(@RequestBody CategoryEntity categoryEntity, @PathVariable Integer categoryId) throws CategoryNotFoundException{
 	        categoryService.update(categoryId, categoryEntity);
 			log.info("Category details{}",categoryEntity);
 			ResponseEntity<CategoryEntity> entity=new ResponseEntity<CategoryEntity>
