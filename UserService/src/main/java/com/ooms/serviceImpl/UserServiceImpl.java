@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import com.admin.productService.ProductService;
 import com.ooms.bean.UserBean;
 import com.ooms.entity.User;
 import com.ooms.exception.EmailIdNotFoundException;
@@ -30,8 +29,7 @@ public class UserServiceImpl implements UserService {
 	private UserRepo userRepo;
 		
 	
-	@Autowired
-	private ProductService productService;
+
 		
 	@Autowired
 	private JavaMailSender javaMailSender;
