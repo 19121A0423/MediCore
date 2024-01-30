@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.ooms.bean.UserBean;
-import com.ooms.util.ResponseStructure;
+import com.ooms.structure.ResponseStructure;
 
 public interface UserService {
 	

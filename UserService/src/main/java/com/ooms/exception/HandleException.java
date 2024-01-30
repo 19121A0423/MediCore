@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.ooms.util.ErrorStructure;
+import com.ooms.structure.ErrorStructure;
 
 @RestControllerAdvice
 public class HandleException extends ResponseEntityExceptionHandler{

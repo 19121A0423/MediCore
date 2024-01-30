@@ -1,4 +1,4 @@
-package com.ooms.util;
+package com.ooms.structure;
 
 public class ResponseStructure<A> {
 	

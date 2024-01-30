@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ooms.bean.UserBean;
 import com.ooms.service.UserService;
-import com.ooms.util.ResponseStructure;
+import com.ooms.structure.ResponseStructure;
 
 @RestController
 public class UserController {

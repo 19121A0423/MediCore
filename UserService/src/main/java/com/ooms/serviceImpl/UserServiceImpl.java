@@ -21,7 +21,7 @@ import com.ooms.exception.UserNotFoundByIdException;
 
 import com.ooms.repository.UserRepo;
 import com.ooms.service.UserService;
-import com.ooms.util.ResponseStructure;
+import com.ooms.structure.ResponseStructure;
 
 @Service
 public class UserServiceImpl implements UserService {
