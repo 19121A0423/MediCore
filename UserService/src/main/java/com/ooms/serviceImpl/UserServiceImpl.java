@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
 		    bean.setUserGender(user.getGender()); 
 		    bean.setUserRole(user.getUser_role());
 		    bean.setUserStatus(user.getStatus());
-			
+			System.out.println("=====");
 			ResponseStructure<UserBean> structure = new ResponseStructure<>();
 			structure.setData(bean);
 			structure.setMessage("Data fetched Successfully !!!");
