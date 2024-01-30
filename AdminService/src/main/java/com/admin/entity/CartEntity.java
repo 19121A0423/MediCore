@@ -12,36 +12,36 @@ public class CartEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cart_id;
+	private Integer cart_id;
 	@NotNull
-	private int quantity;
+	private Integer quantity;
 
-	private double amount;
+	private Double amount;
 	@NotNull
 	@OneToOne
 	private Integer user;
 
-	public int getCart_id() {
+	public Integer getCart_id() {
 		return cart_id;
 	}
 
-	public void setCart_id(int cart_id) {
+	public void setCart_id(Integer cart_id) {
 		this.cart_id = cart_id;
 	}
 
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
-	public double getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
