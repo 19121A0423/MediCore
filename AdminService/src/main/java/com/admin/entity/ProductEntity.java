@@ -37,6 +37,10 @@ public class ProductEntity {
     @JoinColumn(name="category_id", referencedColumnName = "category_id")
 	private CategoryEntity category;
 	
+	@ManyToOne
+	@JoinColumn(name="cart_id",referencedColumnName = "cart_id")
+	private CartEntity cartEntity;
+	
 	public ProductEntity() {
 		
 	}
@@ -89,11 +93,21 @@ public class ProductEntity {
 		this.category = category;
 	}
 
+	public CartEntity getCartEntity() {
+		return cartEntity;
+	}
+
+	public void setCartEntity(CartEntity cartEntity) {
+		this.cartEntity = cartEntity;
+	}
+
 	@Override
 	public String toString() {
-		return "ProductEntity [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity="
-				+ quantity + ", description=" + description + ", category=" + category + "]";
+		return "Product [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity=" + quantity
+				+ ", description=" + description + ", category=" + category + ", cartEntity=" + cartEntity + "]";
 	}
+
+	
 		
 	
 

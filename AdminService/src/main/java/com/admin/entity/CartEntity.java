@@ -1,5 +1,6 @@
 package com.admin.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,21 +13,60 @@ public class CartEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer cart_id;
-	@NotNull
-	private Integer quantity;
-
-	private Double amount;
+	@Column(name = "cart_id")
+	private Integer cartId;
+	
 	@NotNull
 	@OneToOne
-	private Integer user;
+	@Column(name = "user_id")
+	private Integer userId;
+	
+	@Column(name="product_id")
+	private Integer productId;
+	
+	@NotNull
+	@Column(name="quantity")
+	private Integer quantity;
 
-	public Integer getCart_id() {
-		return cart_id;
+	@Column(name="amount")
+	private Double amount;
+	
+
+	public CartEntity() {
+		super();
 	}
 
-	public void setCart_id(Integer cart_id) {
-		this.cart_id = cart_id;
+	public CartEntity(Integer cartId, Integer userId, Integer productId, Integer quantity, Double amount) {
+		super();
+		this.cartId = cartId;
+		this.userId = userId;
+		this.productId = productId;
+		this.quantity = quantity;
+		this.amount = amount;
+	}
+
+	public Integer getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(Integer cartId) {
+		this.cartId = cartId;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
 	}
 
 	public Integer getQuantity() {
@@ -45,17 +85,10 @@ public class CartEntity {
 		this.amount = amount;
 	}
 
-	public Integer getUser() {
-		return user;
-	}
-
-	public void setUser(Integer user) {
-		this.user = user;
-	}
-
 	@Override
 	public String toString() {
-		return "Cart [cart_id=" + cart_id + ", quantity=" + quantity + ", amount=" + amount + ", user=" + user + "]";
+		return "Cart [cartId=" + cartId + ", userId=" + userId + ", productId=" + productId + ", quantity=" + quantity
+				+ ", amount=" + amount + "]";
 	}
 
 }
