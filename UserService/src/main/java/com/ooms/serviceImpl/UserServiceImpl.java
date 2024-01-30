@@ -83,13 +83,6 @@ public class UserServiceImpl implements UserService {
 			
 			/* User save = */ userRepo.save(userEntity);
 			
-			/*
-			 * user.setUserName(save.getName()); user.setUserEmail(save.getEmail());
-			 * user.setUserMobileNumber(save.getMobile_number());
-			 * user.setUserPassword(save.getPassword());
-			 * user.setUserGender(save.getGender()); user.setUserRole(save.getUser_role());
-			 * user.setUserStatus(save.getStatus());
-			 */
 			
 			
 			ResponseStructure<UserBean> structure = new ResponseStructure<>();
