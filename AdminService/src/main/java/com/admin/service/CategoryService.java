@@ -1,4 +1,4 @@
-package com.admin.categoryService;
+package com.admin.service;
 
 import java.util.List;
 
@@ -20,5 +20,5 @@ public interface CategoryService {
 	
 	public void update(Integer categoryId, CategoryEntity entity) throws CategoryNotFoundException;
 	
-	public CategoryEntity delete(Integer categoryId) throws CategoryNotFoundException;
+	public void delete(Integer categoryId) throws CategoryNotFoundException;
 }

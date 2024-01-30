@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.admin.bean.Product;
 import com.admin.entity.ProductEntity;
 import com.admin.exception.ProductNotFoundException;
-import com.admin.productService.ProductService;
+import com.admin.service.ProductService;
 
 @RestController
 @RequestMapping("/productController")

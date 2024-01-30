@@ -1,4 +1,4 @@
-package com.admin.productService;
+package com.admin.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ import com.admin.entity.CategoryEntity;
 import com.admin.entity.ProductEntity;
 import com.admin.exception.ProductNotFoundException;
 import com.admin.repository.ProductRepository;
+import com.admin.service.ProductService;
 
 @Service
 public class ProductServiceImplementation implements ProductService{
