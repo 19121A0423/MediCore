@@ -95,7 +95,6 @@ public class OrderServiceImpl implements OrderService {
 			order.setCartId(orderEntity.getCartId());
 			order.setOrderedDate(orderEntity.getOrderedDate());
 			order.setStatus(orderEntity.getStatus());
-
 			orders.add(order);
 		});
 
