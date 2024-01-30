@@ -1,42 +1,70 @@
 package com.admin.bean;
 
 public class Cart {
-	
-	private int cartId;
-	private int quantity;
-	private double amount;
-	private UserBean user;
-	public int getCartId() {
-		return cartId;
+
+	private Integer cartId;
+	private Integer userId;
+	private Integer productId;
+	private Integer quantity;
+	private Double amount;
+
+	public Cart() {
+		super();
 	}
-	public void setCartId(int cartId) {
+
+	public Cart(Integer cartId, Integer userId, Integer productId, Integer quantity, Double amount) {
+		super();
 		this.cartId = cartId;
-	}
-	public int getQuantity() {
-		return quantity;
-	}
-	public void setQuantity(int quantity) {
+		this.userId = userId;
+		this.productId = productId;
 		this.quantity = quantity;
-	}
-	public double getAmount() {
-		return amount;
-	}
-	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	public UserBean getUser() {
-		return user;
+
+	public Integer getCartId() {
+		return cartId;
 	}
-	public void setUser(UserBean user) {
-		this.user = user;
+
+	public void setCartId(Integer cartId) {
+		this.cartId = cartId;
 	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
 	@Override
 	public String toString() {
-		return "Cart [cartId=" + cartId + ", quantity=" + quantity + ", amount=" + amount + ", user=" + user + "]";
+		return "Cart [cartId=" + cartId + ", userId=" + userId + ", productId=" + productId + ", quantity=" + quantity
+				+ ", amount=" + amount + "]";
 	}
-	
-	
-	
 
 }
- 

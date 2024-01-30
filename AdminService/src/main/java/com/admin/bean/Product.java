@@ -1,5 +1,6 @@
 package com.admin.bean;
 
+import com.admin.entity.CartEntity;
 import com.admin.entity.CategoryEntity;
 
 public class Product {
@@ -9,6 +10,7 @@ public class Product {
 	private Integer quantity;
 	private String description;
 	private CategoryEntity category;
+	private CartEntity cartEntity;
 
 	public Product() {
 
@@ -72,11 +74,22 @@ public class Product {
 	public void setCategory(CategoryEntity category) {
 		this.category = category;
 	}
+	
+	
+	public CartEntity getCartEntity() {
+		return cartEntity;
+	}
+
+	public void setCartEntity(CartEntity cartEntity) {
+		this.cartEntity = cartEntity;
+	}
 
 	@Override
 	public String toString() {
 		return "Product [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity=" + quantity
-				+ ", description=" + description + ", category=" + category + "]";
+				+ ", description=" + description + ", category=" + category + ", cartEntity=" + cartEntity + "]";
 	}
+
+	
 
 }

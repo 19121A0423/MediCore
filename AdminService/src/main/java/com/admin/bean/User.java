@@ -1,20 +1,20 @@
 package com.admin.bean;
 
-public class UserBean {
+public class User {
 	
-	private int userId;
+	private Integer userId;
 	private String userName;
-	private char userGender;
-	private long userMobileNumber;
+	private Character userGender;
+	private Long userMobileNumber;
 	private String userEmail;
 	private String userPassword;
 	private String userRole;
 	private String userStatus;
 	
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	public String getUserName() {
@@ -23,16 +23,16 @@ public class UserBean {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public char getUserGender() {
+	public Character getUserGender() {
 		return userGender;
 	}
-	public void setUserGender(char userGender) {
+	public void setUserGender(Character userGender) {
 		this.userGender = userGender;
 	}
-	public long getUserMobileNumber() {
+	public Long getUserMobileNumber() {
 		return userMobileNumber;
 	}
-	public void setUserMobileNumber(long userMobileNumber) {
+	public void setUserMobileNumber(Long userMobileNumber) {
 		this.userMobileNumber = userMobileNumber;
 	}
 	public String getUserEmail() {
