@@ -3,6 +3,7 @@ package com.order.service;
 import java.util.List;
 
 import com.order.bean.Address;
+import com.order.bean.UserBean;
 import com.order.exceptions.AddressNotFoundException;
 
 public interface AddressService {

@@ -1,7 +1,11 @@
 package com.ooms.exception;
 
 public class UserNotFoundByIdException extends RuntimeException {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String message;
 
 	public UserNotFoundByIdException(String message) {
@@ -12,7 +16,5 @@ public class UserNotFoundByIdException extends RuntimeException {
 	public String getMessage() {
 		return message;
 	}
-	
-	
 
 }

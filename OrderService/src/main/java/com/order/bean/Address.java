@@ -88,4 +88,6 @@ public class Address {
 				+ ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + "]";
 	}
 
+	
+
 }

@@ -18,22 +18,20 @@ import com.ooms.util.ResponseStructure;
 
 @RestController
 public class UserController {
-	
-	
+
 	@Autowired
 	private UserService service;
-	
-	
+
 	@PostMapping("/users")
-	public ResponseEntity<ResponseStructure<UserBean>> save(@RequestBody UserBean user) {	
-		return service.save(user);		
+	public ResponseEntity<ResponseStructure<UserBean>> save(@RequestBody UserBean user) {
+		return service.save(user);
 	}
-	
+
 	@PutMapping("/users")
 	public ResponseEntity<ResponseStructure<UserBean>> update(@RequestBody UserBean user) {
 		return service.update(user);
 	}
-	
+
 	@GetMapping("/users/{userId}")
 	public ResponseEntity<ResponseStructure<UserBean>> getById(@PathVariable int userId) {
 		return service.getById(userId);
@@ -43,10 +41,10 @@ public class UserController {
 	public ResponseEntity<ResponseStructure<UserBean>> delete(@PathVariable int userId) {
 		return service.delete(userId);
 	}
-	
+
 	@GetMapping("/users")
 	public ResponseEntity<ResponseStructure<List<UserBean>>> getAll() {
 		return service.getAll();
 	}
-	
+
 }

@@ -5,15 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.order.bean.Address;
+import com.order.bean.Cart;
 import com.order.bean.Orders;
 import com.order.bean.Payment;
+import com.order.bean.UserBean;
+import com.order.entity.AddressEntity;
 import com.order.entity.OrderEntity;
 import com.order.exceptions.OrderNotFoundException;
 import com.order.repository.OrderRepository;
+import com.order.service.AddressService;
 import com.order.service.OrderService;
 import com.order.service.PaymentService;
+import com.order.structure.ResponseStructure;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -23,6 +36,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private PaymentService paymentService;
+	
+	@Autowired
+	private AddressServiceImpl addressService;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Override
 	public void placeOrder(Orders order) {
@@ -67,9 +86,32 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 	}
+	
+	@Override
+	public Cart getCart(int id) {
+
+		String url = "http://localhost:8081/medicine/users/"+id ;
+		
+		ParameterizedTypeReference<ResponseStructure<Cart>> responseType =
+		        new ParameterizedTypeReference<ResponseStructure<Cart>>() {};
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+
+		ResponseEntity<ResponseStructure<Cart>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity,responseType);
+		ResponseStructure<Cart> response = responseEntity.getBody();
+		Cart cart = response.getData();
+		
+//		ResponseStructure<UserBean> response = restTemplate.getForObject(url, responseType);
+//		System.out.println(response.getData());
+		return cart;
+	}
 
 	public void beanToEntity(Orders order, OrderEntity orderEntity) {
-		orderEntity.setAddressId(order.getAddressId());
+		AddressEntity address = new AddressEntity();
+		addressService.beanToEntity(order.getAddress(), address);
+		orderEntity.setAddress(address);
 		orderEntity.setCartId(order.getCartId());
 		orderEntity.setOrderedDate(LocalDate.now());
 		orderEntity.setStatus("in progress");
@@ -79,7 +121,9 @@ public class OrderServiceImpl implements OrderService {
 
 	public void entityToBean(Orders order, OrderEntity orderEntity) {
 		order.setOrderId(orderEntity.getOrderId());
-		order.setAddressId(orderEntity.getAddressId());
+		Address address = new Address();
+		addressService.entityToBean(address, orderEntity.getAddress());
+		order.setAddress(address);
 		order.setCartId(orderEntity.getCartId());
 		order.setOrderedDate(orderEntity.getOrderedDate());
 		order.setStatus(orderEntity.getStatus());
@@ -91,7 +135,9 @@ public class OrderServiceImpl implements OrderService {
 		orderEntities.stream().forEach(orderEntity -> {
 			Orders order = new Orders();
 			order.setOrderId(orderEntity.getOrderId());
-			order.setAddressId(orderEntity.getAddressId());
+			Address address = new Address();
+			addressService.entityToBean(address, orderEntity.getAddress());
+			order.setAddress(address);
 			order.setCartId(orderEntity.getCartId());
 			order.setOrderedDate(orderEntity.getOrderedDate());
 			order.setStatus(orderEntity.getStatus());

@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.order.bean.Address;
+import com.order.bean.UserBean;
 import com.order.exceptions.AddressNotFoundException;
 import com.order.service.AddressService;
+import com.order.service.UserService;
 
 @RestController
 @RequestMapping("/address")
@@ -24,6 +26,9 @@ public class AddressController {
 	
 	@Autowired
 	private AddressService addressService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@PostMapping("/save")
 	public ResponseEntity<Address> saveAddress(@RequestBody Address address){
@@ -66,6 +71,12 @@ public class AddressController {
 	    } catch (AddressNotFoundException e) {
 	        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	    }
+	}
+	
+	@GetMapping("getUser/{id}")
+	public ResponseEntity<UserBean> getUser(@PathVariable(value="id") int id) {
+	    UserBean user = userService.getUserBean(id);
+	    return new ResponseEntity<>(user, HttpStatus.OK);	
 	}
 
 }

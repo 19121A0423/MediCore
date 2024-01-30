@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -29,9 +31,10 @@ public class OrderEntity implements Serializable{
 
 	@Column(name = "status")
 	private String status;
-
-	@Column(name = "address_id")
-	private Integer addressId;
+	
+	@ManyToOne
+	@JoinColumn(name = "address_id" , referencedColumnName = "address_id")
+	private AddressEntity address;
 
 	@Column(name = "cart_id")
 	private Integer cartId;
@@ -44,12 +47,12 @@ public class OrderEntity implements Serializable{
 		super();
 	}
 
-	public OrderEntity(Integer orderId, LocalDate orderedDate, String status, Integer addressId, Integer cartId, PaymentEntity payment) {
+	public OrderEntity(Integer orderId, LocalDate orderedDate, String status, AddressEntity address, Integer cartId, PaymentEntity payment) {
 		super();
 		this.orderId = orderId;
 		this.orderedDate = orderedDate;
 		this.status = status;
-		this.addressId = addressId;
+		this.address = address;
 		this.cartId = cartId;
 		this.payment = payment;
 	}
@@ -78,12 +81,12 @@ public class OrderEntity implements Serializable{
 		this.status = status;
 	}
 
-	public Integer getAddressId() {
-		return addressId;
+	public AddressEntity getAddress() {
+		return address;
 	}
 
-	public void setAddressId(Integer addressId) {
-		this.addressId = addressId;
+	public void setAddress(AddressEntity address) {
+		this.address = address;
 	}
 
 	public Integer getCartId() {
@@ -105,7 +108,7 @@ public class OrderEntity implements Serializable{
 	@Override
 	public String toString() {
 		return "OrderEntity [orderId=" + orderId + ", orderedDate=" + orderedDate + ", status=" + status
-				+ ", addressId=" + addressId + ", cartId=" + cartId + ", payment=" + payment + "]";
+				+ ", address=" + address + ", cartId=" + cartId + ", payment=" + payment + "]";
 	}
 
 }

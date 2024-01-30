@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.order.bean.Feedback;
+import com.order.bean.Product;
 import com.order.exceptions.FeedbackNotFoundException;
 import com.order.service.FeedbackService;
+import com.order.service.UserService;
 
 @RestController
 @RequestMapping("/feedback")
@@ -55,6 +57,12 @@ public class FeedbackController {
 	public ResponseEntity<List<Feedback>> getFeedbacks() {
 	    List<Feedback> feedbacks = feedbackService.findAll();
 	    return new ResponseEntity<>(feedbacks, HttpStatus.OK);	
+	}
+	
+	@GetMapping("getProduct/{id}")
+	public ResponseEntity<Product> getUser(@PathVariable(value="id") int id) {
+	    Product product = feedbackService.getProduct(id);
+	    return new ResponseEntity<>(product, HttpStatus.OK);	
 	}
 	
 }
