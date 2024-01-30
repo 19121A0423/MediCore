@@ -1,7 +1,8 @@
-package com.admin.categoryService;
+package com.admin.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.admin.bean.Category;
 import com.admin.entity.CategoryEntity;
 import com.admin.exception.CategoryNotFoundException;
 import com.admin.repository.CategoryRepository;
+import com.admin.service.CategoryService;
 
 @Service
 public class CategoryServiceImplementation implements CategoryService{
@@ -55,39 +57,32 @@ public class CategoryServiceImplementation implements CategoryService{
 	
 	
 	@Override
-	public void update(Integer categoryId, CategoryEntity entity) {
-		CategoryEntity categoryEntity=categoryRepository.findById(categoryId).get();
-		if(categoryEntity!=null) {
-			categoryRepository.save(entity);
+	public void update(Integer categoryId, CategoryEntity entity) throws CategoryNotFoundException {
+		Optional<CategoryEntity> optional =categoryRepository.findById(categoryId);
+		if(optional.isPresent()) {
+		CategoryEntity categoryEntity=optional.get();	
+	     categoryRepository.save(entity);
 		}
 		else {
-			try {
-			 throw new CategoryNotFoundException();
-			}
-			catch(CategoryNotFoundException exception) {
-				  exception.getMessage();
+			 throw new CategoryNotFoundException("Category not found with Id- "+categoryId);
 			}
 		}
 		
 		
-	}
+	
 
 	@Override
-	public CategoryEntity delete(Integer categoryId) {
-	CategoryEntity categoryEntity=	categoryRepository.findById(categoryId).get();
-	if(categoryEntity!=null) {
+	public void delete(Integer categoryId) throws CategoryNotFoundException {
+	Optional<CategoryEntity> optional =categoryRepository.findById(categoryId);
+	if(optional.isPresent()) {
+	CategoryEntity categoryEntity=optional.get();	
      categoryRepository.deleteById(categoryId);
      
 	}
 	else {
-		try {
-			 throw new CategoryNotFoundException();
-			}
-			catch(CategoryNotFoundException exception) {
-				  exception.getMessage();
-			}
+		 throw new CategoryNotFoundException("Category not found with Id- "+categoryId);
+		
 	}
-	return categoryEntity;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.admin.productService;
+package com.admin.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,12 +7,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.admin.bean.Category;
 import com.admin.bean.Product;
 import com.admin.entity.CategoryEntity;
 import com.admin.entity.ProductEntity;
 import com.admin.exception.ProductNotFoundException;
 import com.admin.repository.ProductRepository;
+import com.admin.service.ProductService;
 
 @Service
 public class ProductServiceImplementation implements ProductService{
@@ -74,41 +74,41 @@ public 	List<Product> convert(List<ProductEntity> productEntities) {
 	}
 
 	@Override
-	public void update(Integer productId, ProductEntity entity) {
+	public void update(Integer productId, ProductEntity entity) throws ProductNotFoundException {
 	Optional<ProductEntity> productOptional=productRepository.findById(productId);
 		if(productOptional.isPresent()) {
 		ProductEntity productEntity =productOptional.get();
 			productRepository.save(entity);
 		}
 		else {
-			try {
-			throw new ProductNotFoundException("Product not found");
-			}
-			catch(ProductNotFoundException exception) {
-				exception.getMessage();
-			}
+			
+			throw new ProductNotFoundException("Product not found with Id- "+productId);
+			
 		}
 	}
 
 	@Override
-	public ProductEntity delete(Integer productId) {
+	public void delete(Integer productId) throws ProductNotFoundException {
 		Optional<ProductEntity> productOptional=productRepository.findById(productId);
 		if(productOptional.isPresent()) {
 		ProductEntity productEntity =productOptional.get();
 			productRepository.delete(productEntity);
 			
-			return productEntity;
+			
 		}
 		else {
-			try {
-				throw new ProductNotFoundException("Product not found");
-				}
-				catch(ProductNotFoundException exception) {
-					exception.getMessage();
-				}
-			return null;
+				throw new ProductNotFoundException("Product not found with Id- "+productId);
+				
+			   
 		}
 		
 	}
 
-}
+	@Override
+	public List<Product> searchProductByCategory(Optional<Integer> categoryId) {
+		List<ProductEntity> productEntities=productRepository.findByCategory(categoryId);
+		List<Product> products=convert(productEntities);
+		return products;
+	}
+
+	}

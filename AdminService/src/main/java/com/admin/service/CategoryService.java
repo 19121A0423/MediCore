@@ -1,4 +1,4 @@
-package com.admin.categoryService;
+package com.admin.service;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.admin.bean.Category;
 import com.admin.entity.CategoryEntity;
+import com.admin.exception.CategoryNotFoundException;
 
 
 @Service
@@ -17,7 +18,7 @@ public interface CategoryService {
 	
 	public List<Category> getAll();
 	
-	public void update(Integer categoryId, CategoryEntity entity);
+	public void update(Integer categoryId, CategoryEntity entity) throws CategoryNotFoundException;
 	
-	public CategoryEntity delete(Integer categoryId);
+	public void delete(Integer categoryId) throws CategoryNotFoundException;
 }
