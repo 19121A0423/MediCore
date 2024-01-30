@@ -12,14 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import com.ooms.entity.Cart;
+import com.admin.productService.ProductService;
+import com.ooms.bean.UserBean;
 import com.ooms.entity.User;
-import com.ooms.entity.bean.CartBean;
-import com.ooms.entity.bean.UserBean;
 import com.ooms.exception.EmailIdNotFoundException;
 import com.ooms.exception.InvalidPasswordException;
 import com.ooms.exception.UserNotFoundByIdException;
-import com.ooms.repository.CartRepo;
+
 import com.ooms.repository.UserRepo;
 import com.ooms.service.UserService;
 import com.ooms.util.ResponseStructure;
@@ -30,8 +29,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepo userRepo;
 		
+	
 	@Autowired
-	private CartRepo cartRepo;
+	private ProductService productService;
 		
 	@Autowired
 	private JavaMailSender javaMailSender;
@@ -49,14 +49,7 @@ public class UserServiceImpl implements UserService {
 		userEntity.setStatus(user.getUserStatus());
 	
 		userRepo.save(userEntity);
-		
-		Cart cart = new Cart();
-		cart.setAmount(0);
-		
-		cart.setQuantity(0);
-		cart.setUser(userEntity);
-		cartRepo.save(cart);
-		sendMail(user);
+	
 		
 		ResponseStructure<UserBean> structure = new ResponseStructure<>();
 		structure.setData(user);
@@ -227,5 +220,7 @@ public class UserServiceImpl implements UserService {
 		}		
 		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.ACCEPTED);
 	}
+
+
 	
 }

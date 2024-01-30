@@ -1,4 +1,4 @@
-package com.ooms.entity.bean;
+package com.ooms.bean;
 
 public class UserBean {
 	

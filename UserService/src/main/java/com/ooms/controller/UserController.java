@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ooms.entity.bean.UserBean;
+import com.ooms.bean.UserBean;
 import com.ooms.service.UserService;
 import com.ooms.util.ResponseStructure;
 
@@ -53,4 +53,9 @@ public class UserController {
 	public ResponseEntity<ResponseStructure<String>> userLogin(@RequestBody UserBean user) {
 		return service.userLogin(user);		
 	}
+	
+
+	
+	
+	
 }

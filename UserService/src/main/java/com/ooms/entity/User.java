@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -27,6 +28,8 @@ public class User {
 	private String user_role;
 	
 	private String status;
+	
+	
 	
 	public int getUser_id() {
 		return user_id;
@@ -78,15 +81,13 @@ public class User {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+
 	@Override
 	public String toString() {
 		return "User [user_id=" + user_id + ", name=" + name + ", email=" + email + ", mobile_number=" + mobile_number
 				+ ", password=" + password + ", gender=" + gender + ", user_role=" + user_role + ", status=" + status
 				+ "]";
-	}
-	
-	
-	
-	
+	}	
 	
 }
