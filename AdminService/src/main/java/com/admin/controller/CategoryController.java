@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.admin.bean.Category;
-import com.admin.categoryService.CategoryService;
 import com.admin.entity.CategoryEntity;
 import com.admin.exception.CategoryNotFoundException;
+import com.admin.service.CategoryService;
 
 @RestController
 @RequestMapping("/categoryController")
@@ -59,20 +59,29 @@ public class CategoryController {
 	
 	
 	@DeleteMapping("/delete/{categoryId}")
-	public ResponseEntity<CategoryEntity> deleteById(@PathVariable Integer categoryId) throws CategoryNotFoundException{
-	CategoryEntity category=categoryService.delete(categoryId);
-		log.info("Category details{}",category);
-		ResponseEntity<CategoryEntity> entity=new ResponseEntity<CategoryEntity>
-		(category,HttpStatus.OK); 
-		return entity;
+	public ResponseEntity<String> deleteById(@PathVariable Integer categoryId){
+	
+	try {
+		categoryService.delete(categoryId);
+		return new ResponseEntity<String>
+		("Category record deleted successfuly ",HttpStatus.OK); 
+	} catch (CategoryNotFoundException e) {
+		return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+		
 	}
 	
 	@PutMapping("/update/{categoryId}")
-	public ResponseEntity<CategoryEntity> updateById(@RequestBody CategoryEntity categoryEntity, @PathVariable Integer categoryId) throws CategoryNotFoundException{
-	        categoryService.update(categoryId, categoryEntity);
-			log.info("Category details{}",categoryEntity);
-			ResponseEntity<CategoryEntity> entity=new ResponseEntity<CategoryEntity>
-			(categoryEntity,HttpStatus.OK);
-			return entity;
+	public ResponseEntity<String> updateById(@RequestBody CategoryEntity categoryEntity,
+			@PathVariable Integer categoryId) {
+	        try {
+				categoryService.update(categoryId, categoryEntity);
+				log.info("Category details{}",categoryEntity);
+				return new ResponseEntity<String>("category record updated successfilly ",HttpStatus.OK);
+			} catch (CategoryNotFoundException e) {
+				return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+			}
+			
+			
 		}
 }
