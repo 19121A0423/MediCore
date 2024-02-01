@@ -26,15 +26,20 @@ public class OrderController {
 	private OrderService orderService;
 	
 	@PostMapping("/save")
-	public ResponseEntity<Orders> save(@RequestBody Orders order){
-	    orderService.placeOrder(order);
-	    return new ResponseEntity<Orders>(order, HttpStatus.CREATED);
+	public ResponseEntity<Orders> saveOrder(@RequestBody Orders order){
+	    try {
+	    	orderService.placeOrder(order);
+		    return new ResponseEntity<Orders>(order, HttpStatus.CREATED);
+	    }
+	    catch(IllegalArgumentException e) {
+	    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
 	}
 	
 	@GetMapping("/get/{id}")
 	public ResponseEntity<Orders> getAddressById(@PathVariable(value = "id") int id){
 		try {
-	        Orders order = orderService.findById(id);
+	        Orders order = orderService.getOrderById(id);
 	        return new ResponseEntity<>(order, HttpStatus.OK);
 	    } catch (OrderNotFoundException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,8 +49,13 @@ public class OrderController {
 	
 	@GetMapping("/get/all")
 	public ResponseEntity<List<Orders>> getOrders(){
-		List<Orders> orders = orderService.findAll();
-		return new ResponseEntity<List<Orders>>(orders, HttpStatus.OK);
+		List<Orders> orders;
+		try {
+			orders = orderService.getAllOrders();
+			return new ResponseEntity<List<Orders>>(orders, HttpStatus.OK);
+		} catch (OrderNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		
 	}
 	

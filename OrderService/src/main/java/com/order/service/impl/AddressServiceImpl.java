@@ -5,23 +5,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.order.bean.Address;
-import com.order.bean.UserBean;
 import com.order.entity.AddressEntity;
 import com.order.exceptions.AddressNotFoundException;
 import com.order.repository.AddressRepository;
 import com.order.service.AddressService;
-import com.order.structure.ResponseStructure;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class AddressServiceImpl implements AddressService {
 
@@ -29,9 +23,11 @@ public class AddressServiceImpl implements AddressService {
 	private AddressRepository addressRepository;
 
 	@Override
-	public void save(Address address) {
-		if (address == null) {
-			throw new IllegalArgumentException("Address cannot be null");
+	public void saveAddress(Address address) {
+		
+		if (address.getCity() == null || address.getStreetName() == null || address.getState() == null ||
+				address.getPinCode() == null || address.getUserId() == null) {
+			throw new IllegalArgumentException("Address properties cannot be null");
 		}
 
 		AddressEntity addressEntity = new AddressEntity();
@@ -41,7 +37,8 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public Address findById(int id) throws AddressNotFoundException {
+	public Address getAddressById(int id) throws AddressNotFoundException {
+		
 		AddressEntity addressEntity = addressRepository.findById(id)
 				.orElseThrow(() -> new AddressNotFoundException("Address not found with ID: " + id));
 
@@ -51,16 +48,21 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public List<Address> findAll() {
+	public List<Address> getAllAddresses() throws AddressNotFoundException {
 		List<AddressEntity> addressEntities = addressRepository.findAll();
-		List<Address> addresses = new ArrayList<>();
-		entitiesToBeans(addresses, addressEntities);
-		return addresses;
+		if(addressEntities.isEmpty()) {
+			throw new AddressNotFoundException("No addresses found");
+		}
+		else {
+			List<Address> addresses = new ArrayList<>();
+			entitiesToBeans(addresses, addressEntities);
+			return addresses;
+		}
 
 	}
 
 	@Override
-	public void update(int id, Address updatedAddress) throws AddressNotFoundException {
+	public void updateAddress(int id, Address updatedAddress) throws AddressNotFoundException {
 		Optional<AddressEntity> optionalAddressEntity = addressRepository.findById(id);
 
 		if (optionalAddressEntity.isPresent()) {

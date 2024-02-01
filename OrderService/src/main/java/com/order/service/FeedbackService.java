@@ -5,18 +5,19 @@ import java.util.List;
 import com.order.bean.Feedback;
 import com.order.bean.Product;
 import com.order.exceptions.FeedbackNotFoundException;
+import com.order.exceptions.ProductNotFoundException;
 
 
 public interface FeedbackService {
 	
-	void save(Feedback feedback);
+	void saveFeedback(Feedback feedback);
 
-	Feedback findById(int id) throws FeedbackNotFoundException;
+	Feedback getFeedbackById(int id) throws FeedbackNotFoundException;
 
-	List<Feedback> findAll();
+	List<Feedback> getAllFeedbacks() throws FeedbackNotFoundException;
 
-	void updateById(int id, Feedback updatedFeedback) throws FeedbackNotFoundException;
+	void updateFeedbackById(int id, Feedback updatedFeedback) throws FeedbackNotFoundException;
 
-	Product getProduct(int id);
+	Product getProduct(int id) throws ProductNotFoundException;
 	
 }

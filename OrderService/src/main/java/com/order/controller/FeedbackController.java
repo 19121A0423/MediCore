@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.order.bean.Feedback;
 import com.order.bean.Product;
 import com.order.exceptions.FeedbackNotFoundException;
+import com.order.exceptions.ProductNotFoundException;
 import com.order.service.FeedbackService;
-import com.order.service.UserService;
 
 @RestController
 @RequestMapping("/feedback")
@@ -27,16 +27,21 @@ public class FeedbackController {
 	private FeedbackService feedbackService;
 	
 	@PostMapping("/save")
-	public ResponseEntity<Feedback> save(@RequestBody Feedback feedback){
-		feedbackService.save(feedback);
-		return new ResponseEntity<Feedback>(feedback, HttpStatus.CREATED);
+	public ResponseEntity<Feedback> saveFeedback(@RequestBody Feedback feedback){
+		try {
+			feedbackService.saveFeedback(feedback);
+			return new ResponseEntity<Feedback>(feedback, HttpStatus.CREATED);
+		}
+		catch(IllegalArgumentException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Feedback> updateFeedback(@RequestBody Feedback feedback, @PathVariable(value = "id") int id) {
+	public ResponseEntity<Feedback> updateFeedbackById(@RequestBody Feedback feedback, @PathVariable(value = "id") int id) {
 	    try {
-	    	feedbackService.updateById(id, feedback);
+	    	feedbackService.updateFeedbackById(id, feedback);
 	        return new ResponseEntity<>(feedback, HttpStatus.OK);
 	    } catch (FeedbackNotFoundException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -46,7 +51,7 @@ public class FeedbackController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<Feedback> getFeedbackById(@PathVariable(value = "id") int id) {
 	    try {
-	    	Feedback feedback = feedbackService.findById(id);
+	    	Feedback feedback = feedbackService.getFeedbackById(id);
 	        return new ResponseEntity<>(feedback, HttpStatus.OK);
 	    } catch (FeedbackNotFoundException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,15 +59,27 @@ public class FeedbackController {
 	}
 
 	@GetMapping("/get/all")
-	public ResponseEntity<List<Feedback>> getFeedbacks() {
-	    List<Feedback> feedbacks = feedbackService.findAll();
-	    return new ResponseEntity<>(feedbacks, HttpStatus.OK);	
+	public ResponseEntity<List<Feedback>> getAllFeedbacks() {
+	    List<Feedback> feedbacks;
+		try {
+			feedbacks = feedbackService.getAllFeedbacks();
+			return new ResponseEntity<>(feedbacks, HttpStatus.OK);
+		} catch (FeedbackNotFoundException e) {
+			return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+		}
+	    	
 	}
 	
 	@GetMapping("getProduct/{id}")
-	public ResponseEntity<Product> getUser(@PathVariable(value="id") int id) {
-	    Product product = feedbackService.getProduct(id);
-	    return new ResponseEntity<>(product, HttpStatus.OK);	
+	public ResponseEntity<Product> getProduct(@PathVariable(value="id") int id) {
+	    Product product;
+		try {
+			product = feedbackService.getProduct(id);
+			return new ResponseEntity<>(product, HttpStatus.FOUND);
+		} catch (ProductNotFoundException e) {
+			return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+		}
+	    	
 	}
 	
 }

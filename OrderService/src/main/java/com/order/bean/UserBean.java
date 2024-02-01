@@ -2,10 +2,10 @@ package com.order.bean;
 
 public class UserBean {
 	
-	private int userId;
+	private Integer userId;
 	private String userName;
-	private char userGender;
-	private long userMobileNumber;
+	private Character userGender;
+	private Long userMobileNumber;
 	private String userEmail;
 	private String userPassword;
 	private String userRole;
@@ -15,7 +15,7 @@ public class UserBean {
 		super();
 	}
 
-	public UserBean(int userId, String userName, char userGender, long userMobileNumber, String userEmail,
+	public UserBean(Integer userId, String userName, Character userGender, Long userMobileNumber, String userEmail,
 			String userPassword, String userRole, String userStatus) {
 		super();
 		this.userId = userId;
@@ -28,11 +28,11 @@ public class UserBean {
 		this.userStatus = userStatus;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 
@@ -44,19 +44,19 @@ public class UserBean {
 		this.userName = userName;
 	}
 
-	public char getUserGender() {
+	public Character getUserGender() {
 		return userGender;
 	}
 
-	public void setUserGender(char userGender) {
+	public void setUserGender(Character userGender) {
 		this.userGender = userGender;
 	}
 
-	public long getUserMobileNumber() {
+	public Long getUserMobileNumber() {
 		return userMobileNumber;
 	}
 
-	public void setUserMobileNumber(long userMobileNumber) {
+	public void setUserMobileNumber(Long userMobileNumber) {
 		this.userMobileNumber = userMobileNumber;
 	}
 

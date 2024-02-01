@@ -18,12 +18,11 @@ import com.order.bean.Address;
 import com.order.bean.Cart;
 import com.order.bean.Orders;
 import com.order.bean.Payment;
-import com.order.bean.UserBean;
 import com.order.entity.AddressEntity;
 import com.order.entity.OrderEntity;
+import com.order.exceptions.CartNotFoundException;
 import com.order.exceptions.OrderNotFoundException;
 import com.order.repository.OrderRepository;
-import com.order.service.AddressService;
 import com.order.service.OrderService;
 import com.order.service.PaymentService;
 import com.order.structure.ResponseStructure;
@@ -45,8 +44,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public void placeOrder(Orders order) {
-		if (order == null) {
-			throw new IllegalArgumentException("Order cannot be null");
+		if (order.getCartId()==null || order.getAddress().getAddressId()==null || order.getPayment()==null) {
+			throw new IllegalArgumentException("Order properties cannot be null");
 		}
 		OrderEntity orderEntity = new OrderEntity();
 		beanToEntity(order, orderEntity);
@@ -54,12 +53,12 @@ public class OrderServiceImpl implements OrderService {
 
 		Payment payment = order.getPayment();
 		payment.setOrder(order);
-		paymentService.save(payment,orderEntity);
+		paymentService.savePayment(payment,orderEntity);
 
 	}
 
 	@Override
-	public Orders findById(int id) throws OrderNotFoundException {
+	public Orders getOrderById(int id) throws OrderNotFoundException {
 		OrderEntity orderEntity = orderRepository.findById(id)
 				.orElseThrow(() -> new OrderNotFoundException("Address not found with ID: " + id));
 
@@ -69,11 +68,16 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<Orders> findAll() {
+	public List<Orders> getAllOrders() throws OrderNotFoundException {
 		List<OrderEntity> orderEntities = orderRepository.findAll();
-		List<Orders> orders = new ArrayList<>();
-		entitiesToBeans(orders, orderEntities);
-		return orders;
+		if(orderEntities.isEmpty()) {
+			throw new OrderNotFoundException("No orders found");
+		}
+		else {
+			List<Orders> orders = new ArrayList<>();
+			entitiesToBeans(orders, orderEntities);
+			return orders;
+		}
 
 	}
 
@@ -88,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public Cart getCart(int id) {
+	public Cart getCart(int id) throws CartNotFoundException {
 
 		String url = "http://localhost:8081/medicine/users/"+id ;
 		
@@ -103,9 +107,12 @@ public class OrderServiceImpl implements OrderService {
 		ResponseStructure<Cart> response = responseEntity.getBody();
 		Cart cart = response.getData();
 		
-//		ResponseStructure<UserBean> response = restTemplate.getForObject(url, responseType);
-//		System.out.println(response.getData());
-		return cart;
+		if(cart==null) {
+			throw new CartNotFoundException("Cart not found with id : "+id);
+		}
+		else {
+			return cart;
+		}
 	}
 
 	public void beanToEntity(Orders order, OrderEntity orderEntity) {
