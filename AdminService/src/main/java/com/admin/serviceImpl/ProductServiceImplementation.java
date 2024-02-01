@@ -37,6 +37,7 @@ public class ProductServiceImplementation implements ProductService{
 
 	@Override
 	public ProductEntity get(Integer productId) {
+		System.out.println("service admin");
 	    return productRepository.findById(productId).get();
 	}
 

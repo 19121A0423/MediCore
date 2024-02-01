@@ -1,11 +1,23 @@
 package com.admin.bean;
 
+import java.util.List;
+
 public class Cart {
 	
 	private int cartId;
 	private int quantity;
 	private double amount;
+	private String status;
 	private UserBean user;
+	
+	private List<Product> products;
+	
+	public List<Product> getProducts() {
+		return products;
+	}
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
 	public int getCartId() {
 		return cartId;
 	}
@@ -30,10 +42,21 @@ public class Cart {
 	public void setUser(UserBean user) {
 		this.user = user;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	@Override
 	public String toString() {
-		return "Cart [cartId=" + cartId + ", quantity=" + quantity + ", amount=" + amount + ", user=" + user + "]";
+		return "Cart [cartId=" + cartId + ", quantity=" + quantity + ", amount=" + amount + ", status=" + status
+				+ ", user=" + user + ", products=" + products + "]";
 	}
+
+	
+	
+	
 	
 	
 	

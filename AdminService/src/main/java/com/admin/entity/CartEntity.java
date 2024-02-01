@@ -1,61 +1,102 @@
 package com.admin.entity;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
+
+import com.admin.bean.Product;
 
 @Entity
+@Table(name="cart")
 public class CartEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cart_id;
+	@Column(name = "cart_id")
+	private Integer cartId;
+	
 	@NotNull
-	private int quantity;
-
-	private double amount;
+	@Column(name = "user_id")
+	private Integer userId;
+	
+	
+	@OneToMany
+	private List<ProductEntity> products;
+	
 	@NotNull
-	@OneToOne
-	private Integer user;
+	@Column(name="quantity")
+	private Integer quantity;
 
-	public int getCart_id() {
-		return cart_id;
+	@Column(name="amount")
+	private Double amount;
+	
+	private String status;
+
+
+	public Integer getCartId() {
+		return cartId;
 	}
 
-	public void setCart_id(int cart_id) {
-		this.cart_id = cart_id;
+	public void setCartId(Integer cartId) {
+		this.cartId = cartId;
 	}
 
-	public int getQuantity() {
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
-	public double getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
-	public Integer getUser() {
-		return user;
+	public List<ProductEntity> getProducts() {
+		return products;
 	}
 
-	public void setUser(Integer user) {
-		this.user = user;
+	public void setProducts(List<ProductEntity> products) {
+		this.products = products;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override
 	public String toString() {
-		return "Cart [cart_id=" + cart_id + ", quantity=" + quantity + ", amount=" + amount + ", user=" + user + "]";
+		return "CartEntity [cartId=" + cartId + ", userId=" + userId + ", products=" + products + ", quantity="
+				+ quantity + ", amount=" + amount + ", status=" + status + "]";
 	}
+
+	
+	
+	
+	
+	
 
 }

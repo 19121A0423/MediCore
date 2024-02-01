@@ -3,6 +3,7 @@ package com.admin.bean;
 import com.admin.entity.CategoryEntity;
 
 public class Product {
+	
 	private Integer productId;
 	private String name;
 	private Double price;
