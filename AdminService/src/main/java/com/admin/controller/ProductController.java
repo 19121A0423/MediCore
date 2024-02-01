@@ -33,14 +33,18 @@ public class ProductController {
 	private ProductService productService;
 	
 	@PostMapping
-	public ResponseEntity<Product> save(@RequestBody Product product)
+	public ResponseEntity<String> save(@RequestBody Product product)
 	{
-		productService.insert(product);
-		log.info("Products{}",product);
-		ResponseEntity<Product> entity=new ResponseEntity<Product>
-		(product,HttpStatus.CREATED);
-		
-		return entity;
+		log.info("Start Product Controller:insert()");
+		try {
+			productService.insert(product);
+			log.info("Products{}",product);
+			return new ResponseEntity<String>("Inserted successfully"+product,HttpStatus.CREATED);
+		} catch (ProductNotFoundException e) {
+			log.info("Handling Exception in ProductControl::insert() ");
+			log.info("End Product Controller:insert()");
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
 		
 	}
 	
@@ -62,34 +66,42 @@ public class ProductController {
 	}
 	
 	@PutMapping("/update/{productId}")
-	public ResponseEntity<String> update(@RequestBody ProductEntity entity,
+	public ResponseEntity<String> update(@RequestBody Product product,
 			@PathVariable Integer productId) {
+		log.info("Start Product Controller:update()");
 		try {
-			productService.update(productId, entity);
-			log.info("Updated Product details{}", entity);
-			return new ResponseEntity<String>("Product details updated",HttpStatus.OK);
+			productService.update(productId, product);
+			return new ResponseEntity<String>("Product details updated"+product,HttpStatus.OK);
 		} catch (ProductNotFoundException e) {
+			log.info("Handling Exception in ProductControl::update() ");
+			log.info("End Product Controller:update()");
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
 		
 	}
 	
-	@DeleteMapping("/{productId}")
+	@DeleteMapping("/delete/{productId}")
 	public ResponseEntity<String> delete(@PathVariable Integer productId){
-		try {
-			productService.delete(productId);
-			return new ResponseEntity<String>("Product successfully deleted",HttpStatus.ACCEPTED);
-		} catch (ProductNotFoundException e) {
-		   return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
-		}
+		log.info("Start Product Controller:delete()");
+			try {
+				productService.delete(productId);
+			return new ResponseEntity<String>("Deleting the product with Id "+productId,HttpStatus.ACCEPTED);
+			
+			} catch (ProductNotFoundException e) {
+				log.info("Handling Exception in ProductControl::delete() ");
+				log.info("End Product Controller:delete()");
+				return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+			}
 		
 	}
 	
 	@GetMapping("/searchByCategory/{categoryId}")
 	public ResponseEntity<List<Product>> searchByCategory(@PathVariable Optional<Integer> categoryId){
+		log.info(" Start::Product controller:searchByCategory::categoryId"+categoryId);
 		List<Product> products=productService.searchProductByCategory(categoryId);
-		log.info("Product Details{}",products);
 		ResponseEntity<List<Product>> entity=new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+		log.info(" End::Product controller:searchByCategory::Product details"+products);
+
 		return entity;
 		
 	}

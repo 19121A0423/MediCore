@@ -13,15 +13,16 @@ import com.admin.exception.ProductNotFoundException;
 @Service
 public interface ProductService {
 
-	public void insert(Product product);
+	public void insert(Product product) throws ProductNotFoundException;
 	
 	public ProductEntity get(Integer productId);
 	
     public List<Product> getAll();
 	
-	public void update(Integer productId, ProductEntity entity) throws ProductNotFoundException;
+	public void update(Integer productId, Product product) throws ProductNotFoundException;
 	
 	public void delete(Integer productId) throws ProductNotFoundException;
+//	public void delete(Integer productId);
 
 
 	List<Product> searchProductByCategory(Optional<Integer> categoryId);
