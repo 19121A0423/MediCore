@@ -15,6 +15,7 @@ import com.admin.service.CartService;
 
 @RestController
 public class CartController {
+	
 	private static Logger log = LoggerFactory
 			.getLogger(CartController.class.getSimpleName());
 	
@@ -23,12 +24,18 @@ public class CartController {
 	private CartService service;
 	
 	
-	@PostMapping("/cart/{userId}/{productId}")
-	public ResponseEntity<Cart> saveCart(@RequestBody Cart cart, @PathVariable int userId,@PathVariable int productId){		
-		log.info("Cart{}",cart);
-		System.out.println("cartsave");
-		return service.save(cart,userId,productId);		
+	@PostMapping("/cart/{quantity}")
+	public ResponseEntity<Cart> saveCart(@RequestBody Cart cart, @PathVariable int quantity){		
+		log.info("CartController Start => {} ",cart);
+		ResponseEntity<Cart> responseEntity = null;
+		try {
+		responseEntity = service.save(cart,quantity);
+		log.info("CartController End => {} ",cart);
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return responseEntity ;	
+
 	}
 	
-
 }

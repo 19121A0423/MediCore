@@ -9,7 +9,7 @@ import com.admin.bean.Product;
 
 public interface CartService {
 
-	public ResponseEntity<Cart> save(Cart cart,int userId,int productId);
+	public ResponseEntity<Cart> save(Cart cart,int quantity);
 	public ResponseEntity<Cart> update(Cart cart);
 	public ResponseEntity<Cart> delete(Integer cartId);
 	public ResponseEntity<List<Cart>> getCartDetails();
