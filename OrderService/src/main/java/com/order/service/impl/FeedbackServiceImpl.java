@@ -17,12 +17,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.order.bean.Feedback;
 import com.order.bean.Product;
-import com.order.bean.UserBean;
 import com.order.entity.FeedbackEntity;
 import com.order.exceptions.FeedbackNotFoundException;
+import com.order.exceptions.ProductNotFoundException;
 import com.order.repository.FeedbackRepository;
 import com.order.service.FeedbackService;
-import com.order.structure.ResponseStructure;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
@@ -34,9 +33,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 	private RestTemplate restTemplate;
 
 	@Override
-	public void save(Feedback feedback) {
-		if (feedback == null) {
-			throw new IllegalArgumentException("Address cannot be null");
+	public void saveFeedback(Feedback feedback) {
+		if (feedback.getUserId()==null || feedback.getProductId()==null || feedback.getFeedback()==null || 
+				feedback.getRatings() == null) {
+			throw new IllegalArgumentException("Feedback properties cannot be null");
 		}
 
 		FeedbackEntity feedbackEntity = new FeedbackEntity();
@@ -46,7 +46,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public Feedback findById(int id) throws FeedbackNotFoundException {
+	public Feedback getFeedbackById(int id) throws FeedbackNotFoundException {
 		FeedbackEntity feedbackEntity = feedbackRepository.findById(id)
 				.orElseThrow(() -> new FeedbackNotFoundException("Address not found with ID: " + id));
 
@@ -56,15 +56,20 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public List<Feedback> findAll() {
+	public List<Feedback> getAllFeedbacks() throws FeedbackNotFoundException {
 		List<FeedbackEntity> feedbackEntities = feedbackRepository.findAll();
-		List<Feedback> feedbacks = new ArrayList<>();
-		entitiesToBeans(feedbacks, feedbackEntities);
-		return feedbacks;
+		if(feedbackEntities.isEmpty()) {
+			throw new FeedbackNotFoundException("No feedbacks found");
+		}
+		else {
+			List<Feedback> feedbacks = new ArrayList<>();
+			entitiesToBeans(feedbacks, feedbackEntities);
+			return feedbacks;
+		}
 	}
 
 	@Override
-	public void updateById(int id, Feedback updatedFeedback) throws FeedbackNotFoundException {
+	public void updateFeedbackById(int id, Feedback updatedFeedback) throws FeedbackNotFoundException {
 		Optional<FeedbackEntity> optionalFeedbackEntity = feedbackRepository.findById(id);
 
 		if (optionalFeedbackEntity.isPresent()) {
@@ -79,7 +84,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public Product getProduct(int id) {
+	public Product getProduct(int id) throws ProductNotFoundException {
 		String url = "http://localhost:8082/medicine/productController/" + id;
 
 		ParameterizedTypeReference<Product> responseType = new ParameterizedTypeReference<Product>() {
@@ -92,10 +97,11 @@ public class FeedbackServiceImpl implements FeedbackService {
 		ResponseEntity<Product> responseEntity = restTemplate.exchange(url, HttpMethod.GET,
 				httpEntity, responseType);
 		Product product = responseEntity.getBody();
-
-//		ResponseStructure<UserBean> response = restTemplate.getForObject(url, responseType);
-//		System.out.println(response.getData());
+		if(product==null) {
+			throw new ProductNotFoundException("Product not found with id : "+id);
+		}else {
 		return product;
+		}
 	}
 
 	public void beanToEntity(Feedback feedback, FeedbackEntity feedbackEntity) {

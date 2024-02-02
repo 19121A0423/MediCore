@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.order.bean.Address;
 import com.order.bean.UserBean;
 import com.order.exceptions.AddressNotFoundException;
+import com.order.exceptions.UserNotFoundException;
 import com.order.service.AddressService;
 import com.order.service.UserService;
 
@@ -32,15 +33,20 @@ public class AddressController {
 	
 	@PostMapping("/save")
 	public ResponseEntity<Address> saveAddress(@RequestBody Address address){
-		addressService.save(address);
-		return new ResponseEntity<Address>(address, HttpStatus.CREATED);
+		try {
+			addressService.saveAddress(address);
+			return new ResponseEntity<Address>(address, HttpStatus.CREATED);
+		}
+		catch(IllegalArgumentException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
 		
 	}
 	
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Address> updateAddress(@RequestBody Address address, @PathVariable(value = "id") int id) {
 	    try {
-	        addressService.update(id, address);
+	        addressService.updateAddress(id, address);
 	        return new ResponseEntity<>(address, HttpStatus.OK);
 	    } catch (AddressNotFoundException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -50,7 +56,7 @@ public class AddressController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<Address> getAddressById(@PathVariable(value = "id") int id) {
 	    try {
-	        Address address = addressService.findById(id);
+	        Address address = addressService.getAddressById(id);
 	        return new ResponseEntity<>(address, HttpStatus.OK);
 	    } catch (AddressNotFoundException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -59,8 +65,13 @@ public class AddressController {
 
 	@GetMapping("/get/all")
 	public ResponseEntity<List<Address>> getAddress() {
-	    List<Address> addresses = addressService.findAll();
-	    return new ResponseEntity<>(addresses, HttpStatus.OK);	
+	    List<Address> addresses;
+		try {
+			addresses = addressService.getAllAddresses();
+			return new ResponseEntity<>(addresses, HttpStatus.OK);	
+		} catch (AddressNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@DeleteMapping("/delete/{id}")
@@ -75,8 +86,13 @@ public class AddressController {
 	
 	@GetMapping("getUser/{id}")
 	public ResponseEntity<UserBean> getUser(@PathVariable(value="id") int id) {
-	    UserBean user = userService.getUserBean(id);
-	    return new ResponseEntity<>(user, HttpStatus.OK);	
+	    UserBean user;
+		try {
+			user = userService.getUserBean(id);
+			return new ResponseEntity<>(user, HttpStatus.FOUND);
+		} catch (UserNotFoundException e) {
+			return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+		}	
 	}
 
 }

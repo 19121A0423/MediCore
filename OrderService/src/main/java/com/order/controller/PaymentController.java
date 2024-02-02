@@ -23,16 +23,16 @@ public class PaymentController {
 	@Autowired
 	private PaymentService paymentService;
 
-	@PostMapping("/save")
-	public ResponseEntity<Payment> save(@RequestBody Payment payment) {
-//		paymentService.save(payment);
-		return new ResponseEntity<Payment>(payment, HttpStatus.CREATED);
-	}
+//	@PostMapping("/save")
+//	public ResponseEntity<Payment> savePayment(@RequestBody Payment payment) {
+////		paymentService.save(payment);
+//		return new ResponseEntity<Payment>(payment, HttpStatus.CREATED);
+//	}
 
 	@GetMapping("/get/{id}")
-	public ResponseEntity<Payment> getAddressById(@PathVariable(value = "id") int id) {
+	public ResponseEntity<Payment> getPaymentById(@PathVariable(value = "id") int id) {
 		try {
-			Payment payment = paymentService.findById(id);
+			Payment payment = paymentService.getPaymentById(id);
 			return new ResponseEntity<>(payment, HttpStatus.OK);
 		} catch (PaymentNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,8 +41,14 @@ public class PaymentController {
 
 	@GetMapping("/get/all")
 	public ResponseEntity<List<Payment>> getPayments() {
-		List<Payment> payments = paymentService.findAll();
-		return new ResponseEntity<List<Payment>>(payments, HttpStatus.OK);
+		List<Payment> payments;
+		try {
+			payments = paymentService.getAllPayments();
+			return new ResponseEntity<List<Payment>>(payments, HttpStatus.FOUND);
+		} catch (PaymentNotFoundException e) {
+			return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+		}
+		
 
 	}
 

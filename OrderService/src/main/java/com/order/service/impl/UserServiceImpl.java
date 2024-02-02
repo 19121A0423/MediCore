@@ -7,19 +7,22 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.order.bean.UserBean;
+import com.order.exceptions.UserNotFoundException;
 import com.order.service.UserService;
 import com.order.structure.ResponseStructure;
 
+@Service
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Override
-	public UserBean getUserBean(int id) {
+	public UserBean getUserBean(int id) throws UserNotFoundException {
 
 		String url = "http://localhost:8081/medicine/users/"+id ;
 		
@@ -32,11 +35,13 @@ public class UserServiceImpl implements UserService{
 
 		ResponseEntity<ResponseStructure<UserBean>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity,responseType);
 		ResponseStructure<UserBean> response = responseEntity.getBody();
-		UserBean data = response.getData();
-		
-//		ResponseStructure<UserBean> response = restTemplate.getForObject(url, responseType);
-//		System.out.println(response.getData());
-		return response.getData();
+		UserBean user = response.getData();
+		if(user == null) {
+			throw new UserNotFoundException("User not found with id : "+id );
+		}
+		else {
+			return user;
+		}
 	}
 
 }

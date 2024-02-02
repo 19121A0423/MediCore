@@ -24,8 +24,8 @@ public class PaymentServiceImpl implements PaymentService {
 	private OrderServiceImpl orderService = new OrderServiceImpl();
 
 	@Override
-	public void save(Payment payment,OrderEntity orderEntity) {
-	    if (payment.getAmount() <= 0 ) {
+	public void savePayment(Payment payment,OrderEntity orderEntity) {
+	    if (payment.getAmount() <= 0 || payment.getOrder().getOrderId()==null || payment.getPaymentMode()==null) {
 	        throw new IllegalArgumentException("Invalid payment information");
 	    }
 	    
@@ -37,7 +37,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 
 	@Override
-	public Payment findById(int id) throws PaymentNotFoundException {
+	public Payment getPaymentById(int id) throws PaymentNotFoundException {
 		PaymentEntity paymentEntity = paymentRepository.findById(id)
 				.orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + id));
 
@@ -47,11 +47,16 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public List<Payment> findAll() {
+	public List<Payment> getAllPayments() throws PaymentNotFoundException {
 		List<PaymentEntity> paymentEntities = paymentRepository.findAll();
-		List<Payment> payments = new ArrayList<>();
-		entitiesToBeans(payments, paymentEntities);
-		return payments;
+		if(paymentEntities.isEmpty()) {
+			throw new PaymentNotFoundException("No payments found");
+		}
+		else {
+			List<Payment> payments = new ArrayList<>();
+			entitiesToBeans(payments, paymentEntities);
+			return payments;
+		}
 	}
 
 	public void beanToEntity(Payment payment, PaymentEntity paymentEntity) {
