@@ -13,19 +13,17 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import com.ooms.entity.User;
-import com.ooms.entity.bean.Cart;
 import com.ooms.entity.bean.UserBean;
 import com.ooms.exception.UserNotFoundByIdException;
 import com.ooms.repository.UserRepo;
 import com.ooms.service.UserService;
-import com.ooms.util.ResponseStructure;
+import com.ooms.structure.ResponseStructure;
 
 @Service
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepo userRepo;
-	
 	
 	@Autowired
 	private JavaMailSender javaMailSender;
@@ -83,13 +81,6 @@ public class UserServiceImpl implements UserService {
 			
 			/* User save = */ userRepo.save(userEntity);
 			
-			/*
-			 * user.setUserName(save.getName()); user.setUserEmail(save.getEmail());
-			 * user.setUserMobileNumber(save.getMobile_number());
-			 * user.setUserPassword(save.getPassword());
-			 * user.setUserGender(save.getGender()); user.setUserRole(save.getUser_role());
-			 * user.setUserStatus(save.getStatus());
-			 */
 			
 			
 			ResponseStructure<UserBean> structure = new ResponseStructure<>();
@@ -106,10 +97,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<UserBean>> getById(int userId) {
-		User user = userRepo.findById(userId).get();
-		if(user!=null){		
-			UserBean bean = new UserBean();
+		Optional<User> optional = userRepo.findById(userId);
+		if(optional.isPresent()){
 			
+			User user = optional.get();
+			UserBean bean = new UserBean();
+			bean.setUserId(user.getUser_id());
 		    bean.setUserName(user.getName()); 
 		    bean.setUserEmail(user.getEmail());
 		    bean.setUserMobileNumber(user.getMobile_number());
@@ -117,7 +110,7 @@ public class UserServiceImpl implements UserService {
 		    bean.setUserGender(user.getGender()); 
 		    bean.setUserRole(user.getUser_role());
 		    bean.setUserStatus(user.getStatus());
-			
+			System.out.println("=====");
 			ResponseStructure<UserBean> structure = new ResponseStructure<>();
 			structure.setData(bean);
 			structure.setMessage("Data fetched Successfully !!!");
@@ -184,30 +177,7 @@ public class UserServiceImpl implements UserService {
 		return new ResponseEntity<ResponseStructure<List<UserBean>>>(structure, HttpStatus.FOUND);
 	}
 
-	@Override
-	public ResponseEntity<ResponseStructure<Cart>> save(Cart cart) {
-		return null;
-	}
 
-	@Override
-	public ResponseEntity<ResponseStructure<Cart>> update(Cart cart) {
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<ResponseStructure<Cart>> deleteCart(int cartId) {
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<ResponseStructure<Cart>> getCartById(int cartId) {
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<ResponseStructure<List<Cart>>> getAllCarts() {
-		return null;
-	}
 
 	
 }

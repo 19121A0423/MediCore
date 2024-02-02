@@ -1,11 +1,12 @@
-package com.ooms.util;
+package com.admin.structure;
 
-public class ErrorStructure {
 
+
+public class ResponseStructure<A> {
+	
 	private int statusCode;
 	private String message;
-	private String rootCause;
-	
+	private A data;
 	public int getStatusCode() {
 		return statusCode;
 	}
@@ -18,12 +19,17 @@ public class ErrorStructure {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getRootCause() {
-		return rootCause;
+	public A getData() {
+		return data;
 	}
-	public void setRootCause(String rootCause) {
-		this.rootCause = rootCause;
+	public void setData(A data) {
+		this.data = data;
+	}
+	@Override
+	public String toString() {
+		return "ResponseStructure [statusCode=" + statusCode + ", message=" + message + "]";
 	}
 	
 	
+
 }
