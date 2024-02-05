@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
 		Optional<User> optional = userRepo.findById(user.getUserId());
 		User userEntity = optional.get();
 		if(optional.get()!=null) {	
-			
+			userEntity.setUser_id(user.getUserId());
 			userEntity.setName(user.getUserName());
 			userEntity.setEmail(user.getUserEmail());
 			userEntity.setMobile_number(user.getUserMobileNumber());
