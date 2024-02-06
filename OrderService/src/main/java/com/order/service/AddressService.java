@@ -3,19 +3,26 @@ package com.order.service;
 import java.util.List;
 
 import com.order.bean.Address;
+import com.order.entity.AddressEntity;
 import com.order.exceptions.AddressNotFoundException;
 
 public interface AddressService {
 	
-	void save(Address address);
+	Address saveAddress(Address address);
 
-	Address findById(int id) throws AddressNotFoundException;
+	Address getAddressById(int id) throws AddressNotFoundException;
 
-	List<Address> findAll();
+	List<Address> getAllAddresses() throws AddressNotFoundException;
 
 	void deactivateAddress(int id) throws AddressNotFoundException;
 
-	void update(int id, Address updatedAddress) throws AddressNotFoundException;
+	void updateAddress(int id, Address updatedAddress) throws AddressNotFoundException;
+
+	void beanToEntity(Address address, AddressEntity addressEntity);
+
+	void entityToBean(Address address, AddressEntity addressEntity);
+
+	void entitiesToBeans(List<Address> addresses, List<AddressEntity> addressEntities);
 
 
 }

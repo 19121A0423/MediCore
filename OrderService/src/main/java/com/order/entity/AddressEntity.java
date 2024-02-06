@@ -1,45 +1,50 @@
 package com.order.entity;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="address")
+@Table(name = "address")
 public class AddressEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="address_id")
+	@Column(name = "address_id")
 	private Integer addressId;
-	
-	@Column(name="street_name")
+
+	@Column(name = "street_name")
 	private String streetName;
-	
-	@Column(name="city")
+
+	@Column(name = "city")
 	private String city;
-	
-	@Column(name="state")
+
+	@Column(name = "state")
 	private String state;
-	
-	@Column(name="pinCode")
+
+	@Column(name = "pinCode")
 	private Long pinCode;
-	
+
 	@Column(name="user_id")
 	private Integer userId;
-	
-	@Column(name="status")
+
+	@Column(name = "status")
 	private String status;
+	
+	@ManyToOne
+	private OrderEntity orders;
 
 	public AddressEntity() {
 		super();
 	}
 
 	public AddressEntity(Integer addressId, String streetName, String city, String state, Long pinCode, Integer userId,
-			String status) {
+			String status, OrderEntity order) {
 		super();
 		this.addressId = addressId;
 		this.streetName = streetName;
@@ -48,6 +53,7 @@ public class AddressEntity {
 		this.pinCode = pinCode;
 		this.userId = userId;
 		this.status = status;
+		this.orders = order;
 	}
 
 	public Integer getAddressId() {
@@ -106,10 +112,21 @@ public class AddressEntity {
 		this.status = status;
 	}
 
+	public OrderEntity getOrder() {
+		return orders;
+	}
+
+	public void setOrder(OrderEntity order) {
+		this.orders = order;
+	}
+
 	@Override
 	public String toString() {
-		return "Address [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state=" + state
-				+ ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + "]";
+		return "AddressEntity [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state="
+				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + ", order=" + orders
+				+ "]";
 	}
+
+	
 
 }

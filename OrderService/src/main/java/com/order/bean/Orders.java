@@ -10,7 +10,7 @@ public class Orders implements Serializable{
 	private Integer orderId;
 	private LocalDate orderedDate;
 	private String status;
-	private Integer addressId;
+	private Address address;
 	private Integer cartId;
 	private Payment payment;
 
@@ -18,12 +18,12 @@ public class Orders implements Serializable{
 		super();
 	}
 
-	public Orders(Integer orderId, LocalDate orderedDate, String status, Integer addressId, Integer cartId, Payment payment) {
+	public Orders(Integer orderId, LocalDate orderedDate, String status, Address address, Integer cartId, Payment payment) {
 		super();
 		this.orderId = orderId;
 		this.orderedDate = orderedDate;
 		this.status = status;
-		this.addressId = addressId;
+		this.address = address;
 		this.cartId = cartId;
 		this.payment = payment;
 	}
@@ -52,12 +52,12 @@ public class Orders implements Serializable{
 		this.status = status;
 	}
 
-	public int getAddressId() {
-		return addressId;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAddressId(Integer addressId) {
-		this.addressId = addressId;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public Integer getCartId() {
@@ -78,8 +78,8 @@ public class Orders implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Orders [orderId=" + orderId + ", orderedDate=" + orderedDate + ", status=" + status + ", addressId="
-				+ addressId + ", cartId=" + cartId + ", payment=" + payment + "]";
+		return "Orders [orderId=" + orderId + ", orderedDate=" + orderedDate + ", status=" + status + ", address="
+				+ address + ", cartId=" + cartId + ", payment=" + payment + "]";
 	}
 
 	

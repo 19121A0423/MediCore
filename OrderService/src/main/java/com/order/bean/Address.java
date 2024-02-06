@@ -8,6 +8,7 @@ public class Address {
 	private String state;
 	private Long pinCode;
 	private Integer userId;
+	private Orders order;
 	private String status;
 
 	public Address() {
@@ -15,7 +16,7 @@ public class Address {
 	}
 
 	public Address(Integer addressId, String streetName, String city, String state, Long pinCode, Integer userId,
-			String status) {
+			Orders order, String status) {
 		super();
 		this.addressId = addressId;
 		this.streetName = streetName;
@@ -23,6 +24,7 @@ public class Address {
 		this.state = state;
 		this.pinCode = pinCode;
 		this.userId = userId;
+		this.order = order;
 		this.status = status;
 	}
 
@@ -74,6 +76,14 @@ public class Address {
 		this.userId = userId;
 	}
 
+	public Orders getOrder() {
+		return order;
+	}
+
+	public void setOrder(Orders order) {
+		this.order = order;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -85,7 +95,10 @@ public class Address {
 	@Override
 	public String toString() {
 		return "Address [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state=" + state
-				+ ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + "]";
+				+ ", pinCode=" + pinCode + ", userId=" + userId + ", order=" + order + ", status=" + status + "]";
 	}
+
+	
+	
 
 }
