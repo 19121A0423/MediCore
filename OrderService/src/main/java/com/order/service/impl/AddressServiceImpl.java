@@ -1,5 +1,11 @@
 package com.order.service.impl;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +13,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.order.bean.Address;
 import com.order.controller.AddressController;
@@ -24,7 +32,11 @@ public class AddressServiceImpl implements AddressService {
 	@Autowired
 	private AddressRepository addressRepository;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+
 	private static Logger log = LoggerFactory.getLogger(AddressServiceImpl.class.getSimpleName());
+
 
 	@Override
 	public Address saveAddress(Address address) {
