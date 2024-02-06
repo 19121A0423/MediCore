@@ -1,12 +1,12 @@
-package com.ooms.service;
+package com.user.service;
 
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.ooms.bean.UserBean;
-import com.ooms.exception.UserNotFoundByIdException;
-import com.ooms.structure.ResponseStructure;
+import com.user.bean.UserBean;
+import com.user.exception.UserNotFoundByIdException;
+import com.user.structure.ResponseStructure;
 
 public interface UserService {
 	

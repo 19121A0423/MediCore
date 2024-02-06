@@ -1,4 +1,4 @@
-package com.ooms.exception;
+package com.user.exception;
 
 public class UserNotFoundByIdException extends Exception {
 

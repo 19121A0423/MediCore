@@ -1,4 +1,4 @@
-package com.ooms.controller;
+package com.user.controller;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ooms.bean.UserBean;
-import com.ooms.exception.UserNotFoundByIdException;
-import com.ooms.service.UserService;
-import com.ooms.structure.ResponseStructure;
+import com.user.bean.UserBean;
+import com.user.exception.UserNotFoundByIdException;
+import com.user.service.UserService;
+import com.user.structure.ResponseStructure;
 
 @RestController
 public class UserController {

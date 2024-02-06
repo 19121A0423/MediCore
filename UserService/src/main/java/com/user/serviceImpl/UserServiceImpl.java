@@ -1,4 +1,4 @@
-package com.ooms.serviceImpl;
+package com.user.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -6,6 +6,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
+import com.user.bean.UserBean;
+import com.user.controller.UserController;
+import com.user.entity.User;
+import com.user.exception.UserNotFoundByIdException;
+import com.user.repository.UserRepo;
+import com.user.service.UserService;
+import com.user.structure.ResponseStructure;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-
-import com.ooms.bean.UserBean;
-import com.ooms.controller.UserController;
-import com.ooms.entity.User;
-import com.ooms.exception.UserNotFoundByIdException;
-import com.ooms.repository.UserRepo;
-import com.ooms.service.UserService;
-import com.ooms.structure.ResponseStructure;
 
 @Service
 public class UserServiceImpl implements UserService {

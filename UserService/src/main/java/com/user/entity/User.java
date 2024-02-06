@@ -1,4 +1,4 @@
-package com.ooms.entity;
+package com.user.entity;
 
 
 import jakarta.persistence.Entity;

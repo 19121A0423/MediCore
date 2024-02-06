@@ -1,4 +1,4 @@
-package com.ooms.structure;
+package com.user.structure;
 
 public class ErrorStructure {
 
