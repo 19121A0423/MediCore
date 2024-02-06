@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -35,7 +36,8 @@ public class AddressEntity {
 	@Column(name = "status")
 	private String status;
 	
-	private OrderEntity order;
+	@ManyToOne
+	private OrderEntity orders;
 
 	public AddressEntity() {
 		super();
@@ -51,7 +53,7 @@ public class AddressEntity {
 		this.pinCode = pinCode;
 		this.userId = userId;
 		this.status = status;
-		this.order = order;
+		this.orders = order;
 	}
 
 	public Integer getAddressId() {
@@ -111,17 +113,17 @@ public class AddressEntity {
 	}
 
 	public OrderEntity getOrder() {
-		return order;
+		return orders;
 	}
 
 	public void setOrder(OrderEntity order) {
-		this.order = order;
+		this.orders = order;
 	}
 
 	@Override
 	public String toString() {
 		return "AddressEntity [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state="
-				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + ", order=" + order
+				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + ", order=" + orders
 				+ "]";
 	}
 

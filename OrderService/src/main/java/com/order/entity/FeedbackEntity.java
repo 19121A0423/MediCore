@@ -2,11 +2,15 @@ package com.order.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,8 +25,10 @@ public class FeedbackEntity {
 	@Column(name="user_id")
 	private Integer userId;
 	
-	@Column(name="product_id")
-	private Integer productId;
+	@OneToOne
+	@JoinColumn(name = "order_id", referencedColumnName = "order_id")
+	@JsonIgnore
+	private OrderEntity order;
 	
 	@Column(name="feedback")
 	private String feedback;
@@ -37,12 +43,12 @@ public class FeedbackEntity {
 		super();
 	}
 
-	public FeedbackEntity(Integer feedbackId, Integer userId, Integer productId, String feedback, Double ratings,
+	public FeedbackEntity(Integer feedbackId, Integer userId, OrderEntity order, String feedback, Double ratings,
 			LocalDate feedbackDate) {
 		super();
 		this.feedbackId = feedbackId;
 		this.userId = userId;
-		this.productId = productId;
+		this.order = order;
 		this.feedback = feedback;
 		this.ratings = ratings;
 		this.feedbackDate = feedbackDate;
@@ -64,12 +70,12 @@ public class FeedbackEntity {
 		this.userId = userId;
 	}
 
-	public Integer getProductId() {
-		return productId;
+	public OrderEntity getOrder() {
+		return order;
 	}
 
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setOrder(OrderEntity order) {
+		this.order = order;
 	}
 
 	public String getFeedback() {
@@ -98,8 +104,10 @@ public class FeedbackEntity {
 
 	@Override
 	public String toString() {
-		return "Feedback [feedbackId=" + feedbackId + ", userId=" + userId + ", productId=" + productId + ", feedback="
+		return "FeedbackEntity [feedbackId=" + feedbackId + ", userId=" + userId + ", order=" + order + ", feedback="
 				+ feedback + ", ratings=" + ratings + ", feedbackDate=" + feedbackDate + "]";
 	}
+
+	
 
 }

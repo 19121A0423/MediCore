@@ -6,7 +6,7 @@ public class Feedback {
 
 	private Integer feedbackId;
 	private Integer userId;
-	private Integer productId;
+	private Orders order;
 	private String feedback;
 	private Double ratings;
 	private LocalDate feedbackDate;
@@ -15,12 +15,12 @@ public class Feedback {
 		super();
 	}
 
-	public Feedback(Integer feedbackId, Integer userId, Integer productId, String feedback, Double ratings,
+	public Feedback(Integer feedbackId, Integer userId, Orders order, String feedback, Double ratings,
 			LocalDate feedbackDate) {
 		super();
 		this.feedbackId = feedbackId;
 		this.userId = userId;
-		this.productId = productId;
+		this.order = order;
 		this.feedback = feedback;
 		this.ratings = ratings;
 		this.feedbackDate = feedbackDate;
@@ -42,12 +42,12 @@ public class Feedback {
 		this.userId = userId;
 	}
 
-	public Integer getProductId() {
-		return productId;
+	public Orders getOrder() {
+		return order;
 	}
 
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setOrder(Orders order) {
+		this.order = order;
 	}
 
 	public String getFeedback() {
@@ -74,10 +74,6 @@ public class Feedback {
 		this.feedbackDate = feedbackDate;
 	}
 
-	@Override
-	public String toString() {
-		return "Feedback [feedbackId=" + feedbackId + ", userId=" + userId + ", productId=" + productId + ", feedback="
-				+ feedback + ", ratings=" + ratings + ", feedbackDate=" + feedbackDate + "]";
-	}
+	
 
 }
