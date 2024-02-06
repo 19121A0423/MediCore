@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,5 +87,29 @@ public class CartController {
 		return cartDetails;
 	}
 
+	
+	@PutMapping("/cart/update/{quantity}")
+	public ResponseEntity<ResponseStructure<Cart>> update(@RequestBody Cart cart,@PathVariable int quantity) throws CartIdNotFoundException{
+		
+		log.info("Cart contoller  update method {}  "+cart);
+		ResponseEntity<ResponseStructure<Cart>> response = service.update(cart, quantity);
+		return response;
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

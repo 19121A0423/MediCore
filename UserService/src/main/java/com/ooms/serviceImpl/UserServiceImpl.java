@@ -6,14 +6,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import com.ooms.bean.UserBean;
+import com.ooms.controller.UserController;
 import com.ooms.entity.User;
-import com.ooms.entity.bean.UserBean;
 import com.ooms.exception.UserNotFoundByIdException;
 import com.ooms.repository.UserRepo;
 import com.ooms.service.UserService;
@@ -21,6 +24,9 @@ import com.ooms.structure.ResponseStructure;
 
 @Service
 public class UserServiceImpl implements UserService {
+	
+	private static Logger log = LoggerFactory
+			.getLogger(UserServiceImpl.class.getSimpleName());
 	
 	@Autowired
 	private UserRepo userRepo;
@@ -31,28 +37,33 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<ResponseStructure<UserBean>> save(UserBean user) {
 		
-		User userEntity = new User();
-		userEntity.setName(user.getUserName());
-		userEntity.setEmail(user.getUserEmail());
-		userEntity.setMobile_number(user.getUserMobileNumber());
-		userEntity.setPassword(user.getUserPassword());
-		userEntity.setGender(user.getUserGender());
-		userEntity.setUser_role(user.getUserRole());
-		userEntity.setStatus(user.getUserStatus());
-	
-		userRepo.save(userEntity);
-		sendMail(user);
+		log.info("UserServiceImpl save method start {} "+user);
 		
+		if(user.getUserEmail()==null || user.getUserPassword()==null) {
+			throw new IllegalArgumentException("User Values cannot be null");
+		}
+		
+		User userEntity = new User();
+		userEntity=	beanToEntity(userEntity, user);	
+		userEntity = userRepo.save(userEntity);	
+		user=entityToBean(userEntity, user);
+		sendMail(user);
+				
 		ResponseStructure<UserBean> structure = new ResponseStructure<>();
 		structure.setData(user);
 		structure.setMessage("Data Saved Successfully !!!");
 		structure.setStatusCode(HttpStatus.OK.value());
+		
+		log.info("UserServiceImpl save method end {} "+user);	
+		
 		return new ResponseEntity<ResponseStructure<UserBean>>(structure,HttpStatus.OK) ;
+		
 	}
 	
 	
 	public void sendMail(UserBean user) {
-
+		
+		log.info("User  service implementation send mail method start {} "+user);
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(user.getUserEmail());
 		mail.setSubject(" Registration ");
@@ -60,34 +71,32 @@ public class UserServiceImpl implements UserService {
 				+ user.getUserRole());
 		mail.setSentDate(new Date());
 		javaMailSender.send(mail);
+		log.info("User  service implementation send mail method end {} "+user);
 
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<UserBean>> update(UserBean user) {
+	public ResponseEntity<ResponseStructure<UserBean>> update(UserBean user) throws UserNotFoundByIdException {
 		
+		log.info("User  service implementation update method start {} "+user);
+		
+		if(user.getUserId()==0) {
+			throw new IllegalArgumentException("User Id cannot be null");
+		}
 		
 		Optional<User> optional = userRepo.findById(user.getUserId());
-		User userEntity = optional.get();
-		if(optional.get()!=null) {	
-			userEntity.setUser_id(user.getUserId());
-			userEntity.setName(user.getUserName());
-			userEntity.setEmail(user.getUserEmail());
-			userEntity.setMobile_number(user.getUserMobileNumber());
-			userEntity.setPassword(user.getUserPassword());
-			userEntity.setGender(user.getUserGender());
-			userEntity.setUser_role(user.getUserRole());
-			userEntity.setStatus(user.getUserStatus());	
-			
-			/* User save = */ userRepo.save(userEntity);
-			
-			
-			
+		
+		if(optional.isPresent()) {	
+			User userEntity = optional.get();
+			userEntity=beanToEntity(userEntity, user);
+			userEntity= userRepo.save(userEntity);
+			user=entityToBean(userEntity, user);
+					
 			ResponseStructure<UserBean> structure = new ResponseStructure<>();
 			structure.setData(user);
 			structure.setMessage("Data Saved Successfully !!!");
 			structure.setStatusCode(HttpStatus.OK.value());
-			
+			log.info("User  service implementation update method end {} "+user);
 			return new ResponseEntity<ResponseStructure<UserBean>>(structure,HttpStatus.OK) ;
 			
 		}else {
@@ -96,25 +105,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<UserBean>> getById(int userId) {
+	public ResponseEntity<ResponseStructure<UserBean>> getById(int userId) throws UserNotFoundByIdException {
+		log.info("User  service implementation getById method start {} "+userId);
+		if(userId==0) {
+			throw new IllegalArgumentException("User Id cannot be null");
+		}
 		Optional<User> optional = userRepo.findById(userId);
 		if(optional.isPresent()){
 			
-			User user = optional.get();
+			User userEntity = optional.get();
 			UserBean bean = new UserBean();
-			bean.setUserId(user.getUser_id());
-		    bean.setUserName(user.getName()); 
-		    bean.setUserEmail(user.getEmail());
-		    bean.setUserMobileNumber(user.getMobile_number());
-		    bean.setUserPassword(user.getPassword());
-		    bean.setUserGender(user.getGender()); 
-		    bean.setUserRole(user.getUser_role());
-		    bean.setUserStatus(user.getStatus());
-			System.out.println("=====");
+			bean=entityToBean(userEntity, bean);
+		
 			ResponseStructure<UserBean> structure = new ResponseStructure<>();
 			structure.setData(bean);
 			structure.setMessage("Data fetched Successfully !!!");
 			structure.setStatusCode(HttpStatus.FOUND.value());
+			
+			log.info("User  service implementation getById method end {} "+userId);
 			return new ResponseEntity<ResponseStructure<UserBean>>(structure, HttpStatus.FOUND);
 			
 		}else {
@@ -123,28 +131,24 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public ResponseEntity<ResponseStructure<UserBean>> delete(int userId) {
-		User user = userRepo.findById(userId).get();
+	public ResponseEntity<ResponseStructure<UserBean>> delete(int userId) throws UserNotFoundByIdException {
+		log.info("User  service implementation delete method start {} "+userId);
+		if(userId==0) {
+			throw new IllegalArgumentException("User Id cannot be null");
+		}
+		Optional<User> optional = userRepo.findById(userId);
 		
-		
-		if(user!=null){	
-			userRepo.deleteById(userId);
-			
-			UserBean bean = new UserBean();
-			
-		    bean.setUserName(user.getName()); 
-		    bean.setUserEmail(user.getEmail());
-		    bean.setUserMobileNumber(user.getMobile_number());
-		    bean.setUserPassword(user.getPassword());
-		    bean.setUserGender(user.getGender()); 
-		    bean.setUserRole(user.getUser_role());
-		    bean.setUserStatus(user.getStatus());
+		if(optional.isPresent()){	
+			User userEntity=optional.get();
+			userRepo.deleteById(userId);			
+			UserBean bean = new UserBean();		
+			bean =  entityToBean(userEntity, bean);
 		    
 			ResponseStructure<UserBean> structure = new ResponseStructure<>();
 			structure.setData(bean);
 			structure.setMessage("User data deleted successfully  !!!");
 			structure.setStatusCode(HttpStatus.OK.value());	
-			
+			log.info("User  service implementation delete method end {} "+userId);
 			return new ResponseEntity<ResponseStructure<UserBean>>(structure, HttpStatus.OK);
 		}else {
 			throw new UserNotFoundByIdException("User Not Present By This Id "+userId);
@@ -153,19 +157,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<ResponseStructure<List<UserBean>>> getAll() {
 		
+		log.info("User  service implementation get all method start ");
+
 		List<User> users = userRepo.findAll(); 
 		List<UserBean> usersList = new ArrayList<>();
 		for(User user :users) {
 			
-			UserBean bean = new UserBean();
-			
-		    bean.setUserName(user.getName()); 
-		    bean.setUserEmail(user.getEmail());
-		    bean.setUserMobileNumber(user.getMobile_number());
-		    bean.setUserPassword(user.getPassword());
-		    bean.setUserGender(user.getGender()); 
-		    bean.setUserRole(user.getUser_role());
-		    bean.setUserStatus(user.getStatus());
+			UserBean bean = new UserBean();			
+			bean=entityToBean(user, bean);
 		    usersList.add(bean);	    
 		}
 		
@@ -174,10 +173,45 @@ public class UserServiceImpl implements UserService {
 		structure.setMessage("User List Found  successfully  !!!");
 		structure.setStatusCode(HttpStatus.FOUND.value());	
 		
+		log.info("User  service implementation get all method end {} "+usersList);
+		
 		return new ResponseEntity<ResponseStructure<List<UserBean>>>(structure, HttpStatus.FOUND);
 	}
 
+		public User beanToEntity(User userEntity, UserBean bean) {
+			log.info("User  service implementation beanToEntity method start {}"+userEntity);
 
+			userEntity.setName(bean.getUserName());
+			userEntity.setEmail(bean.getUserEmail());
+			userEntity.setGender(bean.getUserGender());
+			userEntity.setMobile_number(bean.getUserMobileNumber());
+			userEntity.setPassword(bean.getUserPassword());
+			userEntity.setUser_role(bean.getUserRole());
+			userEntity.setStatus(bean.getUserStatus());
+			
+			log.info("User  service implementation beanToEntity method end "+bean);
+			return userEntity;
+			
+		}
+		
+		public UserBean entityToBean(User userEntity, UserBean bean) {
+			
+			
+			log.info("User  service implementation beanToEntity method start {}"+bean);
+
+			bean.setUserId(userEntity.getUser_id());
+			bean.setUserEmail(userEntity.getEmail());
+			bean.setUserPassword(userEntity.getPassword());
+			bean.setUserGender(userEntity.getGender());
+			bean.setUserMobileNumber(userEntity.getMobile_number());
+			bean.setUserName(userEntity.getName());
+			bean.setUserRole(userEntity.getUser_role());
+			bean.setUserStatus(userEntity.getStatus());
+			
+			log.info("User  service implementation beanToEntity method start {}"+userEntity);
+
+			return bean;
+		}
 
 	
 }

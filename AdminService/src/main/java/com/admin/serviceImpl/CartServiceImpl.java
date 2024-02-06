@@ -137,7 +137,7 @@ public class CartServiceImpl implements CartService {
 			obj.setPrice(ele.getPrice());
 			obj.setProductId(ele.getProductId());
 			obj.setCategory(ele.getCategory());
-			
+			obj.setQuantity(ele.getQuantity());
 			products.add(obj);			
 			
 		}		
@@ -157,12 +157,39 @@ public class CartServiceImpl implements CartService {
 	public ResponseEntity<ResponseStructure<Cart>> update(Cart cart,int quantity) throws CartIdNotFoundException{
 		
 		log.info("Cart service implementation update method {}"+cart);
-		CartEntity cartEntity = repo.findById(cart.getCartId())
-		.orElseThrow(()-> new CartIdNotFoundException("Cart Doesnot Exist By This Id"+cart.getCartId()));
-		beanToEntity(cartEntity, cart, quantity);
 		
+		CartEntity cartEntity = repo.getCartByUserId(cart.getUser().getUserId());
+		if(cartEntity==null) {
+			throw new CartIdNotFoundException("Cart Not Found By This Id "+cart.getCartId());
+		}
+		List<ProductEntity> products = cartEntity.getProducts();
+	
+		while(true) {
+			int temp=1;
+			for(ProductEntity product :products) {
+				temp++;
+				if(product.getProductId().equals(cart.getProducts().get(0).getProductId())) {
+					quantity--;
+					break;
+				}
+			}				
+			products.remove(temp);
+			if(quantity==0) {
+				break;
+			}
+		}
 		
-		return null;
+		cartEntity = repo.save(cartEntity);
+		
+		UserBean userBean = userService.getUserBean(cartEntity.getUserId());
+		cart = entityToBean(cartEntity, cart);
+		cart.setUser(userBean);
+		ResponseStructure<Cart> structure = new ResponseStructure<>();
+		structure.setData(cart);
+		structure.setMessage("Data Updated Successfully");
+		structure.setStatusCode(HttpStatus.OK.value());
+		log.info("Cart service implementation update method End{}"+cart);
+		return new ResponseEntity<ResponseStructure<Cart>>(structure, HttpStatus.OK);
 	}
 
 	@Override
@@ -248,6 +275,7 @@ public class CartServiceImpl implements CartService {
 			UserBean userBean = userService.getUserBean(optional.get().getUserId());
 			cart.setUser(userBean);
 			cart= entityToBean(optional.get(), cart);
+			
 			structure.setData(cart);
 			structure.setMessage("Data found successfull based on this "+cartId);
 			structure.setStatusCode(HttpStatus.FOUND.value());

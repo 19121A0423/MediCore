@@ -1,6 +1,6 @@
 package com.ooms.exception;
 
-public class UserNotFoundByIdException extends RuntimeException {
+public class UserNotFoundByIdException extends Exception {
 
 	/**
 	 * 
