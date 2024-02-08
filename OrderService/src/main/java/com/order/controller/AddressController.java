@@ -121,5 +121,19 @@ public class AddressController {
 			return new ResponseEntity<>( HttpStatus.NOT_FOUND);
 		}	
 	}
+	
+	@GetMapping("/getByUserId/{id}")
+	public ResponseEntity<List<Address>> getAddressByUserId(@PathVariable(value = "id") int id) {
+		log.info("AddressController::getAddressByUserId::Started");
+		log.info("UserId : "+id);
+	    try {
+	        List<Address> address = addressService.getAddressByUserId(id);
+	        log.info("AddressController::getAddressByUserId::Ended");
+	        return new ResponseEntity<>(address, HttpStatus.OK);
+	    } catch (AddressNotFoundException e) {
+	    	log.error("AddressController::getAddressByUserId::"+e.getMessage());
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	}
 
 }

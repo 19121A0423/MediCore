@@ -23,6 +23,7 @@ public interface AddressService {
 	void entityToBean(Address address, AddressEntity addressEntity);
 
 	void entitiesToBeans(List<Address> addresses, List<AddressEntity> addressEntities);
-
+	
+	List<Address> getAddressByUserId(int userId) throws AddressNotFoundException;
 
 }

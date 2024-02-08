@@ -32,7 +32,7 @@ public class OrderEntity implements Serializable{
 	@Column(name = "status")
 	private String status;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "address_id" , referencedColumnName = "address_id")
 	private AddressEntity address;
 
