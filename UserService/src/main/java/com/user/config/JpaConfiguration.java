@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.ooms")
+@EnableJpaRepositories(basePackages = "com.user")
 public class JpaConfiguration {
 
 }

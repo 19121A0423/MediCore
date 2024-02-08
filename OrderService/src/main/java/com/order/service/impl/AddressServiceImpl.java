@@ -57,7 +57,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public Address getAddressById(int id) throws AddressNotFoundException {
-		log.info("AddressServiceImpl::SaveAddress::Started");
+		log.info("AddressServiceImpl::getAddressById::Started");
 		AddressEntity addressEntity = addressRepository.findById(id)
 				.orElseThrow(() -> new AddressNotFoundException("Address not found with ID: " + id));
 
@@ -69,7 +69,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public List<Address> getAllAddresses() throws AddressNotFoundException {
-		log.info("AddressServiceImpl::SaveAddress::Started");
+		log.info("AddressServiceImpl::getAllAddresses::Started");
 		List<AddressEntity> addressEntities = addressRepository.findAll();
 		if(addressEntities.isEmpty()) {
 			throw new AddressNotFoundException("No addresses found");
@@ -110,6 +110,22 @@ public class AddressServiceImpl implements AddressService {
 		log.info("AddressServiceImpl::deactivateAddress::Ended");
 
 	}
+	
+	@Override
+	public List<Address> getAddressByUserId(int userId) throws AddressNotFoundException {
+		log.info("AddressServiceImpl::getAddressByUserId::Started");
+		List<AddressEntity> addressEntities = addressRepository.getAddressByUserId(userId);
+		if(addressEntities.isEmpty()) {
+			throw new AddressNotFoundException("No addresses found");
+		}
+		else {
+			List<Address> addresses = new ArrayList<>();
+			entitiesToBeans(addresses, addressEntities);
+			log.info("AddressServiceImpl::getAddressByUserId::Ended");
+			return addresses;
+		}
+	}
+
 
 	@Override
 	public void beanToEntity(Address address, AddressEntity addressEntity) {

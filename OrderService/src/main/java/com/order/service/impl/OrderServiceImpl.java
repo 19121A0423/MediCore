@@ -20,9 +20,9 @@ import com.order.bean.Address;
 import com.order.bean.Cart;
 import com.order.bean.Orders;
 import com.order.bean.Payment;
-import com.order.controller.AddressController;
 import com.order.entity.AddressEntity;
 import com.order.entity.OrderEntity;
+import com.order.exceptions.AddressNotFoundException;
 import com.order.exceptions.CartNotFoundException;
 import com.order.exceptions.OrderNotFoundException;
 import com.order.repository.OrderRepository;
@@ -48,15 +48,28 @@ public class OrderServiceImpl implements OrderService {
 	private static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class.getSimpleName());
 
 	@Override
-	public void placeOrder(Orders order) {
+	public void placeOrder(Orders order) throws AddressNotFoundException {
 		log.info("OrderServiceImpl::placeOrder::Started");
 		
 		Address address = order.getAddress();
-//		address.setOrder(order);
-		address = addressService.saveAddress(address);
 		AddressEntity addressEntity = new AddressEntity();
-		addressEntity.setAddressId(address.getAddressId());
-		addressService.beanToEntity(address, addressEntity);
+		if(address.getAddressId()==null) {
+			address = addressService.saveAddress(address);
+			addressEntity.setAddressId(address.getAddressId());
+			addressService.beanToEntity(address, addressEntity);
+		}
+		else {
+			try {
+				address = addressService.getAddressById(address.getAddressId());
+				addressEntity.setAddressId(address.getAddressId());
+				addressService.beanToEntity(address, addressEntity);
+
+			} catch (AddressNotFoundException e) {
+				log.error("Address is not found with id "+address.getAddressId());
+				throw e;
+			}
+			
+		}
 		
 		if (order.getCartId()==null || order.getAddress()==null || order.getPayment()==null) {
 			throw new IllegalArgumentException("Order properties cannot be null");
@@ -118,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Cart getCart(int id) throws CartNotFoundException {
 		log.info("OrderServiceImpl::getCart::Started");
-		String url = "http://localhost:8081/medicine/users/"+id ;
+		String url = "http://localhost:8084/medicine/cart/"+id ;
 		
 		ParameterizedTypeReference<ResponseStructure<Cart>> responseType =
 		        new ParameterizedTypeReference<ResponseStructure<Cart>>() {};
