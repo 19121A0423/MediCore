@@ -40,7 +40,7 @@ public class AddressController {
 		log.info("AddressController::SaveAddress::Started");
 		log.info("Address : "+address);
 		try {
-			addressService.saveAddress(address);
+			address = addressService.saveAddress(address);
 			log.info("AddressController::SaveAddress::Ended");
 			return new ResponseEntity<Address>(address, HttpStatus.CREATED);
 		}
