@@ -31,9 +31,6 @@ public class AddressServiceImpl implements AddressService {
 
 	@Autowired
 	private AddressRepository addressRepository;
-	
-	@Autowired
-	private RestTemplate restTemplate;
 
 	private static Logger log = LoggerFactory.getLogger(AddressServiceImpl.class.getSimpleName());
 
@@ -42,7 +39,7 @@ public class AddressServiceImpl implements AddressService {
 	public Address saveAddress(Address address) {
 		log.info("AddressServiceImpl::SaveAddress::Started");
 		if (address.getCity() == null || address.getStreetName() == null || address.getState() == null ||
-				address.getPinCode() == null || address.getUserId() == null) {
+				address.getPinCode() == null || address.getUserId() <=0) {
 			throw new IllegalArgumentException("Address properties cannot be null");
 		}
 
@@ -130,6 +127,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public void beanToEntity(Address address, AddressEntity addressEntity) {
 		log.info("AddressServiceImpl::beanToEntity::Started");
+		addressEntity.setAddressId(address.getAddressId());
 		addressEntity.setStreetName(address.getStreetName());
 		addressEntity.setCity(address.getCity());
 		addressEntity.setState(address.getState());

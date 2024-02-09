@@ -50,29 +50,18 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void placeOrder(Orders order) throws AddressNotFoundException {
 		log.info("OrderServiceImpl::placeOrder::Started");
+		if (order.getCartId()==null || order.getPayment()==null) {
+			throw new IllegalArgumentException("Order properties cannot be null");
+		}
 		
-		Address address = order.getAddress();
 		AddressEntity addressEntity = new AddressEntity();
-		if(address.getAddressId()==null) {
-			address = addressService.saveAddress(address);
-			addressEntity.setAddressId(address.getAddressId());
-			addressService.beanToEntity(address, addressEntity);
+		if(order.getAddress().getAddressId()==null) {
+			throw new AddressNotFoundException("Address in not found with id "+order.getAddress().getAddressId());
 		}
 		else {
-			try {
-				address = addressService.getAddressById(address.getAddressId());
-				addressEntity.setAddressId(address.getAddressId());
-				addressService.beanToEntity(address, addressEntity);
-
-			} catch (AddressNotFoundException e) {
-				log.error("Address is not found with id "+address.getAddressId());
-				throw e;
-			}
-			
-		}
-		
-		if (order.getCartId()==null || order.getAddress()==null || order.getPayment()==null) {
-			throw new IllegalArgumentException("Order properties cannot be null");
+			Address address = addressService.getAddressById(order.getAddress().getAddressId());
+			addressService.beanToEntity(address, addressEntity);
+//			addressEntity.setAddressId(order.getAddress().getAddressId());
 		}
 		
 		OrderEntity orderEntity = new OrderEntity();
