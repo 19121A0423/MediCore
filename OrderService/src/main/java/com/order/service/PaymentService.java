@@ -9,7 +9,7 @@ import com.order.exceptions.PaymentNotFoundException;
 
 public interface PaymentService {
 	
-	void savePayment(Payment payment, OrderEntity orderEntity);
+	Payment savePayment(Payment payment, OrderEntity orderEntity);
 
 	Payment getPaymentById(int id) throws PaymentNotFoundException;
 

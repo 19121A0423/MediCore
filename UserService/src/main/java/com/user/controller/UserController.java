@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.user.bean.PasswordUpdateRequest;
 import com.user.bean.UserBean;
 import com.user.exception.UserNotFoundByIdException;
 import com.user.service.UserService;
@@ -90,5 +91,37 @@ public class UserController {
 		log.info("UserController getAll method end");	
 		return response;
 	}
+	
+	@GetMapping("/users/validate/{email}/{password}")
+	public ResponseEntity<UserBean> userValiadtion(@PathVariable(value="email") String email, @PathVariable(value="password") String password) {
+		log.info("UserController userValiadtion method start");	
+		UserBean user =null;
+		try {
+			user = service.validateUser(email,password);
+			log.info("UserController userValiadtion method end");	
+			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@PutMapping("/users/updatepassword")
+	public ResponseEntity<UserBean> updatePassword(@RequestBody PasswordUpdateRequest request){
+		log.info("UserController updatePassword method start");	
+		log.info("Update password : "+request);
+		UserBean user =null;
+		try {
+			user = service.updatePassword(request.getEmail(),request.getNewPassword());
+			log.info("UserController updatePassword method end");	
+			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
 
 }

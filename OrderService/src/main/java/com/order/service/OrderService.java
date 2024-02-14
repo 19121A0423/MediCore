@@ -11,7 +11,7 @@ import com.order.exceptions.OrderNotFoundException;
 
 public interface OrderService {
 	
-	void placeOrder(Orders order) throws AddressNotFoundException;
+	Orders placeOrder(Orders order) throws AddressNotFoundException;
 
 	Orders getOrderById(int id) throws OrderNotFoundException;
 

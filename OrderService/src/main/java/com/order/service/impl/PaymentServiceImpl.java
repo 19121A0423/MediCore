@@ -1,6 +1,7 @@
 package com.order.service.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +32,9 @@ public class PaymentServiceImpl implements PaymentService {
 	private OrderService orderService = new OrderServiceImpl();
 
 	@Override
-	public void savePayment(Payment payment,OrderEntity orderEntity) {
+	public Payment savePayment(Payment payment,OrderEntity orderEntity) {
 		log.info("PaymentServiceImpl::savePayment::Started");
-	    if (payment.getAmount() <= 0 || orderEntity.getOrderId()==null || payment.getPaymentMode()==null) {
+	    if (payment.getAmount() <= 0 && orderEntity.getOrderId()== 0 && payment.getPaymentMode().isEmpty() ) {
 	        throw new IllegalArgumentException("Invalid payment information");
 	    }
 	    
@@ -42,6 +43,8 @@ public class PaymentServiceImpl implements PaymentService {
 	    beanToEntity(payment, paymentEntity);
 	    paymentRepository.save(paymentEntity);
 	    log.info("PaymentServiceImpl::savePayment::Ended");
+	    entityToBean(payment, paymentEntity);
+	    return payment;
 	}
 
 
@@ -75,8 +78,9 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public void beanToEntity(Payment payment, PaymentEntity paymentEntity) {
 		log.info("PaymentServiceImpl::beanToEntity::Started");
+		paymentEntity.setPaymentId(payment.getPaymentId());
 		paymentEntity.setAmount(payment.getAmount());
-		paymentEntity.setPaymentDate(LocalDate.now());
+		paymentEntity.setPaymentDate(LocalDateTime.now());
 		paymentEntity.setPaymentMode(payment.getPaymentMode());
 		paymentEntity.setStatus(payment.getStatus());
 		log.info("PaymentServiceImpl::beanToEntity::Ended");

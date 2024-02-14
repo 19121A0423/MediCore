@@ -2,6 +2,7 @@ package com.order.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,7 +28,7 @@ public class OrderEntity implements Serializable{
 	private Integer orderId;
 
 	@Column(name = "ordered_date")
-	private LocalDate orderedDate;
+	private LocalDateTime orderedDate;
 
 	@Column(name = "status")
 	private String status;
@@ -51,7 +52,7 @@ public class OrderEntity implements Serializable{
 		super();
 	}
 
-	public OrderEntity(Integer orderId, LocalDate orderedDate, String status, AddressEntity address, Integer cartId,
+	public OrderEntity(Integer orderId, LocalDateTime orderedDate, String status, AddressEntity address, Integer cartId,
 			PaymentEntity payment, FeedbackEntity feedback) {
 		super();
 		this.orderId = orderId;
@@ -71,11 +72,11 @@ public class OrderEntity implements Serializable{
 		this.orderId = orderId;
 	}
 
-	public LocalDate getOrderedDate() {
+	public LocalDateTime getOrderedDate() {
 		return orderedDate;
 	}
 
-	public void setOrderedDate(LocalDate orderedDate) {
+	public void setOrderedDate(LocalDateTime orderedDate) {
 		this.orderedDate = orderedDate;
 	}
 

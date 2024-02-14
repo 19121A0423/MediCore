@@ -34,7 +34,7 @@ public class OrderController {
 		log.info("OrderController::saveOrder::Started");
 //		log.info("Order : "+order);
 		try {
-			orderService.placeOrder(order);
+			order = orderService.placeOrder(order);
 			log.info("OrderController::saveOrder::Ended");
 			return new ResponseEntity<Orders>(order, HttpStatus.CREATED);
 		} catch (IllegalArgumentException | AddressNotFoundException e) {

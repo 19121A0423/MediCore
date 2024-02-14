@@ -17,8 +17,8 @@ public interface UserService {
 	public ResponseEntity<ResponseStructure<UserBean>> getById(int userId) throws UserNotFoundByIdException;
 	public ResponseEntity<ResponseStructure<List<UserBean>>> getAll();
 	
-
-	
+	public UserBean validateUser(String email, String password) throws UserNotFoundByIdException;
+	public UserBean updatePassword(String email,String password) throws UserNotFoundByIdException;
 	
 
 }

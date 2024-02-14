@@ -1,6 +1,7 @@
 package com.order.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,14 +38,14 @@ public class FeedbackEntity {
 	private Double ratings;
 	
 	@Column(name="feedback_date")
-	private LocalDate feedbackDate;
+	private LocalDateTime feedbackDate;
 
 	public FeedbackEntity() {
 		super();
 	}
 
 	public FeedbackEntity(Integer feedbackId, Integer userId, OrderEntity order, String feedback, Double ratings,
-			LocalDate feedbackDate) {
+			LocalDateTime feedbackDate) {
 		super();
 		this.feedbackId = feedbackId;
 		this.userId = userId;
@@ -94,11 +95,11 @@ public class FeedbackEntity {
 		this.ratings = ratings;
 	}
 
-	public LocalDate getFeedbackDate() {
+	public LocalDateTime getFeedbackDate() {
 		return feedbackDate;
 	}
 
-	public void setFeedbackDate(LocalDate feedbackDate) {
+	public void setFeedbackDate(LocalDateTime feedbackDate) {
 		this.feedbackDate = feedbackDate;
 	}
 

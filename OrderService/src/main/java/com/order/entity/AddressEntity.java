@@ -37,8 +37,7 @@ public class AddressEntity {
 	@Column(name = "status")
 	private String status;
 	
-	@OneToOne
-	
+	@OneToOne(mappedBy = "address")
 	private OrderEntity orders;
 
 	public AddressEntity() {

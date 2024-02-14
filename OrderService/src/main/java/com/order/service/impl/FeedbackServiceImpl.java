@@ -1,6 +1,7 @@
 package com.order.service.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	private static Logger log = LoggerFactory.getLogger(FeedbackServiceImpl.class.getSimpleName());
 
 	@Override
-	public void saveFeedback(Feedback feedback) {
+	public Feedback saveFeedback(Feedback feedback) {
 		log.info("FeedbackServiceImpl::saveFeedback::Started");
 		if (feedback.getUserId() == null || feedback.getOrder() == null || feedback.getFeedback() == null
 				|| feedback.getRatings() == null) {
@@ -53,7 +54,8 @@ public class FeedbackServiceImpl implements FeedbackService {
 		beanToEntity(feedback, feedbackEntity);
 		feedbackRepository.save(feedbackEntity);
 		log.info("FeedbackServiceImpl::saveFeedback::Ended");
-
+		entityToBean(feedback, feedbackEntity);
+		return feedback;
 	}
 
 	@Override
@@ -111,9 +113,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 		} catch (OrderNotFoundException e) {
 			log.error("Order is not found with id "+feedback.getOrder().getOrderId());
 		}
+		feedbackEntity.setFeedbackId(feedback.getFeedbackId());
 		feedbackEntity.setUserId(feedback.getUserId());
 		feedbackEntity.setFeedback(feedback.getFeedback());
-		feedbackEntity.setFeedbackDate(LocalDate.now());
+		feedbackEntity.setFeedbackDate(LocalDateTime.now());
 		feedbackEntity.setRatings(feedback.getRatings());
 		log.info("FeedbackServiceImpl::beanToEntity::Ended");
 	}

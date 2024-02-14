@@ -35,7 +35,7 @@ public class FeedbackController {
 		log.info("FeedbackController::saveFeedback::Started");
 		log.info("Feedback : "+feedback);
 		try {
-			feedbackService.saveFeedback(feedback);
+			feedback = feedbackService.saveFeedback(feedback);
 			log.info("FeedbackController::saveFeedback::Ended");
 			return new ResponseEntity<Feedback>(feedback, HttpStatus.CREATED);
 		}

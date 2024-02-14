@@ -11,7 +11,7 @@ import com.order.exceptions.ProductNotFoundException;
 
 public interface FeedbackService {
 	
-	void saveFeedback(Feedback feedback);
+	Feedback saveFeedback(Feedback feedback);
 
 	Feedback getFeedbackById(int id) throws FeedbackNotFoundException;
 

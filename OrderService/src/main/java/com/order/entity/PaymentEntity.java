@@ -2,6 +2,7 @@ package com.order.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,21 +36,19 @@ public class PaymentEntity implements Serializable{
 	private String status;
 
 	@Column(name = "payment_date")
-	private LocalDate paymentDate;
+	private LocalDateTime paymentDate;
 
 	@OneToOne
 	@JoinColumn(name = "order_id", referencedColumnName = "order_id")
 	@JsonIgnore
 	private OrderEntity order;
 
-//	@Column(name="order_id")
-//	private int orderId;
 
 	public PaymentEntity() {
 		super();
 	}
 
-	public PaymentEntity(Integer paymentId, String paymentMode, Double amount, String status, LocalDate paymentDate,
+	public PaymentEntity(Integer paymentId, String paymentMode, Double amount, String status, LocalDateTime paymentDate,
 			OrderEntity order) {
 		super();
 		this.paymentId = paymentId;
@@ -92,11 +91,11 @@ public class PaymentEntity implements Serializable{
 		this.status = status;
 	}
 
-	public LocalDate getPaymentDate() {
+	public LocalDateTime getPaymentDate() {
 		return paymentDate;
 	}
 
-	public void setPaymentDate(LocalDate paymentDate) {
+	public void setPaymentDate(LocalDateTime paymentDate) {
 		this.paymentDate = paymentDate;
 	}
 

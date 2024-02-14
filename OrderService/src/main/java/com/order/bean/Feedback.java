@@ -1,6 +1,7 @@
 package com.order.bean;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Feedback {
 
@@ -9,14 +10,14 @@ public class Feedback {
 	private Orders order;
 	private String feedback;
 	private Double ratings;
-	private LocalDate feedbackDate;
+	private LocalDateTime feedbackDate;
 
 	public Feedback() {
 		super();
 	}
 
 	public Feedback(Integer feedbackId, Integer userId, Orders order, String feedback, Double ratings,
-			LocalDate feedbackDate) {
+			LocalDateTime feedbackDate) {
 		super();
 		this.feedbackId = feedbackId;
 		this.userId = userId;
@@ -66,11 +67,11 @@ public class Feedback {
 		this.ratings = ratings;
 	}
 
-	public LocalDate getFeedbackDate() {
+	public LocalDateTime getFeedbackDate() {
 		return feedbackDate;
 	}
 
-	public void setFeedbackDate(LocalDate feedbackDate) {
+	public void setFeedbackDate(LocalDateTime feedbackDate) {
 		this.feedbackDate = feedbackDate;
 	}
 

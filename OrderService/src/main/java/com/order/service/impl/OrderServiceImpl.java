@@ -1,6 +1,7 @@
 package com.order.service.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
 	private static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class.getSimpleName());
 
 	@Override
-	public void placeOrder(Orders order) throws AddressNotFoundException {
+	public Orders placeOrder(Orders order) throws AddressNotFoundException {
 		log.info("OrderServiceImpl::placeOrder::Started");
 		if (order.getCartId()==null || order.getPayment()==null) {
 			throw new IllegalArgumentException("Order properties cannot be null");
@@ -71,9 +72,10 @@ public class OrderServiceImpl implements OrderService {
 
 		Payment payment = order.getPayment();
 		payment.setOrder(order);
-		paymentService.savePayment(payment,orderEntity);
-		
+		payment = paymentService.savePayment(payment,orderEntity);
+		order.setPayment(payment);
 		log.info("OrderServiceImpl::placeOrder::Ended");
+		return order;
 
 	}
 
@@ -145,8 +147,9 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void beanToEntity(Orders order, OrderEntity orderEntity) {
 		log.info("OrderServiceImpl::beanToEntity::Started");
+		orderEntity.setOrderId(order.getOrderId());
 		orderEntity.setCartId(order.getCartId());
-		orderEntity.setOrderedDate(LocalDate.now());
+		orderEntity.setOrderedDate(LocalDateTime.now());
 		orderEntity.setStatus("in progress");
 		log.info("OrderServiceImpl::beanToEntity::Ended");
 

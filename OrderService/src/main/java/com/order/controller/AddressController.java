@@ -38,7 +38,7 @@ public class AddressController {
 	@PostMapping("/save")
 	public ResponseEntity<Address> saveAddress(@RequestBody Address address){
 		log.info("AddressController::SaveAddress::Started");
-		log.info("Address : "+address);
+//		log.info("Address : "+address);
 		try {
 			address = addressService.saveAddress(address);
 			log.info("AddressController::SaveAddress::Ended");
