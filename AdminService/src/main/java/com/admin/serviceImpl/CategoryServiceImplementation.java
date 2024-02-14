@@ -35,7 +35,6 @@ public class CategoryServiceImplementation implements CategoryService{
 	public List<Category> getAll() {
 	
 		List<CategoryEntity> categoryEntities=categoryRepository.findAll();
-		
 		List<Category> categories = convert(categoryEntities);
 		return categories;
 	}

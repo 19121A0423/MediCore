@@ -1,6 +1,6 @@
 package com.admin.exception;
 
-public class CategoryNotFoundException extends Exception{
+public class CategoryNotFoundException extends RuntimeException{
 
 			
 		/**

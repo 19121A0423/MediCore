@@ -8,22 +8,27 @@ import org.springframework.stereotype.Service;
 
 import com.admin.bean.Product;
 import com.admin.entity.ProductEntity;
+import com.admin.exception.CategoryNotFoundException;
 import com.admin.exception.ProductNotFoundException;
 
 @Service
 public interface ProductService {
 
-	public void insert(Product product);
+	public Product insert(Product product);
 	
 	public ProductEntity get(Integer productId);
 	
+	public List<Product> getProductsByCategoryName(String categoryName) throws CategoryNotFoundException;
+	
     public List<Product> getAll();
 	
-	public void update(Integer productId, ProductEntity entity) throws ProductNotFoundException;
+	public void update(Integer productId, Product product) throws ProductNotFoundException;
 	
 	public void delete(Integer productId) throws ProductNotFoundException;
 
-
-	List<Product> searchProductByCategory(Optional<Integer> categoryId);
+	public List<Product> searchProductByCategory(Optional<Integer> categoryId);
+		
+	List<Product> searchSimilarProducts(String productName) throws ProductNotFoundException;
+	
 	
 }

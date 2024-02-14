@@ -38,9 +38,9 @@ public class CartServiceImpl implements CartService {
 	public ProductRepository productRepo;
 	
 	
-	@Autowired
-	public ProductServiceImplementation service;
-	
+//	@Autowired
+//	public ProductServiceImplementation service;
+//	
 	
 	
 	@Autowired
