@@ -2,6 +2,7 @@ package com.order.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,12 +28,12 @@ public class OrderEntity implements Serializable{
 	private Integer orderId;
 
 	@Column(name = "ordered_date")
-	private LocalDate orderedDate;
+	private LocalDateTime orderedDate;
 
 	@Column(name = "status")
 	private String status;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "address_id" , referencedColumnName = "address_id")
 	private AddressEntity address;
 
@@ -42,12 +43,17 @@ public class OrderEntity implements Serializable{
 	@OneToOne(mappedBy = "order")
 	@JsonIgnore
 	private PaymentEntity payment;
+	
+	@OneToOne(mappedBy = "order")
+	@JsonIgnore
+	private FeedbackEntity feedback;
 
 	public OrderEntity() {
 		super();
 	}
 
-	public OrderEntity(Integer orderId, LocalDate orderedDate, String status, AddressEntity address, Integer cartId, PaymentEntity payment) {
+	public OrderEntity(Integer orderId, LocalDateTime orderedDate, String status, AddressEntity address, Integer cartId,
+			PaymentEntity payment, FeedbackEntity feedback) {
 		super();
 		this.orderId = orderId;
 		this.orderedDate = orderedDate;
@@ -55,6 +61,7 @@ public class OrderEntity implements Serializable{
 		this.address = address;
 		this.cartId = cartId;
 		this.payment = payment;
+		this.feedback = feedback;
 	}
 
 	public Integer getOrderId() {
@@ -65,11 +72,11 @@ public class OrderEntity implements Serializable{
 		this.orderId = orderId;
 	}
 
-	public LocalDate getOrderedDate() {
+	public LocalDateTime getOrderedDate() {
 		return orderedDate;
 	}
 
-	public void setOrderedDate(LocalDate orderedDate) {
+	public void setOrderedDate(LocalDateTime orderedDate) {
 		this.orderedDate = orderedDate;
 	}
 
@@ -105,10 +112,20 @@ public class OrderEntity implements Serializable{
 		this.payment = payment;
 	}
 
+	public FeedbackEntity getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(FeedbackEntity feedback) {
+		this.feedback = feedback;
+	}
+
 	@Override
 	public String toString() {
-		return "OrderEntity [orderId=" + orderId + ", orderedDate=" + orderedDate + ", status=" + status
-				+ ", address=" + address + ", cartId=" + cartId + ", payment=" + payment + "]";
+		return "OrderEntity [orderId=" + orderId + ", orderedDate=" + orderedDate + ", status=" + status + ", address="
+				+ address + ", cartId=" + cartId + ", payment=" + payment + ", feedback=" + feedback + "]";
 	}
+
+	
 
 }

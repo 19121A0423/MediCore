@@ -2,13 +2,14 @@ package com.order.bean;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Orders implements Serializable{
 
 	private static final long serialVersionUID = 4226841471917030749L;
 	
 	private Integer orderId;
-	private LocalDate orderedDate;
+	private LocalDateTime orderedDate;
 	private String status;
 	private Address address;
 	private Integer cartId;
@@ -18,7 +19,7 @@ public class Orders implements Serializable{
 		super();
 	}
 
-	public Orders(Integer orderId, LocalDate orderedDate, String status, Address address, Integer cartId, Payment payment) {
+	public Orders(Integer orderId, LocalDateTime orderedDate, String status, Address address, Integer cartId, Payment payment) {
 		super();
 		this.orderId = orderId;
 		this.orderedDate = orderedDate;
@@ -36,11 +37,11 @@ public class Orders implements Serializable{
 		this.orderId = orderId;
 	}
 
-	public LocalDate getOrderedDate() {
+	public LocalDateTime getOrderedDate() {
 		return orderedDate;
 	}
 
-	public void setOrderedDate(LocalDate orderedDate) {
+	public void setOrderedDate(LocalDateTime orderedDate) {
 		this.orderedDate = orderedDate;
 	}
 

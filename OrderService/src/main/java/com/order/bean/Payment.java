@@ -2,6 +2,7 @@ package com.order.bean;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Payment implements Serializable {
 
@@ -11,7 +12,7 @@ public class Payment implements Serializable {
 	private String paymentMode;
 	private Double amount;
 	private String status;
-	private LocalDate paymentDate;
+	private LocalDateTime paymentDate;
 //	private int orderId;
 	private Orders order;
 
@@ -19,7 +20,7 @@ public class Payment implements Serializable {
 		super();
 	}
 	
-	public Payment(Integer paymentId, String paymentMode, Double amount, String status, LocalDate paymentDate, Orders order) {
+	public Payment(Integer paymentId, String paymentMode, Double amount, String status, LocalDateTime paymentDate, Orders order) {
 		super();
 		this.paymentId = paymentId;
 		this.paymentMode = paymentMode;
@@ -61,11 +62,11 @@ public class Payment implements Serializable {
 		this.status = status;
 	}
 
-	public LocalDate getPaymentDate() {
+	public LocalDateTime getPaymentDate() {
 		return paymentDate;
 	}
 
-	public void setPaymentDate(LocalDate paymentDate) {
+	public void setPaymentDate(LocalDateTime paymentDate) {
 		this.paymentDate = paymentDate;
 	}
 
