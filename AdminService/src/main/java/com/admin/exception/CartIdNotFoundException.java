@@ -1,6 +1,6 @@
 package com.admin.exception;
 
-public class CartIdNotFoundException extends Exception {
+public class CartIdNotFoundException extends RuntimeException {
 	
 	private String message;
 
@@ -12,4 +12,7 @@ public class CartIdNotFoundException extends Exception {
 	public String getMessage() {
 		return message;
 	}
+	
+	
+
 }

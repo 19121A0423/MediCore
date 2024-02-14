@@ -6,19 +6,15 @@ import org.springframework.http.ResponseEntity;
 
 import com.admin.bean.Cart;
 import com.admin.bean.Product;
-import com.admin.entity.CartEntity;
-import com.admin.exception.CartIdNotFoundException;
-import com.admin.exception.CartListNotFoundException;
-import com.admin.exception.UserIdNotFoundException;
-import com.admin.structure.ResponseStructure;
 
 public interface CartService {
 
-	public ResponseEntity<ResponseStructure<Cart>> save(Cart cart,int quantity) throws UserIdNotFoundException;
-	public ResponseEntity<ResponseStructure<Cart>> update(Cart cart,int quantity) throws CartIdNotFoundException;
-	public ResponseEntity<ResponseStructure<Cart>> delete(Integer cartId) throws CartIdNotFoundException;
-	public ResponseEntity<ResponseStructure<List<Cart>>> getCartDetails() throws CartListNotFoundException;
+	public ResponseEntity<Cart> save(Cart cart,int quantity);
+	public ResponseEntity<Cart> update(Cart cart);
+	public ResponseEntity<Cart> delete(Integer cartId);
+	public ResponseEntity<List<Cart>> getCartDetails();
 	
-	public ResponseEntity<ResponseStructure<Cart>>  getCartById(Integer cartId) throws CartIdNotFoundException;	
+	public ResponseEntity<Cart> getCartById(Integer cartId);	
+	public ResponseEntity<List<Product>> getProductsCartId(Integer cartId);
 	
 }
