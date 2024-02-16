@@ -45,8 +45,8 @@ public class FeedbackServiceImpl implements FeedbackService {
 	@Override
 	public Feedback saveFeedback(Feedback feedback) {
 		log.info("FeedbackServiceImpl::saveFeedback::Started");
-		if (feedback.getUserId() == null || feedback.getOrder() == null || feedback.getFeedback() == null
-				|| feedback.getRatings() == null) {
+		if (feedback.getUserId() == 0 || feedback.getFeedback().isEmpty()
+				|| feedback.getRatings()==0) {
 			throw new IllegalArgumentException("Feedback properties cannot be null");
 		}
 
@@ -54,7 +54,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 		beanToEntity(feedback, feedbackEntity);
 		feedbackRepository.save(feedbackEntity);
 		log.info("FeedbackServiceImpl::saveFeedback::Ended");
-		entityToBean(feedback, feedbackEntity);
+//		entityToBean(feedback, feedbackEntity);
 		return feedback;
 	}
 

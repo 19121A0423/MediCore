@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.order.bean.Orders;
-import com.order.entity.OrderEntity;
 import com.order.exceptions.AddressNotFoundException;
 import com.order.exceptions.OrderNotFoundException;
 import com.order.service.OrderService;
@@ -27,7 +26,6 @@ public class OrderScheduler {
         for (Orders order : orders) {
             if ("Ordered".equals(order.getStatus()) && currentTime.isAfter(order.getOrderedDate().plusMinutes(15))) {
             	order.setStatus("Delivered");
-                // Update the product status in the database
                 orderService.placeOrder(order);
             }
         }
