@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -189,5 +190,19 @@ public class OrderServiceImpl implements OrderService {
 		
 		log.info("OrderServiceImpl::entitiesToBeans::Ended");
 	}
+	
+	@Scheduled(fixedRate = 600000) // Check every 10 minutes, with an initial delay of 10 minutes
+    public void checkProducts() throws OrderNotFoundException, AddressNotFoundException {
+		log.info("OrderServiceImpl::checkProducts::Started");
+		List<Orders> orders = getAllOrders();
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        for (Orders order : orders) {
+            if ("Ordered".equals(order.getStatus()) && currentTime.isAfter(order.getOrderedDate().plusMinutes(15))) {
+            	updateStatusById(order.getOrderId());
+            }
+        }
+        log.info("OrderServiceImpl::checkProducts::Ended");
+    }
 
 }
