@@ -50,10 +50,10 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/getAll")
-	public ResponseEntity<List<Category>> getAll(){
-		List<Category> categories=categoryService.getAll();
+	public ResponseEntity<List<CategoryEntity>> getAll(){
+		List<CategoryEntity> categories=categoryService.getAll();
 		log.info("Category details{}",categories);
-		ResponseEntity<List<Category>> entity=new ResponseEntity<List<Category>>(categories,HttpStatus.OK);
+		ResponseEntity<List<CategoryEntity>> entity=new ResponseEntity<List<CategoryEntity>>(categories,HttpStatus.OK);
 		return entity;
 	}
 	

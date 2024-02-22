@@ -1,8 +1,7 @@
 package com.admin.entity;
 
+import java.util.Objects;
 
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +31,12 @@ public class ProductEntity {
 	
 	@Column(name = "description")
 	private String description;
+	
+	@Column(name="product_quantity")
+	private Integer quantityProduct;
+	
+	@Column(name="image")
+	private String image;
 	
 	@ManyToOne
     @JoinColumn(name="category_id", referencedColumnName = "category_id")
@@ -89,11 +94,45 @@ public class ProductEntity {
 		this.category = category;
 	}
 
+	
+	
+	public Integer getQuantityProduct() {
+		return quantityProduct;
+	}
+
+	public void setQuantityProduct(Integer quantityProduct) {
+		this.quantityProduct = quantityProduct;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	@Override
 	public String toString() {
 		return "ProductEntity [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity="
-				+ quantity + ", description=" + description + ", category=" + category + "]";
+				+ quantity + ", description=" + description + ", quantityProduct=" + quantityProduct + ", image="
+				+ image + ", category=" + category + "]";
 	}
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj)
+	        return true;
+	    if (obj == null || getClass() != obj.getClass())
+	        return false;
+	    ProductEntity other = (ProductEntity) obj;
+	    return Objects.equals(productId, other.productId);
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(productId);
+	}
+	
 		
 	
 

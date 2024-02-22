@@ -47,11 +47,14 @@ public class ProductController {
 	}
 	
 	@GetMapping("/getById/{productId}")
-	public ResponseEntity<ProductEntity> getById(@PathVariable Integer productId){
-		ProductEntity product=productService.get(productId);
+	public ResponseEntity<Product> getById(@PathVariable Integer productId){
+		log.info("Start::ProductController::getProductById");
+		Product product=productService.getProductById(productId);
 		log.info("Product Details of id{}",product);
-		ResponseEntity<ProductEntity> entity=new ResponseEntity<ProductEntity>(product,HttpStatus.OK);
-		return entity;
+		log.info("End::ProductController::getProductById");
+		return ResponseEntity.status(HttpStatus.OK).body(product);
+		
+		
 		
 	}
 	
@@ -64,17 +67,14 @@ public class ProductController {
 	}
 	
 	@PutMapping("/update/{productId}")
-	public ResponseEntity<String> update(@RequestBody Product product,
+	public ResponseEntity<Product> update(@RequestBody Product product,
 			@PathVariable Integer productId) {
 		log.info("Start Product Controller:update()");
-		try {
+  
 			productService.update(productId, product);
-			return new ResponseEntity<String>("Product details updated"+product,HttpStatus.OK);
-		} catch (ProductNotFoundException e) {
-			log.error("Handling Exception in ProductControl::update() ");
+		
 			log.info("End Product Controller:update()");
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
-		}
+			return ResponseEntity.status(HttpStatus.OK).body(product);
 		
 	}
 	
