@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,10 @@ public class PaymentServiceImpl implements PaymentService {
 	private PaymentRepository paymentRepository;
 	
 	private static Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class.getSimpleName());
-
 	
-	private OrderService orderService = new OrderServiceImpl();
+	@Autowired
+	@Lazy
+	private OrderService orderService;
 
 	@Override
 	public Payment savePayment(Payment payment,OrderEntity orderEntity) {
@@ -42,8 +44,8 @@ public class PaymentServiceImpl implements PaymentService {
 	    paymentEntity.setOrder(orderEntity);
 	    beanToEntity(payment, paymentEntity);
 	    paymentRepository.save(paymentEntity);
-	    log.info("PaymentServiceImpl::savePayment::Ended");
 	    entityToBean(payment, paymentEntity);
+	    log.info("PaymentServiceImpl::savePayment::Ended");
 	    return payment;
 	}
 

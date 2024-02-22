@@ -33,8 +33,8 @@ public class OrderEntity implements Serializable{
 	@Column(name = "status")
 	private String status;
 	
-	@OneToOne
-	@JoinColumn(name = "address_id" , referencedColumnName = "address_id")
+	@ManyToOne
+    @JoinColumn(name = "address_id")
 	private AddressEntity address;
 
 	@Column(name = "cart_id")

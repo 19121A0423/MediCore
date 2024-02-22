@@ -33,7 +33,7 @@ public class FeedbackController {
 	@PostMapping("/save")
 	public ResponseEntity<Feedback> saveFeedback(@RequestBody Feedback feedback){
 		log.info("FeedbackController::saveFeedback::Started");
-		log.info("Feedback : "+feedback);
+//		log.info("Feedback : "+feedback);
 		try {
 			feedback = feedbackService.saveFeedback(feedback);
 			log.info("FeedbackController::saveFeedback::Ended");

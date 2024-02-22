@@ -75,6 +75,12 @@ public class Feedback {
 		this.feedbackDate = feedbackDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Feedback [feedbackId=" + feedbackId + ", userId=" + userId + ", order=" + order + ", feedback="
+				+ feedback + ", ratings=" + ratings + ", feedbackDate=" + feedbackDate + "]";
+	}
+
 	
 
 }
