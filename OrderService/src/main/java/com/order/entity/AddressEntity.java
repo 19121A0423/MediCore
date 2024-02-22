@@ -36,16 +36,13 @@ public class AddressEntity {
 
 	@Column(name = "status")
 	private String status;
-	
-	@OneToOne(mappedBy = "address")
-	private OrderEntity orders;
 
 	public AddressEntity() {
 		super();
 	}
 
 	public AddressEntity(Integer addressId, String streetName, String city, String state, Long pinCode, Integer userId,
-			String status, OrderEntity order) {
+			String status) {
 		super();
 		this.addressId = addressId;
 		this.streetName = streetName;
@@ -54,7 +51,6 @@ public class AddressEntity {
 		this.pinCode = pinCode;
 		this.userId = userId;
 		this.status = status;
-		this.orders = order;
 	}
 
 	public Integer getAddressId() {
@@ -113,19 +109,10 @@ public class AddressEntity {
 		this.status = status;
 	}
 
-	public OrderEntity getOrder() {
-		return orders;
-	}
-
-	public void setOrder(OrderEntity order) {
-		this.orders = order;
-	}
-
 	@Override
 	public String toString() {
 		return "AddressEntity [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state="
-				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + ", order=" + orders
-				+ "]";
+				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status +  "]";
 	}
 
 	

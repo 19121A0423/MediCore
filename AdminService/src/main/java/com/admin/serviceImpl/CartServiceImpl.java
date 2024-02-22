@@ -118,13 +118,14 @@ public class CartServiceImpl implements CartService {
 			products.add(obj);	
 			
 		}
-		for(ProductEntity product:products) {
-			total=(total+(product.getPrice()*product.getQuantityProduct()));
-		}
+		
 		System.out.println("Before Set"+products);
 	    HashSet<ProductEntity> set = new HashSet<>(products);
 	    products=null;
 	    products = new ArrayList<>(set);	
+	    for(ProductEntity product:products) {
+			total=(total+(product.getPrice()*product.getQuantityProduct()));
+		}
 		System.out.println("After Set "+products);
 		
 		System.out.println(total);

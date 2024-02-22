@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.admin.bean.UserBean;
 import com.admin.service.UserService;
+import com.admin.structure.ResponseStructure;
 
 
 
@@ -29,21 +30,21 @@ public class UserServiceImpl  implements UserService{
 		
 		String url = "http://localhost:8084/medicine/users/"+id;
 		
-		ParameterizedTypeReference<UserBean> responseType =
-		        new ParameterizedTypeReference<UserBean>() {};
+		ParameterizedTypeReference<ResponseStructure<UserBean>> responseType =
+		        new ParameterizedTypeReference<ResponseStructure<UserBean>>() {};
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 
-		ResponseEntity<UserBean> responseEntity = template.exchange(url, HttpMethod.GET, httpEntity,responseType);
+		ResponseEntity<ResponseStructure<UserBean>> responseEntity = template.exchange(url, HttpMethod.GET, httpEntity,responseType);
 		
 		System.out.println(responseEntity);
-		UserBean response = responseEntity.getBody();
-	
+		ResponseStructure<UserBean> response = responseEntity.getBody();
+		UserBean user = response.getData();
 		
-		System.out.println(response);	
-		return response;
+		System.out.println(user);	
+		return user;
 		
 	}
 
