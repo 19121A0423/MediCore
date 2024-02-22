@@ -2,6 +2,10 @@ package com.admin.exception;
 
 public class CartListNotFoundException extends Exception {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String message;
 	
 	

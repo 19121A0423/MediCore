@@ -29,6 +29,8 @@ public class ProductServiceImplementation implements ProductService{
 		entity.setPrice(product.getPrice());
 		entity.setQuantity(product.getQuantity());
 		entity.setDescription(product.getDescription());
+		entity.setQuantityProduct(product.getQuantityProduct());
+		entity.setImage(product.getImage());
 		CategoryEntity categoryEntity=new CategoryEntity();
 		categoryEntity.setCategoryId(product.getCategory().getCategoryId());
 		entity.setCategory(categoryEntity);
@@ -43,14 +45,37 @@ public class ProductServiceImplementation implements ProductService{
 	}
 
 	@Override
-	public ProductEntity get(Integer productId) {
-	    return productRepository.findById(productId).get();
+	public Product getProductById(Integer productId) {
+	    Optional<ProductEntity> productOptional = productRepository.findById(productId);
+	    if (productOptional.isPresent()) {
+	        ProductEntity productEntity = productOptional.get();
+	        Product product = new Product();
+	        product.setProductId(productEntity.getProductId());
+	        product.setName(productEntity.getName());
+	        product.setPrice(productEntity.getPrice());
+	        product.setQuantity(productEntity.getQuantity());
+	        product.setDescription(productEntity.getDescription());
+	        product.setQuantityProduct(productEntity.getQuantityProduct());
+	        product.setImage(productEntity.getImage());
+
+	        CategoryEntity category = new CategoryEntity();
+	        category.setCategoryId(productEntity.getCategory().getCategoryId());
+	        category.setCategoryName(productEntity.getCategory().getCategoryName());
+
+	        product.setCategory(category);
+
+	        return product;
+	    } else {
+	    	throw new ProductNotFoundException("Product not found with Id- " + productId);
+	    }
 	}
+
 
 	@Override
 	public List<Product> getAll() {
 		List<ProductEntity> productEntities=productRepository.findAll();
 		List<Product> products = entityToBean(productEntities);
+		
 		return products;
 	}
 	
@@ -65,7 +90,8 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 			product.setPrice(entity.getPrice());	
 			product.setQuantity(entity.getQuantity());	
 			product.setDescription(entity.getDescription());
-			
+			product.setQuantityProduct(entity.getQuantityProduct());
+			product.setImage(entity.getImage());
 			CategoryEntity category = new CategoryEntity();
 	        category.setCategoryId(entity.getCategory().getCategoryId());
 	        category.setCategoryName(entity.getCategory().getCategoryName());
@@ -85,7 +111,9 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 	   entity.setName(product.getName());
 	   entity.setPrice(product.getPrice());
 	   entity.setQuantity(product.getQuantity());
+	   entity.setQuantityProduct(product.getQuantityProduct());
 	   entity.setDescription(product.getDescription());
+	   entity.setImage(product.getImage());
 	   CategoryEntity category=new CategoryEntity();
 	   category.setCategoryId(product.getCategory().getCategoryId());
 	   category.setCategoryName(product.getCategory().getCategoryName());

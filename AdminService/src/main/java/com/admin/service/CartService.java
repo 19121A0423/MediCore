@@ -2,19 +2,18 @@ package com.admin.service;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 
 import com.admin.bean.Cart;
-import com.admin.bean.Product;
+import com.admin.exception.CartIdNotFoundException;
+import com.admin.exception.CartListNotFoundException;
+import com.admin.exception.UserIdNotFoundException;
 
 public interface CartService {
 
-	public ResponseEntity<Cart> save(Cart cart,int quantity);
-	public ResponseEntity<Cart> update(Cart cart);
-	public ResponseEntity<Cart> delete(Integer cartId);
-	public ResponseEntity<List<Cart>> getCartDetails();
-	
-	public ResponseEntity<Cart> getCartById(Integer cartId);	
-	public ResponseEntity<List<Product>> getProductsCartId(Integer cartId);
+	public Cart save(Cart cart) throws UserIdNotFoundException;
+	public Cart update(Cart cart,Integer productId) throws CartIdNotFoundException;
+	public Cart delete(Integer cartId,Integer productId) throws CartIdNotFoundException;
+    List<Cart> getCartDetails() throws CartListNotFoundException;	
+	public Cart getCartById(Integer cartId) throws CartIdNotFoundException, UserIdNotFoundException, CartListNotFoundException;	
 	
 }

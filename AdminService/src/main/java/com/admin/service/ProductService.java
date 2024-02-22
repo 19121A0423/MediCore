@@ -16,7 +16,7 @@ public interface ProductService {
 
 	public Product insert(Product product);
 	
-	public ProductEntity get(Integer productId);
+	public Product getProductById(Integer productId);
 	
 	public List<Product> getProductsByCategoryName(String categoryName) throws CategoryNotFoundException;
 	

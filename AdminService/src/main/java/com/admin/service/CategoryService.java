@@ -16,7 +16,7 @@ public interface CategoryService {
 	
 	public CategoryEntity  getById(Integer categoryId);
 	
-	public List<Category> getAll();
+	public List<CategoryEntity> getAll();
 	
 	public void update(Integer categoryId, CategoryEntity entity) throws CategoryNotFoundException;
 	

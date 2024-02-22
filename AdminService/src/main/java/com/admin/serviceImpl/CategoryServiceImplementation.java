@@ -32,24 +32,24 @@ public class CategoryServiceImplementation implements CategoryService{
 	}
 
 	@Override
-	public List<Category> getAll() {
+	public List<CategoryEntity> getAll() {
 	
 		List<CategoryEntity> categoryEntities=categoryRepository.findAll();
-		List<Category> categories = convert(categoryEntities);
-		return categories;
-	}
-
-	public 	List<Category> convert(List<CategoryEntity> categoryEntities) {
-		
-		List<Category> categories = new ArrayList<>();
-		
-		for(CategoryEntity entity:categoryEntities) {
-			Category category=new Category();
-			category.setCategoryId(entity.getCategoryId());
-			category.setCategoryName(entity.getCategoryName());
-			categories.add(category);
-		}
-		return categories;
+//		List<Category> categories = convert(categoryEntities);
+//		return categories;
+//	}
+//
+//	public 	List<Category> convert(List<CategoryEntity> categoryEntities) {
+//		
+//		List<Category> categories = new ArrayList<>();
+//		
+//		for(CategoryEntity entity:categoryEntities) {
+//			Category category=new Category();
+//			category.setCategoryId(entity.getCategoryId());
+//			category.setCategoryName(entity.getCategoryName());
+//			categories.add(category);
+//		}
+		return categoryEntities;
 		
 		
 		

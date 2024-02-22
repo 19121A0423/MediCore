@@ -1,7 +1,11 @@
 package com.admin.exception;
 
-public class CartIdNotFoundException extends RuntimeException {
+public class CartIdNotFoundException extends Exception {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String message;
 
 	public CartIdNotFoundException(String message) {
@@ -12,7 +16,4 @@ public class CartIdNotFoundException extends RuntimeException {
 	public String getMessage() {
 		return message;
 	}
-	
-	
-
 }
