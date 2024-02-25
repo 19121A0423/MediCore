@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import com.order.exceptions.AddressNotFoundException;
 import com.order.exceptions.CartNotFoundException;
 import com.order.exceptions.OrderNotFoundException;
 import com.order.repository.OrderRepository;
+import com.order.service.AddressService;
 import com.order.service.OrderService;
 import com.order.service.PaymentService;
 import com.order.structure.ResponseStructure;
@@ -42,7 +44,8 @@ public class OrderServiceImpl implements OrderService {
 	private PaymentService paymentService;
 	
 	@Autowired
-	private AddressServiceImpl addressService;
+	@Lazy
+	private AddressService addressService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -52,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Orders placeOrder(Orders order) throws AddressNotFoundException {
 		log.info("OrderServiceImpl::placeOrder::Started");
-		if (order.getCartId()==null || order.getPayment()==null) {
+		if (order.getCartId()==0 || order.getPayment()==null) {
 			throw new IllegalArgumentException("Order properties cannot be null");
 		}
 		
@@ -70,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
 		orderEntity.setAddress(addressEntity);
 		beanToEntity(order, orderEntity);
 		orderRepository.save(orderEntity);
+		entityToBean(order, orderEntity);
 
 		Payment payment = order.getPayment();
 		payment.setOrder(order);
@@ -187,17 +191,18 @@ public class OrderServiceImpl implements OrderService {
 		log.info("OrderServiceImpl::entitiesToBeans::Ended");
 	}
 	
-	 @Scheduled(fixedDelay = 600000) // Check every 10 minutes, with an initial delay of 10 minutes
-	    public void checkProducts() throws OrderNotFoundException, AddressNotFoundException {
-	        List<Orders> orders = getAllOrders();
-	        LocalDateTime currentTime = LocalDateTime.now();
-
-	        for (Orders order : orders) {
-	            if ("Ordered".equals(order.getStatus()) && currentTime.isAfter(order.getOrderedDate().plusMinutes(15))) {
-	            	order.setStatus("Delivered");
-	                updateStatusById(order.getOrderId());
-	            }
-	        }
-	    }
+//	@Scheduled(fixedRate = 600000) // Check every 10 minutes, with an initial delay of 10 minutes
+//    public void checkProducts() throws OrderNotFoundException, AddressNotFoundException {
+//		log.info("OrderServiceImpl::checkProducts::Started");
+//		List<Orders> orders = getAllOrders();
+//        LocalDateTime currentTime = LocalDateTime.now();
+//
+//        for (Orders order : orders) {
+//            if ("Ordered".equals(order.getStatus()) && currentTime.isAfter(order.getOrderedDate().plusMinutes(15))) {
+//            	updateStatusById(order.getOrderId());
+//            }
+//        }
+//        log.info("OrderServiceImpl::checkProducts::Ended");
+//    }
 
 }

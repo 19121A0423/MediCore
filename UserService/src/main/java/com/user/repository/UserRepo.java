@@ -12,4 +12,12 @@ public interface UserRepo extends JpaRepository<User, Integer>  {
 	
 	User findByEmail(String email);
 	
+	
+	
+	@Query("select u.email from User u where u.email=?1")
+	public String getEmail(String userEmail);
+		
+	@Query("select u.mobile_number from User u where u.mobile_number=?1")
+	public Long getMobileNumber(long mobileNumber);
+	
 }

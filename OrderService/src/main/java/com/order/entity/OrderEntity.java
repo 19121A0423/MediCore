@@ -34,7 +34,7 @@ public class OrderEntity implements Serializable{
 	private String status;
 	
 	@ManyToOne
-	@JoinColumn(name="address_id")
+    @JoinColumn(name = "address_id")
 	private AddressEntity address;
 
 	@Column(name = "cart_id")

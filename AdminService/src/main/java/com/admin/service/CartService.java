@@ -15,5 +15,5 @@ public interface CartService {
 	public Cart delete(Integer cartId,Integer productId) throws CartIdNotFoundException;
     List<Cart> getCartDetails() throws CartListNotFoundException;	
 	public Cart getCartById(Integer cartId) throws CartIdNotFoundException, UserIdNotFoundException, CartListNotFoundException;	
-	
+	public Cart updateCartStatus(Cart cart) throws CartIdNotFoundException;
 }

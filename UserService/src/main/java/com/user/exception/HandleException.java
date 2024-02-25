@@ -22,5 +22,30 @@ public class HandleException extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<ErrorStructure>(structure,HttpStatus.NOT_FOUND);
 		
 	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure> dublicateEmailIdException(DublicateEmailIdException exception){
+		
+		ErrorStructure structure = new ErrorStructure();
+		structure.setMessage("Dublicate EmailId ");
+		structure.setRootCause(exception.getMessage());
+		structure.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
+		
+		return new ResponseEntity<ErrorStructure>(structure,HttpStatus.NOT_ACCEPTABLE);
+		
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure> dublicateMobileNumberException(DublicateMobileNumberException exception){
+		
+		ErrorStructure structure = new ErrorStructure();
+		structure.setMessage("Dublicate MobileNumber ");
+		structure.setRootCause(exception.getMessage());
+		structure.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
+		
+		return new ResponseEntity<ErrorStructure>(structure,HttpStatus.NOT_ACCEPTABLE);
+		
+	}
+	
+	
 
 }
