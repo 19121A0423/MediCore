@@ -27,6 +27,7 @@ public class UserServiceImpl  implements UserService{
 		
 		System.out.println("user service");
 		
+		
 		String url = "http://localhost:8084/medicine/users/"+id;
 		
 		ParameterizedTypeReference<UserBean> responseType =
@@ -40,9 +41,8 @@ public class UserServiceImpl  implements UserService{
 		
 		System.out.println(responseEntity);
 		UserBean response = responseEntity.getBody();
-	
+		System.out.println(response);
 		
-		System.out.println(response);	
 		return response;
 		
 	}

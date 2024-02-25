@@ -31,6 +31,7 @@ public class ProductServiceImplementation implements ProductService{
 		entity.setDescription(product.getDescription());
 		entity.setQuantityProduct(product.getQuantityProduct());
 		entity.setImage(product.getImage());
+		entity.setStatus(product.getStatus());
 		CategoryEntity categoryEntity=new CategoryEntity();
 		categoryEntity.setCategoryId(product.getCategory().getCategoryId());
 		entity.setCategory(categoryEntity);
@@ -57,7 +58,7 @@ public class ProductServiceImplementation implements ProductService{
 	        product.setDescription(productEntity.getDescription());
 	        product.setQuantityProduct(productEntity.getQuantityProduct());
 	        product.setImage(productEntity.getImage());
-
+	        product.setStatus(productEntity.getStatus());
 	        CategoryEntity category = new CategoryEntity();
 	        category.setCategoryId(productEntity.getCategory().getCategoryId());
 	        category.setCategoryName(productEntity.getCategory().getCategoryName());
@@ -92,6 +93,7 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 			product.setDescription(entity.getDescription());
 			product.setQuantityProduct(entity.getQuantityProduct());
 			product.setImage(entity.getImage());
+			product.setStatus(entity.getStatus());
 			CategoryEntity category = new CategoryEntity();
 	        category.setCategoryId(entity.getCategory().getCategoryId());
 	        category.setCategoryName(entity.getCategory().getCategoryName());
@@ -114,6 +116,7 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 	   entity.setQuantityProduct(product.getQuantityProduct());
 	   entity.setDescription(product.getDescription());
 	   entity.setImage(product.getImage());
+	   entity.setStatus(product.getStatus());
 	   CategoryEntity category=new CategoryEntity();
 	   category.setCategoryId(product.getCategory().getCategoryId());
 	   category.setCategoryName(product.getCategory().getCategoryName());

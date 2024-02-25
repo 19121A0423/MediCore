@@ -36,7 +36,13 @@ public class AddressEntity {
 
 	@Column(name = "status")
 	private String status;
-	
+
+	@Override
+	public String toString() {
+		return "AddressEntity [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state="
+				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + "]";
+	}
+
 	public AddressEntity() {
 		super();
 	}
@@ -109,11 +115,7 @@ public class AddressEntity {
 		this.status = status;
 	}
 
-	@Override
-	public String toString() {
-		return "AddressEntity [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state="
-				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + "]";
-	}
+	
 
 	
 

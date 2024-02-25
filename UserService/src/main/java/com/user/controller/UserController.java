@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.user.bean.PasswordUpdateRequest;
 import com.user.bean.UserBean;
+import com.user.exception.DublicateEmailIdException;
+import com.user.exception.DublicateMobileNumberException;
 import com.user.exception.UserNotFoundByIdException;
 import com.user.service.UserService;
-import com.user.structure.ResponseStructure;
 
 @RestController
 public class UserController {
@@ -31,66 +32,67 @@ public class UserController {
 	private UserService service;
 
 	@PostMapping("/users/save")
-	public ResponseEntity<ResponseStructure<UserBean>> save(@RequestBody UserBean user) {
+	public ResponseEntity<UserBean> save(@RequestBody UserBean user) throws DublicateEmailIdException, DublicateMobileNumberException {
 		log.info("UserController save method start {}"+user);	
-		ResponseEntity<ResponseStructure<UserBean>> response=null;
+		UserBean userBean=null;
 		try {
-			response= service.save(user);
+			 userBean = service.save(user);
 		}catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		log.info("UserController save method end{}"+user);	
-		return response;
+		 return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
 	@PutMapping("/users/update")
-	public ResponseEntity<ResponseStructure<UserBean>> update(@RequestBody UserBean user) throws UserNotFoundByIdException {
+	public ResponseEntity<UserBean> update(@RequestBody UserBean user) throws UserNotFoundByIdException {
 		log.info("UserController update method start {}"+user);	
-		ResponseEntity<ResponseStructure<UserBean>> response=null;
+		UserBean userBean=null;
 		try {
-	    response =service.update(user);
+			 userBean = service.update(user);
 		}catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		log.info("UserController update method 	end {}"+user);	
-		return response;
+		 return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
 	@GetMapping("/users/{userId}")
-	public ResponseEntity<ResponseStructure<UserBean>> getById(@PathVariable int userId) throws UserNotFoundByIdException {
+	public ResponseEntity<UserBean> getById(@PathVariable int userId) throws UserNotFoundByIdException {
 		
 		log.info("UserController getById method start {}"+userId);	
-		ResponseEntity<ResponseStructure<UserBean>> response=null;
+		UserBean userBean=null;
 		try {
-			response =service.getById(userId);
+			 userBean = service.getById(userId);
 		}catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		log.info("UserController getById method 	end {}"+userId);	
 		
-		return response;
+		return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
 	@DeleteMapping("/users/delete/{userId}")
-	public ResponseEntity<ResponseStructure<UserBean>> delete(@PathVariable int userId) throws UserNotFoundByIdException {
+	public ResponseEntity<UserBean> delete(@PathVariable int userId) throws UserNotFoundByIdException {
 		log.info("UserController delete method start {}"+userId);	
-		ResponseEntity<ResponseStructure<UserBean>> response=null;
+		UserBean userBean=null;
 		try {
-			response =service.delete(userId);
+			  userBean = service.delete(userId);
 		}catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		log.info("UserController delete method 	end {}"+userId);			
-		return response;
+		return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
 	@GetMapping("/users")
-	public ResponseEntity<ResponseStructure<List<UserBean>>> getAll() {
+	public ResponseEntity<List<UserBean>> getAll() {
 		log.info("UserController getAll method start");	
-		ResponseEntity<ResponseStructure<List<UserBean>>> response = service.getAll();
+		 List<UserBean> usersList = service.getAll();
 		log.info("UserController getAll method end");	
-		return response;
+		return ResponseEntity.status(HttpStatus.OK).body(usersList);
 	}
+
 	
 	@GetMapping("/users/validate/{email}/{password}")
 	public ResponseEntity<UserBean> userValiadtion(@PathVariable(value="email") String email, @PathVariable(value="password") String password) {

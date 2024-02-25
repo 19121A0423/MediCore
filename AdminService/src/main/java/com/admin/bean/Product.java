@@ -12,6 +12,7 @@ public class Product {
 	private Integer quantityProduct;
 	private String image;
 	private CategoryEntity category;
+	private String status;
 
 	public Product() {
 
@@ -94,14 +95,25 @@ public class Product {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {
 		return "Product [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity=" + quantity
 				+ ", description=" + description + ", quantityProduct=" + quantityProduct + ", image=" + image
-				+ ", category=" + category + "]";
+				+ ", category=" + category + ", status=" + status + "]";
 	}
 
+	
 	
 
 }

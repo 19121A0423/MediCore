@@ -191,18 +191,18 @@ public class OrderServiceImpl implements OrderService {
 		log.info("OrderServiceImpl::entitiesToBeans::Ended");
 	}
 	
-	@Scheduled(fixedRate = 600000) // Check every 10 minutes, with an initial delay of 10 minutes
-    public void checkProducts() throws OrderNotFoundException, AddressNotFoundException {
-		log.info("OrderServiceImpl::checkProducts::Started");
-		List<Orders> orders = getAllOrders();
-        LocalDateTime currentTime = LocalDateTime.now();
-
-        for (Orders order : orders) {
-            if ("Ordered".equals(order.getStatus()) && currentTime.isAfter(order.getOrderedDate().plusMinutes(15))) {
-            	updateStatusById(order.getOrderId());
-            }
-        }
-        log.info("OrderServiceImpl::checkProducts::Ended");
-    }
+//	@Scheduled(fixedRate = 600000) // Check every 10 minutes, with an initial delay of 10 minutes
+//    public void checkProducts() throws OrderNotFoundException, AddressNotFoundException {
+//		log.info("OrderServiceImpl::checkProducts::Started");
+//		List<Orders> orders = getAllOrders();
+//        LocalDateTime currentTime = LocalDateTime.now();
+//
+//        for (Orders order : orders) {
+//            if ("Ordered".equals(order.getStatus()) && currentTime.isAfter(order.getOrderedDate().plusMinutes(15))) {
+//            	updateStatusById(order.getOrderId());
+//            }
+//        }
+//        log.info("OrderServiceImpl::checkProducts::Ended");
+//    }
 
 }

@@ -90,4 +90,18 @@ public class CartController {
 		return ResponseEntity.status(HttpStatus.OK).body(cart);
 	
 	}
+	
+	@PutMapping("/cart/updateStatus")
+	public ResponseEntity<Cart> updateCartStatus(@RequestBody Cart cart) throws CartIdNotFoundException {
+		log.info("Cart Controller Update Cart Status Method Start");
+		try {
+			cart = service.updateCartStatus(cart);
+			log.info("Cart Controller Update Cart Status Method End");
+			return ResponseEntity.status(HttpStatus.OK).body(cart);
+		}catch (IllegalArgumentException e) {
+			log.info("Cart controller Update Cart Status Method End "+e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+	}
 }

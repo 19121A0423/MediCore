@@ -115,16 +115,18 @@ public class CartServiceImpl implements CartService {
 			obj.setProductId(ele.getProductId());
 			obj.setCategory(ele.getCategory());
 			obj.setImage(ele.getImage());
+			obj.setStatus(ele.getStatus());
 			products.add(obj);	
 			
 		}
-		for(ProductEntity product:products) {
-			total=(total+(product.getPrice()*product.getQuantityProduct()));
-		}
+		
 		System.out.println("Before Set"+products);
 	    HashSet<ProductEntity> set = new HashSet<>(products);
 	    products=null;
 	    products = new ArrayList<>(set);	
+	    for(ProductEntity product:products) {
+			total=(total+(product.getPrice()*product.getQuantityProduct()));
+		}
 		System.out.println("After Set "+products);
 		
 		System.out.println(total);
@@ -145,22 +147,25 @@ public class CartServiceImpl implements CartService {
 		
 		double total=0;
 		List<Product > products = new ArrayList<>();
-		for(ProductEntity ele:cartEntity.getProducts()) {
-			
-			Product obj = new Product();
-			obj.setDescription(ele.getDescription());
-			obj.setName(ele.getName());
-			obj.setPrice(ele.getPrice());
-			obj.setProductId(ele.getProductId());
-			obj.setCategory(ele.getCategory());
-			obj.setQuantity(ele.getQuantity());
-			obj.setQuantityProduct(ele.getQuantityProduct());
-			obj.setImage(ele.getImage());
-			total=(total+(ele.getPrice()*ele.getQuantityProduct()));
-			System.out.println(total);
-			products.add(obj);			
-			
-		}		
+		if(cartEntity.getProducts()!=null) {
+			for(ProductEntity ele:cartEntity.getProducts()) {
+				
+				Product obj = new Product();
+				obj.setDescription(ele.getDescription());
+				obj.setName(ele.getName());
+				obj.setPrice(ele.getPrice());
+				obj.setProductId(ele.getProductId());
+				obj.setCategory(ele.getCategory());
+				obj.setQuantity(ele.getQuantity());
+				obj.setQuantityProduct(ele.getQuantityProduct());
+				obj.setImage(ele.getImage());
+				obj.setStatus(ele.getStatus());
+				total=(total+(ele.getPrice()*ele.getQuantityProduct()));
+				System.out.println(total);
+				products.add(obj);			
+				
+			}
+		}
 		cart.setQuantity(cartEntity.getQuantity());
 		cart.setAmount(total);
 		cart.setProducts(products);			
@@ -221,6 +226,7 @@ public class CartServiceImpl implements CartService {
 					cartEntity.setQuantity(cartEntity.getQuantity()-1);
 					total=(product.getPrice()*product.getQuantityProduct());
 					product.setQuantityProduct(1);
+					product.setStatus("Add To Cart");
 					productRepo.save(product);
 					break;
 				}
@@ -289,6 +295,40 @@ public class CartServiceImpl implements CartService {
 		log.info("Cart sevice implementation getCartById method  End -> {}"+cart,userId);			
 		return cart;
 			
+	}
+	
+	@Override
+	public Cart updateCartStatus(Cart cart) throws CartIdNotFoundException {
+		log.info("Cart Service Implementation Update Cart Status Start"+cart.getCartId());
+		if(cart==null) {
+			throw new IllegalArgumentException("Cart Id Cannot be Empty");
+		}
+		
+		Optional<CartEntity> optional = repo.findById(cart.getCartId());
+		if(optional.isPresent()) {
+			CartEntity cartEntity = optional.get();
+			List<ProductEntity> products = cartEntity.getProducts();
+			
+			for(ProductEntity product:products) {
+				product.setQuantityProduct(1);
+				product.setStatus("Add To Cart");
+				productRepo.save(product);
+			}
+			products=null;
+			cartEntity.setProducts(products);
+			cartEntity.setAmount(0.0);
+			cartEntity.setQuantity(0);
+			cartEntity.setStatus("Deactivated");
+			cartEntity = repo.save(cartEntity);
+			System.out.println(cartEntity);
+			cart=entityToBean(cartEntity, cart);
+		log.info("Cart Service Implementation Update Cart Status End"+cart);
+
+			return cart;
+		}else {
+			throw new CartIdNotFoundException("Cart Not Found By This Id"+cart.getCartId());
+		}
+	
 	}
 
 	

@@ -38,6 +38,8 @@ public class ProductEntity {
 	@Column(name="image")
 	private String image;
 	
+	private String status;
+	
 	@ManyToOne
     @JoinColumn(name="category_id", referencedColumnName = "category_id")
 	private CategoryEntity category;
@@ -111,13 +113,24 @@ public class ProductEntity {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {
 		return "ProductEntity [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity="
 				+ quantity + ", description=" + description + ", quantityProduct=" + quantityProduct + ", image="
-				+ image + ", category=" + category + "]";
+				+ image + ", status=" + status + ", category=" + category + "]";
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj)

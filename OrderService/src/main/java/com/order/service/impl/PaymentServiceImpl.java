@@ -28,9 +28,8 @@ public class PaymentServiceImpl implements PaymentService {
 	private PaymentRepository paymentRepository;
 	
 	private static Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class.getSimpleName());
-	
+
 	@Autowired
-	@Lazy
 	private OrderService orderService;
 
 	@Override
