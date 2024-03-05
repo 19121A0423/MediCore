@@ -1,5 +1,6 @@
 package com.admin.repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 
 @Query(value="SELECT p.* FROM product p JOIN product_category c ON p.category_id = c.category_id WHERE c.category_name = :categoryName", nativeQuery = true)
 public List<ProductEntity> findByCategoryName(String categoryName);
+
+
 }

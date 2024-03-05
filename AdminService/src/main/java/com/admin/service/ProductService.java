@@ -29,6 +29,5 @@ public interface ProductService {
 	public List<Product> searchProductByCategory(Optional<Integer> categoryId);
 		
 	List<Product> searchSimilarProducts(String productName) throws ProductNotFoundException;
-	
-	
+		
 }

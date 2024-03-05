@@ -1,19 +1,26 @@
 package com.admin.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.admin.bean.Composition;
 import com.admin.bean.Product;
 import com.admin.entity.CategoryEntity;
+import com.admin.entity.CompositionEntity;
 import com.admin.entity.ProductEntity;
 import com.admin.exception.CategoryNotFoundException;
+import com.admin.exception.CompositionNotFoundException;
 import com.admin.exception.ProductNotFoundException;
 import com.admin.repository.ProductRepository;
 import com.admin.service.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class ProductServiceImplementation implements ProductService{
@@ -22,28 +29,24 @@ public class ProductServiceImplementation implements ProductService{
 	private ProductRepository productRepository;
 	
 	@Override
-	public Product insert(Product product)  {
-		ProductEntity entity=new ProductEntity();
-		entity.setProductId(product.getProductId());
-		entity.setName(product.getName());
-		entity.setPrice(product.getPrice());
-		entity.setQuantity(product.getQuantity());
-		entity.setDescription(product.getDescription());
-		entity.setQuantityProduct(product.getQuantityProduct());
-		entity.setImage(product.getImage());
-		entity.setStatus(product.getStatus());
-		CategoryEntity categoryEntity=new CategoryEntity();
-		categoryEntity.setCategoryId(product.getCategory().getCategoryId());
-		entity.setCategory(categoryEntity);
-		if(entity!=null) {
-		productRepository.save(entity);
-		}
-		else {
-			throw new ProductNotFoundException("The Product fields are null");
-		}
-		return product;
-	
+	public Product insert(Product product) {
+	    ProductEntity entity = new ProductEntity();
+	    entity.setProductId(product.getProductId());
+	    entity.setName(product.getName());
+	    entity.setPrice(product.getPrice());
+	    entity.setQuantity(product.getQuantity());
+	    entity.setDescription(product.getDescription());
+	    entity.setQuantityProduct(product.getQuantityProduct());
+	    entity.setImage(product.getImage());
+	    entity.setStatus(product.getStatus());
+       CategoryEntity categoryEntity = new CategoryEntity();
+	    categoryEntity.setCategoryId(product.getCategory().getCategoryId());
+	    entity.setCategory(categoryEntity);
+	    entity.setCompositions(product.getCompositions());
+	    productRepository.save(entity); // Save the entity
+	    return product;
 	}
+
 
 	@Override
 	public Product getProductById(Integer productId) {
@@ -59,12 +62,13 @@ public class ProductServiceImplementation implements ProductService{
 	        product.setQuantityProduct(productEntity.getQuantityProduct());
 	        product.setImage(productEntity.getImage());
 	        product.setStatus(productEntity.getStatus());
+	       
 	        CategoryEntity category = new CategoryEntity();
 	        category.setCategoryId(productEntity.getCategory().getCategoryId());
 	        category.setCategoryName(productEntity.getCategory().getCategoryName());
 
 	        product.setCategory(category);
-
+            product.setCompositions(productEntity.getCompositions());
 	        return product;
 	    } else {
 	    	throw new ProductNotFoundException("Product not found with Id- " + productId);
@@ -97,9 +101,8 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 			CategoryEntity category = new CategoryEntity();
 	        category.setCategoryId(entity.getCategory().getCategoryId());
 	        category.setCategoryName(entity.getCategory().getCategoryName());
-
 	        product.setCategory(category);
-			
+	        product.setCompositions(entity.getCompositions());
 			products.add(product);
 		}
 		return products;
@@ -121,6 +124,8 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 	   category.setCategoryId(product.getCategory().getCategoryId());
 	   category.setCategoryName(product.getCategory().getCategoryName());
 	   product.setCategory(category);
+	   entity.setCategory(category);
+	   entity.setCompositions(product.getCompositions());
    }
 
 	@Override
@@ -130,6 +135,8 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 		ProductEntity productEntity =productOptional.get();
 		beanToEntity(product, productEntity);
 			productRepository.save(productEntity);
+			System.out.println("update() serviceimpl");
+			
 		}
 		else {
 			
@@ -198,5 +205,10 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 
 		
 	}
+	
 
-	}
+	
+
+}
+
+
