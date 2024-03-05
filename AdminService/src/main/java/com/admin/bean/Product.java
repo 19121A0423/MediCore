@@ -1,6 +1,9 @@
 package com.admin.bean;
 
+import java.util.List;
+
 import com.admin.entity.CategoryEntity;
+import com.admin.entity.CompositionEntity;
 
 public class Product {
 	
@@ -13,23 +16,51 @@ public class Product {
 	private String image;
 	private CategoryEntity category;
 	private String status;
-
+	private List<CompositionEntity> compositions;
+	
 	public Product() {
 
 	}
 
-	public Product(Integer productId, String name, Double price, Integer quantity, String description,Integer quantityProduct,
-			String image,CategoryEntity category) {
+	
+	
+
+
+	public List<CompositionEntity> getCompositions() {
+		return compositions;
+	}
+
+
+
+
+
+	public void setCompositions(List<CompositionEntity> compositions) {
+		this.compositions = compositions;
+	}
+
+
+
+
+
+	public Product(Integer productId, String name, Double price, Integer quantity, String description,
+			Integer quantityProduct, String image, CategoryEntity category, String status,
+			List<CompositionEntity> compositions) {
 		super();
 		this.productId = productId;
 		this.name = name;
 		this.price = price;
 		this.quantity = quantity;
 		this.description = description;
-		this.quantityProduct=quantityProduct;
-		this.image=image;
+		this.quantityProduct = quantityProduct;
+		this.image = image;
 		this.category = category;
+		this.status = status;
+		this.compositions = compositions;
 	}
+
+
+
+
 
 	public Integer getProductId() {
 		return productId;
@@ -105,13 +136,18 @@ public class Product {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Product [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity=" + quantity
 				+ ", description=" + description + ", quantityProduct=" + quantityProduct + ", image=" + image
-				+ ", category=" + category + ", status=" + status + "]";
+				+ ", category=" + category + ", status=" + status + ", compositions=" + compositions + "]";
 	}
+
+
+	
+
+	
 
 	
 	

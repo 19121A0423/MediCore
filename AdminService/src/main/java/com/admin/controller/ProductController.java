@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,10 +39,10 @@ public class ProductController {
 		
 	      	log.info("Start Product Controller:insert()");
 	      	log.info("Products{}",product);
-			Product product2=productService.insert(product);
-			
+			Product products=productService.insert(product);
+			log.info("Products{}",products);
 			log.info("End Product Controller:insert()");
-			return ResponseEntity.status(HttpStatus.OK).body(product2);			
+			return ResponseEntity.status(HttpStatus.OK).body(products);			
 	}
 	
 	@GetMapping("/getById/{productId}")
@@ -83,7 +82,7 @@ public class ProductController {
 		log.info("Start Product Controller:delete()");
 			try {
 				productService.delete(productId);
-			return new ResponseEntity<String>("Deleting the product with Id "+productId,HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("Deleting the product with Id "+productId,HttpStatus.NO_CONTENT);
 			
 			} catch (ProductNotFoundException e) {
 				log.error("Handling Exception in ProductControl::delete() ");
@@ -123,4 +122,5 @@ public class ProductController {
 
 		
 	}
+	
 }

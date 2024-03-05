@@ -1,14 +1,20 @@
 package com.admin.entity;
 
+
+import java.util.List;
 import java.util.Objects;
+
+import org.hibernate.annotations.Cascade;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,11 +44,16 @@ public class ProductEntity {
 	@Column(name="image")
 	private String image;
 	
-	private String status;
 	
 	@ManyToOne
     @JoinColumn(name="category_id", referencedColumnName = "category_id")
 	private CategoryEntity category;
+	
+	private String status;
+	
+	@OneToMany(fetch = FetchType.EAGER)
+//	@JoinColumn(name="composition_id", referencedColumnName = "composition_id")
+	private List<CompositionEntity> compositions;
 	
 	public ProductEntity() {
 		
@@ -123,12 +134,26 @@ public class ProductEntity {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public List<CompositionEntity> getCompositions() {
+		return compositions;
+	}
+
+
+
+
+
+	public void setCompositions(List<CompositionEntity> compositions) {
+		this.compositions = compositions;
+	}
+
+
 
 	@Override
 	public String toString() {
 		return "ProductEntity [productId=" + productId + ", name=" + name + ", price=" + price + ", quantity="
 				+ quantity + ", description=" + description + ", quantityProduct=" + quantityProduct + ", image="
-				+ image + ", status=" + status + ", category=" + category + "]";
+				+ image + ", category=" + category + ", status=" + status + ", compositions=" + compositions + "]";
 	}
 
 	@Override

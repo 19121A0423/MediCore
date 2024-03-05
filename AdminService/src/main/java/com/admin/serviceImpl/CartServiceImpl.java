@@ -312,6 +312,7 @@ public class CartServiceImpl implements CartService {
 			for(ProductEntity product:products) {
 				product.setQuantityProduct(1);
 				product.setStatus("Add To Cart");
+				product.setQuantity(product.getQuantity()-product.getQuantityProduct());
 				productRepo.save(product);
 			}
 			products=null;
