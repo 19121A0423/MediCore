@@ -2,6 +2,10 @@ package com.user.exception;
 
 public class DuplicateEmailIdException extends Exception {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String message;
 
 	public DuplicateEmailIdException(String message) {

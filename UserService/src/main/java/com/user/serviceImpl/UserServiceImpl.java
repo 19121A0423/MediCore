@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
 		if (userBean.getUserEmail() == null || userBean.getUserPassword() == null) {
 			throw new IllegalArgumentException("User Values cannot be null");
 		}
-
 		UserEntity existingUser = userRepository.findByUserEmailOrUserMobileNumber(userBean.getUserEmail(), userBean.getUserMobileNumber());
 		if (existingUser != null) {
 			if (existingUser.getUserEmail() != null) {
@@ -54,7 +53,6 @@ public class UserServiceImpl implements UserService {
 				throw new DuplicateMobileNumberException("Duplicate Mobile Number");
 			}
 		}
-
 		UserEntity userEntity = new UserEntity();
 		userEntity = mapper.convertValue(userBean,UserEntity.class);
 		userEntity = userRepository.save(userEntity);
