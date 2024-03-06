@@ -34,7 +34,7 @@ public class CartEntity {
 	private Integer quantity;
 
 	@Column(name="amount")
-	private Double amount;
+	private Double amount; 
 	
 	private String status;
 
@@ -73,7 +73,7 @@ public class CartEntity {
 
 	public List<ProductEntity> getProducts() {
 		return products;
-	}
+	} 
 
 	public void setProducts(List<ProductEntity> products) {
 		this.products = products;
@@ -92,11 +92,5 @@ public class CartEntity {
 		return "CartEntity [cartId=" + cartId + ", userId=" + userId + ", products=" + products + ", quantity="
 				+ quantity + ", amount=" + amount + ", status=" + status + "]";
 	}
-
-	
-	
-	
-	
-	
 
 }
