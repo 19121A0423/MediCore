@@ -2,7 +2,7 @@ package com.user.service;
 import java.util.List;
 
 
-import com.user.bean.UserBean;
+import com.user.bean.User;
 import com.user.exception.DuplicateMobileNumberException;
 import com.user.exception.DuplicateEmailIdException;
 import com.user.exception.UserNotFoundByIdException;
@@ -10,15 +10,15 @@ import com.user.exception.UserNotFoundByIdException;
 public interface UserService {
 	
 	
-	public UserBean save(UserBean user) throws DuplicateEmailIdException, DuplicateMobileNumberException;
-	public UserBean update(UserBean user) throws UserNotFoundByIdException;
-	public UserBean delete(Integer userId) throws UserNotFoundByIdException;
-	public UserBean getById(Integer userId) throws UserNotFoundByIdException;
-	public List<UserBean> getAll();
+	public User saveUserDetails(User user) throws DuplicateEmailIdException, DuplicateMobileNumberException;
+	public User updateUserDetails(User user) throws UserNotFoundByIdException;
+	public User deleteUserDetailsByUserId(Integer userId) throws UserNotFoundByIdException;
+	public User getUserDetailsByUserId(Integer userId) throws UserNotFoundByIdException;
+	public List<User> getAllUserDetails();
 	
 	
-	public UserBean validateUser(String email, String password) throws UserNotFoundByIdException;
-	public UserBean updatePassword(String email,String password) throws UserNotFoundByIdException;
+	public User validateUser(String email, String password) throws UserNotFoundByIdException;
+	public User updatePassword(String email,String password) throws UserNotFoundByIdException;
 	
 
 }

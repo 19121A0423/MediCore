@@ -6,10 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class User {	
+@Table(name="User")
+public class UserEntity {	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,9 +91,7 @@ public class User {
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
 	}
-
 	
-
 	public char getUserGender() {
 		return userGender;
 	}

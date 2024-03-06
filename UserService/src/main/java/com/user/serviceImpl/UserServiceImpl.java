@@ -8,8 +8,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.user.bean.UserBean;
-import com.user.entity.User;
+import com.user.bean.User;
+import com.user.entity.UserEntity;
 import com.user.exception.DuplicateMobileNumberException;
 import com.user.exception.DuplicateEmailIdException;
 import com.user.exception.UserNotFoundByIdException;
@@ -38,14 +38,13 @@ public class UserServiceImpl implements UserService {
 	private ObjectMapper mapper; 
 
 	@Override
-	public UserBean save(UserBean userBean) throws DuplicateEmailIdException, DuplicateMobileNumberException {
+	public User saveUserDetails(User userBean) throws DuplicateEmailIdException, DuplicateMobileNumberException {
 		log.info("UserServiceImpl save method start {} " + userBean);
 
 		if (userBean.getUserEmail() == null || userBean.getUserPassword() == null) {
 			throw new IllegalArgumentException("User Values cannot be null");
 		}
-
-		User existingUser = userRepository.findByUserEmailOrUserMobileNumber(userBean.getUserEmail(), userBean.getUserMobileNumber());
+		UserEntity existingUser = userRepository.findByUserEmailOrUserMobileNumber(userBean.getUserEmail(), userBean.getUserMobileNumber());
 		if (existingUser != null) {
 			if (existingUser.getUserEmail() != null) {
 				throw new DuplicateEmailIdException("Duplicate Emaild");
@@ -54,11 +53,10 @@ public class UserServiceImpl implements UserService {
 				throw new DuplicateMobileNumberException("Duplicate Mobile Number");
 			}
 		}
-
-		User userEntity = new User();
-		userEntity = mapper.convertValue(userBean,User.class);
+		UserEntity userEntity = new UserEntity();
+		userEntity = mapper.convertValue(userBean,UserEntity.class);
 		userEntity = userRepository.save(userEntity);
-		userBean = mapper.convertValue(userEntity, UserBean.class);
+		userBean = mapper.convertValue(userEntity, User.class);
 		sendMail(userBean);
 
 		log.info("UserServiceImpl save method end {} " + userBean);
@@ -67,20 +65,20 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean update(UserBean userBean) throws UserNotFoundByIdException {
+	public User updateUserDetails(User userBean) throws UserNotFoundByIdException {
 
 		log.info("User  service implementation update method start {} " + userBean);
 		
 		if (userBean.getUserId() == null) {
 			throw new IllegalArgumentException("User Id cannot be Empty");
 		}
-		Optional<User> optional = userRepository.findById(userBean.getUserId());
+		Optional<UserEntity> optional = userRepository.findById(userBean.getUserId());
 		if (optional.isPresent()) {
-			User userEntity = optional.get();
+			UserEntity userEntity = optional.get();
 			
-			userEntity = mapper.convertValue(userBean, User.class);
+			userEntity = mapper.convertValue(userBean, UserEntity.class);
 			userEntity = userRepository.save(userEntity);			
-			userBean = mapper.convertValue(userEntity, UserBean.class);
+			userBean = mapper.convertValue(userEntity, User.class);
 			return userBean;
 		} else {
 			throw new UserNotFoundByIdException("User does not exist by this " + userBean.getUserId());
@@ -88,18 +86,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean getById(Integer userId) throws UserNotFoundByIdException {
+	public User getUserDetailsByUserId(Integer userId) throws UserNotFoundByIdException {
 
 		log.info("User service implementation getById method start {} " + userId);
 		if (userId == null) {
 			throw new IllegalArgumentException("User Id cannot be null");
 		}
-		Optional<User> optional = userRepository.findById(userId);
+		Optional<UserEntity> optional = userRepository.findById(userId);
 		if (optional.isPresent()) {
 
-			User userEntity = optional.get();
-			UserBean bean = new UserBean();
-			bean = mapper.convertValue(userEntity, UserBean.class);
+			UserEntity userEntity = optional.get();
+			User bean = new User();
+			bean = mapper.convertValue(userEntity, User.class);
 
 		log.info("User  service implementation getById method end {} " + userId);
 			return bean;
@@ -112,18 +110,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean delete(Integer userId) throws UserNotFoundByIdException {
+	public User deleteUserDetailsByUserId(Integer userId) throws UserNotFoundByIdException {
 		log.info("User  service implementation delete method start {} " + userId);
 		if (userId == null) {
 			throw new IllegalArgumentException("User Id cannot be null");
 		}
-		Optional<User> optional = userRepository.findById(userId);
+		Optional<UserEntity> optional = userRepository.findById(userId);
 
 		if (optional.isPresent()) {
-			User userEntity = optional.get();
+			UserEntity userEntity = optional.get();
 			userRepository.deleteById(userId);
-			UserBean bean = new UserBean();
-			bean =mapper.convertValue(userEntity, UserBean.class);
+			User bean = new User();
+			bean =mapper.convertValue(userEntity, User.class);
 
 			return bean;
 		} else {
@@ -132,15 +130,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserBean> getAll() {
+	public List<User> getAllUserDetails() {
 
 		log.info("User  service implementation get all method start ");
 
-		List<User> users = userRepository.findAll();
-		List<UserBean> usersList = new ArrayList<>();
-		for (User user : users) {
-			UserBean bean = new UserBean();
-			bean = mapper.convertValue(user, UserBean.class);
+		List<UserEntity> users = userRepository.findAll();
+		List<User> usersList = new ArrayList<>();
+		for (UserEntity user : users) {
+			User bean = new User();
+			bean = mapper.convertValue(user, User.class);
 			usersList.add(bean);
 		}
 		log.info("User  service implementation get all method end {} " + usersList);
@@ -148,16 +146,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean validateUser(String email, String  password) throws UserNotFoundByIdException {
+	public User validateUser(String userEmail, String  userPassword) throws UserNotFoundByIdException {
 		log.info("User Service implementation validateUser method start");
-		User user = null;
-		if (email != null && password != null) {
-			user = userRepository.findByUserEmailAndUserPassword(email, password);
+		UserEntity user = null;
+		if (userEmail != null && userPassword != null) {
+			user = userRepository.findByUserEmailAndUserPassword(userEmail, userPassword);
 		}
 
 		if (user != null) {
-			UserBean userBean = new UserBean();
-			userBean = mapper.convertValue(user, UserBean.class);
+			User userBean = new User();
+			userBean = mapper.convertValue(user, User.class);
 			log.info("User Service implementation validateUser method end");
 			return userBean;
 		} else {
@@ -166,18 +164,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean updatePassword(String email, String password) throws UserNotFoundByIdException {
+	public User updatePassword(String userEmail, String userPassword) throws UserNotFoundByIdException {
 		log.info("User Service implementation updatePassword method start ");
-		User user = null;
-		if (email != null) {
-			user = userRepository.findByUserEmail(email);
+		UserEntity user = null;
+		if (userEmail != null) {
+			user = userRepository.findByUserEmail(userEmail);
 		}
 
-		if (user != null && password != null) {
-			user.setUserPassword(password);
+		if (user != null && userPassword != null) {
+			user.setUserPassword(userPassword);
 			userRepository.save(user);
-			UserBean userBean = new UserBean();
-			userBean =mapper.convertValue(user, UserBean.class);
+			User userBean = new User();
+			userBean =mapper.convertValue(user, User.class);
 			log.info("User Service implementation updatePassword method end");
 			return userBean;
 		} else {
@@ -219,7 +217,7 @@ public class UserServiceImpl implements UserService {
 //
 //	}
 
-	public void sendMail(UserBean user) {
+	public void sendMail(User user) {
 
 		log.info("User  service implementation send mail method start {} " + user);
 		SimpleMailMessage mail = new SimpleMailMessage();
