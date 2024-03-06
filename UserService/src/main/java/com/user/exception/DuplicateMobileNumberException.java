@@ -1,10 +1,11 @@
 package com.user.exception;
 
-public class DublicateEmailIdException extends Exception {
-	
+
+public class DuplicateMobileNumberException extends Exception{
+
 	private String message;
 
-	public DublicateEmailIdException(String message) {
+	public DuplicateMobileNumberException(String message) {
 		super();
 		this.message = message;
 	}
@@ -12,7 +13,4 @@ public class DublicateEmailIdException extends Exception {
 	public String getMessage() {
 		return message;
 	}
-	
-	
-
 }

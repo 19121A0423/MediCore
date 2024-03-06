@@ -1,6 +1,7 @@
 package com.user.entity;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,81 +13,105 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int user_id;
-	@NotNull
-	private String name;
-	@NotNull 	
-	private String email;
-	@NotNull
-	private long mobile_number;
-	@NotNull
-	private String password;
-	@NotNull
-	private char gender;
-	@NotNull
-	private String user_role;
+	private Integer userId;
 	
-	private String status;
+	@NotNull
+	@Column(name ="user_name")
+	private String userName;
 	
-	public int getUser_id() {
-		return user_id;
-	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public long getMobile_number() {
-		return mobile_number;
-	}
-	public void setMobile_number(long mobile_number) {
-		this.mobile_number = mobile_number;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public char getGender() {
-		return gender;
-	}
-	public void setGender(char gender) {
-		this.gender = gender;
-	}
-	public String getUser_role() {
-		return user_role;
-	}
-	public void setUser_role(String user_role) {
-		this.user_role = user_role;
-	}
+	@NotNull 
+	@Column(name = "user_email")
+	private String userEmail;
 	
+	@NotNull
+	@Column(name = "user_mobile_number")
+	private Long userMobileNumber;
 	
-	public String getStatus() {
-		return status;
+	@NotNull
+	@Column(name = "user_password")
+	private String userPassword;
+	
+	@NotNull
+	@Column(name = "user_gender")
+	private char userGender;
+	
+	@NotNull
+	@Column(name = "user_role")
+	private String userRole;
+	
+	@Column(name = "user_status")
+	private String userStatus;
+
+	public Integer getUserId() {
+		return userId;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public Long getUserMobileNumber() {
+		return userMobileNumber;
+	}
+
+	public void setUserMobileNumber(Long userMobileNumber) {
+		this.userMobileNumber = userMobileNumber;
+	}
+
+	public String getUserPassword() {
+		return userPassword;
+	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
+	}
+
+	public String getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
+	}
+
+	
+
+	public char getUserGender() {
+		return userGender;
+	}
+
+	public void setUserGender(char userGender) {
+		this.userGender = userGender;
+	}
+
+	public String getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
+	}
+
 	@Override
 	public String toString() {
-		return "User [user_id=" + user_id + ", name=" + name + ", email=" + email + ", mobile_number=" + mobile_number
-				+ ", password=" + password + ", gender=" + gender + ", user_role=" + user_role + ", status=" + status
-				+ "]";
+		return "User [userId=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userMobileNumber="
+				+ userMobileNumber + ", userPassword=" + userPassword + ", userGender=" + userGender + ", userRole=" + userRole
+				+ ", userStatus=" + userStatus + "]";
 	}
-	
-	
-	
-	
-	
 }

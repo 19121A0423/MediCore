@@ -2,19 +2,19 @@ package com.user.bean;
 
 public class UserBean {
 	
-	private int userId;
+	private Integer userId;
 	private String userName;
 	private char userGender;
-	private long userMobileNumber;
+	private Long userMobileNumber;
 	private String userEmail;
 	private String userPassword;
 	private String userRole;
 	private String userStatus;
 	
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	public String getUserName() {

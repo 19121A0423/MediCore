@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.user.bean.PasswordUpdateRequest;
 import com.user.bean.UserBean;
-import com.user.exception.DublicateEmailIdException;
-import com.user.exception.DublicateMobileNumberException;
+import com.user.exception.DuplicateMobileNumberException;
+import com.user.exception.DuplicateEmailIdException;
 import com.user.exception.UserNotFoundByIdException;
 import com.user.service.UserService;
 
@@ -32,7 +32,7 @@ public class UserController {
 	private UserService service;
 
 	@PostMapping("/users/save")
-	public ResponseEntity<UserBean> save(@RequestBody UserBean user) throws DublicateEmailIdException, DublicateMobileNumberException {
+	public ResponseEntity<UserBean> save(@RequestBody UserBean user) throws DuplicateEmailIdException, DuplicateMobileNumberException {
 		log.info("UserController save method start {}"+user);	
 		UserBean userBean=null;
 		try {
@@ -120,6 +120,7 @@ public class UserController {
 			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
 		}
 		catch(Exception e) {
+			
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}

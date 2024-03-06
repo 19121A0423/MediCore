@@ -23,10 +23,11 @@ public class HandleException extends ResponseEntityExceptionHandler{
 		
 	}
 	@ExceptionHandler
-	public ResponseEntity<ErrorStructure> dublicateEmailIdException(DublicateEmailIdException exception){
+	public ResponseEntity<ErrorStructure> dublicateEmailIdException(DuplicateEmailIdException exception){
 		
 		ErrorStructure structure = new ErrorStructure();
-		structure.setMessage("Dublicate EmailId ");
+		
+		structure.setMessage("Duplicate EmailId ");
 		structure.setRootCause(exception.getMessage());
 		structure.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
 		
@@ -35,10 +36,11 @@ public class HandleException extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler
-	public ResponseEntity<ErrorStructure> dublicateMobileNumberException(DublicateMobileNumberException exception){
+	public ResponseEntity<ErrorStructure> dublicateMobileNumberException(DuplicateMobileNumberException exception){
 		
 		ErrorStructure structure = new ErrorStructure();
-		structure.setMessage("Dublicate MobileNumber ");
+		
+		structure.setMessage("Duplicate MobileNumber ");
 		structure.setRootCause(exception.getMessage());
 		structure.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
 		

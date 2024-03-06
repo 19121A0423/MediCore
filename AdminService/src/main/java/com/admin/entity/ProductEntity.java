@@ -37,7 +37,7 @@ public class ProductEntity {
 	
 	@Column(name = "description")
 	private String description;
-	
+	 
 	@Column(name="product_quantity")
 	private Integer quantityProduct;
 	
@@ -171,7 +171,4 @@ public class ProductEntity {
 	    return Objects.hash(productId);
 	}
 	
-		
-	
-
 }

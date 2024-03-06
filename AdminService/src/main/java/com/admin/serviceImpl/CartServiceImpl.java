@@ -1,14 +1,9 @@
 package com.admin.serviceImpl;
 
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,22 +59,23 @@ public class CartServiceImpl implements CartService {
 		 
 		 CartEntity cartEntity = repo.getCartByUserId(userBean.getUserId());
 		 if(cartEntity!=null) {
-			 boolean result=cartEntity.getProducts().contains(cart.getProducts().get(0));
-			 if(!result) {			 
+			 @SuppressWarnings("unlikely-arg-type")
+			boolean contains = cartEntity.getProducts().contains(cart.getProducts().stream().findFirst().get());
+			 if(!contains) {			 
 				 cart.setUser(userBean);
 				 cartEntity.setUserId(userBean.getUserId());
 				 cartEntity = beanToEntity(cartEntity,cart);
-				 productRepo.save(cartEntity.getProducts().get(0));
+				 productRepo.save(cartEntity.getProducts().stream().findFirst().get());
 				 repo.save(cartEntity);
 				 cart = entityToBean(cartEntity,cart);
 			 }
 		 }
-		else {
+		else { 
 			cartEntity = new CartEntity();
 			 cart.setUser(userBean);
 			 cartEntity.setUserId(userBean.getUserId());
 			 cartEntity = beanToEntity(cartEntity,cart);
-			 productRepo.save(cartEntity.getProducts().get(0));
+			 productRepo.save(cartEntity.getProducts().stream().findFirst().get());
 			 repo.save(cartEntity);
 			 cart = entityToBean(cartEntity,cart);
 			

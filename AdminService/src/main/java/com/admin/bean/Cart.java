@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Cart {
 	
-	private int cartId;
-	private int quantity;
-	private double amount;
+	private Integer cartId;
+	private Integer quantity;
+	private Double amount;
 	private String status;
 	private UserBean user;
 	
@@ -18,22 +18,22 @@ public class Cart {
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
-	public int getCartId() {
+	public Integer getCartId() {
 		return cartId;
 	}
-	public void setCartId(int cartId) {
+	public void setCartId(Integer cartId) {
 		this.cartId = cartId;
 	}
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	public double getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
-	public void setAmount(double amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 	public UserBean getUser() {
