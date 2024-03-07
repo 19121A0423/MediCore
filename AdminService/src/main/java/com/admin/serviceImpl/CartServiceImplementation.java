@@ -15,26 +15,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import com.admin.bean.Cart;
-import com.admin.bean.Product;
+import com.admin.bean.CartBean;
+import com.admin.bean.ProductBean;
 import com.admin.bean.UserBean;
-import com.admin.entity.CartEntity;
-import com.admin.entity.ProductEntity;
+import com.admin.entity.Cart;
+import com.admin.entity.Product;
 import com.admin.exception.CartIdNotFoundException;
 import com.admin.exception.CartListNotFoundException;
 import com.admin.exception.UserIdNotFoundException;
-import com.admin.repository.CartRepo;
+import com.admin.repository.CartRepository;
 import com.admin.repository.ProductRepository;
 import com.admin.service.CartService;
 
 @Service
-public class CartServiceImpl implements CartService {
+public class CartServiceImplementation implements CartService {
 	
 	private static Logger log = LoggerFactory
-			.getLogger(CartServiceImpl.class.getSimpleName());
+			.getLogger(CartServiceImplementation.class.getSimpleName());
 	
 	@Autowired
-	public CartRepo repo;
+	public CartRepository repo;
 	
 	@Autowired
 	public ProductRepository productRepo;
@@ -48,7 +48,7 @@ public class CartServiceImpl implements CartService {
 	
 
 	@Override
-	public Cart save(Cart cart) throws UserIdNotFoundException {
+	public CartBean saveCart(CartBean cart) throws UserIdNotFoundException {
 	
 		log.info("Cart Service Implementation Save Method Start-> {}"+cart);
 		
@@ -62,7 +62,7 @@ public class CartServiceImpl implements CartService {
 			 throw new UserIdNotFoundException("User Does Not Found By This Id "+cart.getUser().getUserId());
 		 }
 		 
-		 CartEntity cartEntity = repo.getCartByUserId(userBean.getUserId());
+		 Cart cartEntity = repo.getCartByUserId(userBean.getUserId());
 		 if(cartEntity!=null) {
 			 boolean result=cartEntity.getProducts().contains(cart.getProducts().get(0));
 			 if(!result) {			 
@@ -75,7 +75,7 @@ public class CartServiceImpl implements CartService {
 			 }
 		 }
 		else {
-			cartEntity = new CartEntity();
+			cartEntity = new Cart();
 			 cart.setUser(userBean);
 			 cartEntity.setUserId(userBean.getUserId());
 			 cartEntity = beanToEntity(cartEntity,cart);
@@ -92,21 +92,21 @@ public class CartServiceImpl implements CartService {
 		
 	}
 
-	public CartEntity beanToEntity(CartEntity cartEntity, Cart cart) {
+	public Cart beanToEntity(Cart cartEntity, CartBean cart) {
 		
 		log.info("Cart Service Implementation beanToEntity Method Start -> {}"+cart.getProducts());
 		
 		cartEntity.setStatus(cart.getStatus());			
-		List<ProductEntity > products=new ArrayList<>();
+		List<Product > products=new ArrayList<>();
 		
 		if(cartEntity.getProducts()!=null) {
 			products = cartEntity.getProducts();
 		}
 		
 		double total =0;		
-		for(Product ele:cart.getProducts()) {
+		for(ProductBean ele:cart.getProducts()) {
 			
-			ProductEntity obj = new ProductEntity();		
+			Product obj = new Product();		
 			obj.setDescription(ele.getDescription());
 			obj.setName(ele.getName());
 			obj.setPrice(ele.getPrice());
@@ -121,10 +121,10 @@ public class CartServiceImpl implements CartService {
 		}
 		
 		System.out.println("Before Set"+products);
-	    HashSet<ProductEntity> set = new HashSet<>(products);
+	    HashSet<Product> set = new HashSet<>(products);
 	    products=null;
 	    products = new ArrayList<>(set);	
-	    for(ProductEntity product:products) {
+	    for(Product product:products) {
 			total=(total+(product.getPrice()*product.getQuantityProduct()));
 		}
 		System.out.println("After Set "+products);
@@ -138,7 +138,7 @@ public class CartServiceImpl implements CartService {
 		return cartEntity;
 	}
 
-	public Cart entityToBean(CartEntity cartEntity, Cart cart) {
+	public CartBean entityToBean(Cart cartEntity, CartBean cart) {
 	log.info("Cart Service Implementation entityToBean Method Start -> {}"+cart);
 
 		
@@ -146,11 +146,11 @@ public class CartServiceImpl implements CartService {
 		cart.setStatus(cartEntity.getStatus());
 		
 		double total=0;
-		List<Product > products = new ArrayList<>();
+		List<ProductBean > products = new ArrayList<>();
 		if(cartEntity.getProducts()!=null) {
-			for(ProductEntity ele:cartEntity.getProducts()) {
+			for(Product ele:cartEntity.getProducts()) {
 				
-				Product obj = new Product();
+				ProductBean obj = new ProductBean();
 				obj.setDescription(ele.getDescription());
 				obj.setName(ele.getName());
 				obj.setPrice(ele.getPrice());
@@ -175,19 +175,19 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public Cart update(Cart cart,Integer productId) throws CartIdNotFoundException{
+	public CartBean update(CartBean cart,Integer productId) throws CartIdNotFoundException{
 		
 		log.info("Cart service implementation update method {}"+cart);
 		
-		 Optional<CartEntity> optional = repo.findById(cart.getCartId());
+		 Optional<Cart> optional = repo.findById(cart.getCartId());
 		if(optional.isEmpty()) {
 			throw new CartIdNotFoundException("Cart Not Found By This Id "+cart.getCartId());
 		}
 		
-		CartEntity cartEntity = optional.get();
-		List<ProductEntity> products =cartEntity.getProducts();
+		Cart cartEntity = optional.get();
+		List<Product> products =cartEntity.getProducts();
 
-		for(ProductEntity product :products) {
+		for(Product product :products) {
 			if(product.getProductId()==productId) {
 				product.setQuantityProduct(cart.getProducts().get(0).getQuantityProduct());		
 				System.out.println(product.getQuantityProduct());
@@ -208,19 +208,19 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public Cart delete(Integer cartId,Integer productId) throws CartIdNotFoundException {
+	public CartBean delete(Integer cartId,Integer productId) throws CartIdNotFoundException {
 		
 		log.info("Cart Service Implementation delete Method Start->");
 		if(cartId==0){
 			throw new IllegalArgumentException("Cart Id Cannot Be Empty");
 		}		
-		Optional<CartEntity> optional = repo.findById(cartId);
+		Optional<Cart> optional = repo.findById(cartId);
 		double total =0;
 		if(optional.isPresent()){
-			CartEntity cartEntity = optional.get();
-			List<ProductEntity> products = cartEntity.getProducts();
+			Cart cartEntity = optional.get();
+			List<Product> products = cartEntity.getProducts();
 			int temp=-1;
-			for(ProductEntity product:products) {
+			for(Product product:products) {
 				temp++;
 				if(product.getProductId()==productId) {
 					cartEntity.setQuantity(cartEntity.getQuantity()-1);
@@ -233,7 +233,7 @@ public class CartServiceImpl implements CartService {
 			}			
 			products.remove(temp);
 			cartEntity.setAmount(cartEntity.getAmount()-total);
-			Cart cart = new Cart();
+			CartBean cart = new CartBean();
 			repo.save(cartEntity);
 			cart = entityToBean(cartEntity, cart);			
 			return cart;
@@ -245,16 +245,16 @@ public class CartServiceImpl implements CartService {
 
 
 	@Override
-	public List<Cart> getCartDetails() throws CartListNotFoundException{
+	public List<CartBean> getCartDetails() throws CartListNotFoundException{
 		log.info("Cart sevice implementation getCartDetails method start -> ");
-		List<CartEntity> cartList = repo.findAll();
-		List<Cart> beanCartList = new ArrayList<>();
+		List<Cart> cartList = repo.findAll();
+		List<CartBean> beanCartList = new ArrayList<>();
 		
 		
 		if(!cartList.isEmpty()){		
 			
-			for(CartEntity cart : cartList){
-				Cart bean = new Cart();
+			for(Cart cart : cartList){
+				CartBean bean = new CartBean();
 				
 				UserBean userBean = userService.getUserBean(cart.getUserId());
 				bean.setUser(userBean);
@@ -271,7 +271,7 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public Cart  getCartById(Integer userId) throws CartIdNotFoundException, UserIdNotFoundException, CartListNotFoundException {
+	public CartBean  getCartById(Integer userId) throws CartIdNotFoundException, UserIdNotFoundException, CartListNotFoundException {
 		
 		log.info("Cart sevice implementation getCartById method start -> {}"+userId);
 		if(userId==null){
@@ -282,12 +282,12 @@ public class CartServiceImpl implements CartService {
 			
 			throw new UserIdNotFoundException("User Does Not Having Cart By This Id"+userId);
 		}
-		CartEntity cartEntity = repo.getCartByUserId(bean.getUserId());
+		Cart cartEntity = repo.getCartByUserId(bean.getUserId());
 		if(cartEntity==null) {
 			throw new CartListNotFoundException("Cart is Empty");
 		}
 			
-		Cart cart = new Cart();
+		CartBean cart = new CartBean();
 		
 		cart.setUser(bean);
 		cart= entityToBean(cartEntity, cart);
@@ -298,18 +298,18 @@ public class CartServiceImpl implements CartService {
 	}
 	
 	@Override
-	public Cart updateCartStatus(Cart cart) throws CartIdNotFoundException {
+	public CartBean updateCartStatus(CartBean cart) throws CartIdNotFoundException {
 		log.info("Cart Service Implementation Update Cart Status Start"+cart.getCartId());
 		if(cart==null) {
 			throw new IllegalArgumentException("Cart Id Cannot be Empty");
 		}
 		
-		Optional<CartEntity> optional = repo.findById(cart.getCartId());
+		Optional<Cart> optional = repo.findById(cart.getCartId());
 		if(optional.isPresent()) {
-			CartEntity cartEntity = optional.get();
-			List<ProductEntity> products = cartEntity.getProducts();
+			Cart cartEntity = optional.get();
+			List<Product> products = cartEntity.getProducts();
 			
-			for(ProductEntity product:products) {
+			for(Product product:products) {
 				product.setQuantityProduct(1);
 				product.setStatus("Add To Cart");
 				product.setQuantity(product.getQuantity()-product.getQuantityProduct());

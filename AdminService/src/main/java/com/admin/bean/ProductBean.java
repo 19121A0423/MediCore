@@ -2,10 +2,10 @@ package com.admin.bean;
 
 import java.util.List;
 
-import com.admin.entity.CategoryEntity;
-import com.admin.entity.CompositionEntity;
+import com.admin.entity.Category;
+import com.admin.entity.Composition;
 
-public class Product {
+public class ProductBean {
 	
 	private Integer productId;
 	private String name;
@@ -14,11 +14,11 @@ public class Product {
 	private String description;
 	private Integer quantityProduct;
 	private String image;
-	private CategoryEntity category;
+	private Category category;
 	private String status;
-	private List<CompositionEntity> compositions;
+	private List<Composition> compositions;
 	
-	public Product() {
+	public ProductBean() {
 
 	}
 
@@ -26,7 +26,7 @@ public class Product {
 	
 
 
-	public List<CompositionEntity> getCompositions() {
+	public List<Composition> getCompositions() {
 		return compositions;
 	}
 
@@ -34,7 +34,7 @@ public class Product {
 
 
 
-	public void setCompositions(List<CompositionEntity> compositions) {
+	public void setCompositions(List<Composition> compositions) {
 		this.compositions = compositions;
 	}
 
@@ -42,9 +42,9 @@ public class Product {
 
 
 
-	public Product(Integer productId, String name, Double price, Integer quantity, String description,
-			Integer quantityProduct, String image, CategoryEntity category, String status,
-			List<CompositionEntity> compositions) {
+	public ProductBean(Integer productId, String name, Double price, Integer quantity, String description,
+			Integer quantityProduct, String image, Category category, String status,
+			List<Composition> compositions) {
 		super();
 		this.productId = productId;
 		this.name = name;
@@ -102,11 +102,11 @@ public class Product {
 		this.description = description;
 	}
 
-	public CategoryEntity getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(CategoryEntity category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 	

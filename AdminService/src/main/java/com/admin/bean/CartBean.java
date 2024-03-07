@@ -2,7 +2,7 @@ package com.admin.bean;
 
 import java.util.List;
 
-public class Cart {
+public class CartBean {
 	
 	private int cartId;
 	private int quantity;
@@ -10,12 +10,12 @@ public class Cart {
 	private String status;
 	private UserBean user;
 	
-	private List<Product> products;
+	private List<ProductBean> products;
 	
-	public List<Product> getProducts() {
+	public List<ProductBean> getProducts() {
 		return products;
 	}
-	public void setProducts(List<Product> products) {
+	public void setProducts(List<ProductBean> products) {
 		this.products = products;
 	}
 	public int getCartId() {

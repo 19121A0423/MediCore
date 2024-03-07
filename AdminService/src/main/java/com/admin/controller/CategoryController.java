@@ -1,7 +1,6 @@
 package com.admin.controller;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.admin.bean.Category;
-import com.admin.entity.CategoryEntity;
+import com.admin.bean.CategoryBean;
+import com.admin.entity.Category;
 import com.admin.exception.CategoryNotFoundException;
 import com.admin.service.CategoryService;
 
@@ -31,29 +30,29 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@PostMapping
-	public ResponseEntity<Category> save(@RequestBody Category category){
-		categoryService.insert(category);
+	@PostMapping("/insertcategory")
+	public ResponseEntity<CategoryBean> saveCategory(@RequestBody CategoryBean category){
+		categoryService.insertCategory(category);
 		log.info("Category details inserting {}",category);
-		ResponseEntity<Category> entity=new ResponseEntity<Category>
+		ResponseEntity<CategoryBean> entity=new ResponseEntity<CategoryBean>
 		(category,HttpStatus.CREATED);
 	    return entity;	
 	}
 	
-	@GetMapping("/{categoryId}")
-	public ResponseEntity<CategoryEntity> getById(@PathVariable Integer categoryId){
-		CategoryEntity category=categoryService.getById(categoryId);
+	@GetMapping("/getbycategoryid/{categoryId}")
+	public ResponseEntity<Category> getByCategoryId(@PathVariable Integer categoryId){
+		Category category=categoryService.getByCategoryId(categoryId);
 		log.info("Category details{}",category);
-		ResponseEntity<CategoryEntity> entity=new ResponseEntity<CategoryEntity>
+		ResponseEntity<Category> entity=new ResponseEntity<Category>
 		(category,HttpStatus.OK);
 		return entity;
 	}
 	
-	@GetMapping("/getAll")
-	public ResponseEntity<List<CategoryEntity>> getAll(){
-		List<CategoryEntity> categories=categoryService.getAll();
+	@GetMapping("/getallcategories")
+	public ResponseEntity<List<Category>> getAllCategories(){
+		List<Category> categories=categoryService.getAllCategories();
 		log.info("Category details{}",categories);
-		ResponseEntity<List<CategoryEntity>> entity=new ResponseEntity<List<CategoryEntity>>(categories,HttpStatus.OK);
+		ResponseEntity<List<Category>> entity=new ResponseEntity<List<Category>>(categories,HttpStatus.OK);
 		return entity;
 	}
 	
@@ -62,7 +61,7 @@ public class CategoryController {
 	public ResponseEntity<String> deleteById(@PathVariable Integer categoryId){
 	
 	try {
-		categoryService.delete(categoryId);
+		categoryService.deleteCategory(categoryId);
 		return new ResponseEntity<String>
 		("Category record deleted successfuly ",HttpStatus.OK); 
 	} catch (CategoryNotFoundException e) {
@@ -72,10 +71,10 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/update/{categoryId}")
-	public ResponseEntity<String> updateById(@RequestBody CategoryEntity categoryEntity,
+	public ResponseEntity<String> updateCategoryById(@RequestBody Category categoryEntity,
 			@PathVariable Integer categoryId) {
 	        try {
-				categoryService.update(categoryId, categoryEntity);
+				categoryService.updateCategory(categoryId, categoryEntity);
 				log.info("Category details{}",categoryEntity);
 				return new ResponseEntity<String>("category record updated successfilly ",HttpStatus.OK);
 			} catch (CategoryNotFoundException e) {

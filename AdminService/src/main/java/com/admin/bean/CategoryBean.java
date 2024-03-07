@@ -1,14 +1,14 @@
 package com.admin.bean;
 
-public class Category {
+public class CategoryBean {
 private Integer categoryId;
 private String categoryName;
 
-public Category() {
+public CategoryBean() {
 	
 }
 
-public Category(Integer categoryId, String categoryName) {
+public CategoryBean(Integer categoryId, String categoryName) {
 	
 	this.categoryId = categoryId;
 	this.categoryName = categoryName;

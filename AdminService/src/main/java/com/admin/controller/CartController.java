@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.admin.bean.Cart;
+import com.admin.bean.CartBean;
 import com.admin.exception.CartIdNotFoundException;
 import com.admin.exception.CartListNotFoundException;
 import com.admin.exception.UserIdNotFoundException;
@@ -33,10 +33,10 @@ public class CartController {
 	
 	
 	@PostMapping("/cart")
-	public ResponseEntity<Cart> saveCart(@RequestBody Cart cart) throws UserIdNotFoundException{		
+	public ResponseEntity<CartBean> saveCart(@RequestBody CartBean cart) throws UserIdNotFoundException{		
 		log.info("CartController saveCart Start => {} ",cart);
 		try {
-		  cart = service.save(cart);
+		  cart = service.saveCart(cart);
 		}catch (IllegalArgumentException e) {			
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -45,9 +45,9 @@ public class CartController {
 	}	
 	
 	@GetMapping("/cart/{userId}")
-	public ResponseEntity<Cart>  getCartById(@PathVariable Integer userId) throws CartIdNotFoundException, UserIdNotFoundException, CartListNotFoundException {
+	public ResponseEntity<CartBean>  getCartById(@PathVariable Integer userId) throws CartIdNotFoundException, UserIdNotFoundException, CartListNotFoundException {
 		log.info("CartController getCartById Start => {} ",userId);
-		Cart cart=null; 
+		CartBean cart=null; 
 		try {
 			  cart = service.getCartById(userId);
 		}catch (IllegalArgumentException e) {
@@ -59,11 +59,11 @@ public class CartController {
 	}
 	
 	@DeleteMapping("/cart/delete/{cartId}/{productId}")
-	public ResponseEntity<Cart> delete(@PathVariable Integer cartId,@PathVariable Integer productId) throws CartIdNotFoundException {
+	public ResponseEntity<CartBean> delete(@PathVariable Integer cartId,@PathVariable Integer productId) throws CartIdNotFoundException {
 		
 		log.info("Cart controller delete cart method start "+cartId,productId);
 		try {
-			Cart cart=service.delete(cartId,productId);
+			CartBean cart=service.delete(cartId,productId);
 			log.info("Cart controller delete produtc in cart method end try block {} "+cartId);
 			return ResponseEntity.status(HttpStatus.OK).body(cart);
 		}catch (IllegalArgumentException e) {
@@ -74,16 +74,16 @@ public class CartController {
 	}
 	
 	@GetMapping("/cart")
-	public ResponseEntity<List<Cart>> getCartDetails() throws CartListNotFoundException{
+	public ResponseEntity<List<CartBean>> getCartDetails() throws CartListNotFoundException{
 		log.info("Cart controller getCartDetails method start");
-		List<Cart> cartDetails =service.getCartDetails();
+		List<CartBean> cartDetails =service.getCartDetails();
 		log.info("Cart controller getCartDetails method End");
 		return ResponseEntity.status(HttpStatus.OK).body(cartDetails);
 	}
 
 	
 	@PutMapping("/cart/update/{productId}")
-	public ResponseEntity<Cart> update(@RequestBody Cart cart,@PathVariable int productId) throws CartIdNotFoundException{
+	public ResponseEntity<CartBean> update(@RequestBody CartBean cart,@PathVariable int productId) throws CartIdNotFoundException{
 		
 		log.info("Cart contoller  update method {}  "+cart);
 		cart  = service.update(cart, productId);
@@ -92,7 +92,7 @@ public class CartController {
 	}
 	
 	@PutMapping("/cart/updateStatus")
-	public ResponseEntity<Cart> updateCartStatus(@RequestBody Cart cart) throws CartIdNotFoundException {
+	public ResponseEntity<CartBean> updateCartStatus(@RequestBody CartBean cart) throws CartIdNotFoundException {
 		log.info("Cart Controller Update Cart Status Method Start");
 		try {
 			cart = service.updateCartStatus(cart);

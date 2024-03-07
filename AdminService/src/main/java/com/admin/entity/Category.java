@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "product_category")
-public class CategoryEntity {
+public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "category_id")
@@ -18,11 +18,11 @@ public class CategoryEntity {
 	@Column(name = "category_name")
 	private String categoryName;
 
-	public CategoryEntity() {
+	public Category() {
 		super();
 	}
 
-	public CategoryEntity(Integer categoryId, String categoryName) {
+	public Category(Integer categoryId, String categoryName) {
 		super();
 		this.categoryId = categoryId;
 		this.categoryName = categoryName;

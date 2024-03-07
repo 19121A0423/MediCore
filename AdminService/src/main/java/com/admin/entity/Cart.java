@@ -10,11 +10,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
-import com.admin.bean.Product;
+import com.admin.bean.ProductBean;
 
 @Entity
 @Table(name="cart")
-public class CartEntity {
+public class Cart {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class CartEntity {
 	
 	
 	@OneToMany
-	private List<ProductEntity> products;
+	private List<Product> products;
 	
 	@NotNull
 	@Column(name="quantity")
@@ -71,11 +71,11 @@ public class CartEntity {
 		this.amount = amount;
 	}
 
-	public List<ProductEntity> getProducts() {
+	public List<Product> getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<ProductEntity> products) {
+	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
 

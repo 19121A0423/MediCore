@@ -4,21 +4,21 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.admin.bean.Category;
-import com.admin.entity.CategoryEntity;
+import com.admin.bean.CategoryBean;
+import com.admin.entity.Category;
 import com.admin.exception.CategoryNotFoundException;
 
 
 @Service
 public interface CategoryService {
 
-	public void  insert(Category category);
+	public void  insertCategory(CategoryBean category);
 	
-	public CategoryEntity  getById(Integer categoryId);
+	public Category  getByCategoryId(Integer categoryId);
 	
-	public List<CategoryEntity> getAll();
+	public List<Category> getAllCategories();
 	
-	public void update(Integer categoryId, CategoryEntity entity) throws CategoryNotFoundException;
+	public void updateCategory(Integer categoryId, Category entity) throws CategoryNotFoundException;
 	
-	public void delete(Integer categoryId) throws CategoryNotFoundException;
+	public void deleteCategory(Integer categoryId) throws CategoryNotFoundException;
 }

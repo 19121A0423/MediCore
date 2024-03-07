@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.admin.bean.Composition;
-import com.admin.bean.Product;
-import com.admin.entity.CategoryEntity;
-import com.admin.entity.CompositionEntity;
-import com.admin.entity.ProductEntity;
+import com.admin.bean.CompositionBean;
+import com.admin.bean.ProductBean;
+import com.admin.entity.Category;
+import com.admin.entity.Composition;
+import com.admin.entity.Product;
 import com.admin.exception.CategoryNotFoundException;
 import com.admin.exception.CompositionNotFoundException;
 import com.admin.exception.ProductNotFoundException;
@@ -29,8 +29,8 @@ public class ProductServiceImplementation implements ProductService{
 	private ProductRepository productRepository;
 	
 	@Override
-	public Product insert(Product product) {
-	    ProductEntity entity = new ProductEntity();
+	public ProductBean insertProduct(ProductBean product) {
+	    Product entity = new Product();
 	    entity.setProductId(product.getProductId());
 	    entity.setName(product.getName());
 	    entity.setPrice(product.getPrice());
@@ -39,7 +39,7 @@ public class ProductServiceImplementation implements ProductService{
 	    entity.setQuantityProduct(product.getQuantityProduct());
 	    entity.setImage(product.getImage());
 	    entity.setStatus(product.getStatus());
-       CategoryEntity categoryEntity = new CategoryEntity();
+       Category categoryEntity = new Category();
 	    categoryEntity.setCategoryId(product.getCategory().getCategoryId());
 	    entity.setCategory(categoryEntity);
 	    entity.setCompositions(product.getCompositions());
@@ -49,11 +49,11 @@ public class ProductServiceImplementation implements ProductService{
 
 
 	@Override
-	public Product getProductById(Integer productId) {
-	    Optional<ProductEntity> productOptional = productRepository.findById(productId);
+	public ProductBean getProductById(Integer productId) {
+	    Optional<Product> productOptional = productRepository.findById(productId);
 	    if (productOptional.isPresent()) {
-	        ProductEntity productEntity = productOptional.get();
-	        Product product = new Product();
+	        Product productEntity = productOptional.get();
+	        ProductBean product = new ProductBean();
 	        product.setProductId(productEntity.getProductId());
 	        product.setName(productEntity.getName());
 	        product.setPrice(productEntity.getPrice());
@@ -63,7 +63,7 @@ public class ProductServiceImplementation implements ProductService{
 	        product.setImage(productEntity.getImage());
 	        product.setStatus(productEntity.getStatus());
 	       
-	        CategoryEntity category = new CategoryEntity();
+	        Category category = new Category();
 	        category.setCategoryId(productEntity.getCategory().getCategoryId());
 	        category.setCategoryName(productEntity.getCategory().getCategoryName());
 
@@ -77,19 +77,19 @@ public class ProductServiceImplementation implements ProductService{
 
 
 	@Override
-	public List<Product> getAll() {
-		List<ProductEntity> productEntities=productRepository.findAll();
-		List<Product> products = entityToBean(productEntities);
+	public List<ProductBean> getAll() {
+		List<Product> productEntities=productRepository.findAll();
+		List<ProductBean> products = entityToBean(productEntities);
 		
 		return products;
 	}
 	
-public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
+public 	List<ProductBean> entityToBean(List<Product> productEntities) {
 		
-		List<Product> products = new ArrayList<>();
+		List<ProductBean> products = new ArrayList<>();
 		
-		for(ProductEntity entity:productEntities) {
-			Product product=new Product();
+		for(Product entity:productEntities) {
+			ProductBean product=new ProductBean();
 			product.setProductId(entity.getProductId());	
 			product.setName(entity.getName());	
 			product.setPrice(entity.getPrice());	
@@ -98,7 +98,7 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 			product.setQuantityProduct(entity.getQuantityProduct());
 			product.setImage(entity.getImage());
 			product.setStatus(entity.getStatus());
-			CategoryEntity category = new CategoryEntity();
+			Category category = new Category();
 	        category.setCategoryId(entity.getCategory().getCategoryId());
 	        category.setCategoryName(entity.getCategory().getCategoryName());
 	        product.setCategory(category);
@@ -111,7 +111,7 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 		
 	}
 
-   public void beanToEntity(Product product, ProductEntity entity) {
+   public void beanToEntity(ProductBean product, Product entity) {
 	   entity.setProductId(product.getProductId());
 	   entity.setName(product.getName());
 	   entity.setPrice(product.getPrice());
@@ -120,7 +120,7 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 	   entity.setDescription(product.getDescription());
 	   entity.setImage(product.getImage());
 	   entity.setStatus(product.getStatus());
-	   CategoryEntity category=new CategoryEntity();
+	   Category category=new Category();
 	   category.setCategoryId(product.getCategory().getCategoryId());
 	   category.setCategoryName(product.getCategory().getCategoryName());
 	   product.setCategory(category);
@@ -129,10 +129,10 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
    }
 
 	@Override
-	public void update(Integer productId, Product product) throws ProductNotFoundException {
-	Optional<ProductEntity> productOptional=productRepository.findById(productId);
+	public void update(Integer productId, ProductBean product) throws ProductNotFoundException {
+	Optional<Product> productOptional=productRepository.findById(productId);
 		if(productOptional.isPresent()) {
-		ProductEntity productEntity =productOptional.get();
+		Product productEntity =productOptional.get();
 		beanToEntity(product, productEntity);
 			productRepository.save(productEntity);
 			System.out.println("update() serviceimpl");
@@ -148,9 +148,9 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 	
 	@Override
 	public void delete(Integer productId) throws ProductNotFoundException {
-		Optional<ProductEntity> productOptional=productRepository.findById(productId);
+		Optional<Product> productOptional=productRepository.findById(productId);
 		if(productOptional.isPresent()) {
-		ProductEntity productEntity =productOptional.get();
+		Product productEntity =productOptional.get();
 			productRepository.delete(productEntity);
 		}
 		else {
@@ -162,22 +162,22 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 	
 	
 	@Override
-	public List<Product> searchProductByCategory(Optional<Integer> categoryId) {
-		List<ProductEntity> productEntities=productRepository.findByCategory(categoryId);
-		List<Product> products=entityToBean(productEntities);
+	public List<ProductBean> searchProductByCategory(Optional<Integer> categoryId) {
+		List<Product> productEntities=productRepository.findByCategory(categoryId);
+		List<ProductBean> products=entityToBean(productEntities);
 		return products;
 	}
 
 	@Override
-	public List<Product> searchSimilarProducts(String productName) throws ProductNotFoundException {
-	    List<ProductEntity> allProductEntities = productRepository.findAll();
-	    List<Product> allProducts = entityToBean(allProductEntities);
+	public List<ProductBean> searchSimilarProducts(String productName) throws ProductNotFoundException {
+	    List<Product> allProductEntities = productRepository.findAll();
+	    List<ProductBean> allProducts = entityToBean(allProductEntities);
 
 	    // List to store similar products
-	    List<Product> similarProducts = new ArrayList<>();
+	    List<ProductBean> similarProducts = new ArrayList<>();
 
 	    // Iterate through all products and check if the name contains the search query
-	    for (Product product : allProducts) {
+	    for (ProductBean product : allProducts) {
 	        if (product.getName().toLowerCase().contains(productName.toLowerCase())) {
 	            // Found a similar product
 	            similarProducts.add(product);
@@ -194,9 +194,9 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 	   	}
 
 	@Override
-	public List<Product> getProductsByCategoryName(String categoryName) throws CategoryNotFoundException {
+	public List<ProductBean> getProductsByCategoryName(String categoryName) throws CategoryNotFoundException {
 		
-		List<ProductEntity> productEntities = productRepository.findByCategoryName(categoryName);
+		List<Product> productEntities = productRepository.findByCategoryName(categoryName);
 	    if (!productEntities.isEmpty()) {
 	        return entityToBean(productEntities);
 	    } else {
@@ -205,6 +205,20 @@ public 	List<Product> entityToBean(List<ProductEntity> productEntities) {
 
 		
 	}
+
+	 @Override
+	    public List<CompositionBean> getCompositionsByProductId(Integer productId) throws ProductNotFoundException {
+	        Optional<Product> productOptional = productRepository.findById(productId);
+	        if (productOptional.isPresent()) {
+	            Product productEntity = productOptional.get();
+	            return productEntity.getCompositions().stream()
+	                    .map(compositionEntity -> new CompositionBean(compositionEntity.getCompositionId(),
+	                            compositionEntity.getCompositionName()))
+	                    .collect(Collectors.toList());
+	        } else {
+	            throw new ProductNotFoundException("Product not found with Id- " + productId);
+	        }
+	    }
 	
 
 	

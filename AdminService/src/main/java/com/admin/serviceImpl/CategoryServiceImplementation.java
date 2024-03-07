@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.admin.bean.Category;
-import com.admin.entity.CategoryEntity;
+import com.admin.bean.CategoryBean;
+import com.admin.entity.Category;
 import com.admin.exception.CategoryNotFoundException;
 import com.admin.repository.CategoryRepository;
 import com.admin.service.CategoryService;
@@ -20,21 +20,21 @@ public class CategoryServiceImplementation implements CategoryService{
 	private CategoryRepository categoryRepository;
 	
 	@Override
-	public void insert(Category category) {
-		CategoryEntity categoryEntity=new CategoryEntity();
+	public void insertCategory(CategoryBean category) {
+		Category categoryEntity=new Category();
 		categoryEntity.setCategoryName(category.getCategoryName());
      	 categoryRepository.save(categoryEntity);
 	}
 
 	@Override
-	public CategoryEntity getById(Integer categoryId) {
+	public Category getByCategoryId(Integer categoryId) {
 		return categoryRepository.findById(categoryId).get();
 	}
 
 	@Override
-	public List<CategoryEntity> getAll() {
+	public List<Category> getAllCategories() {
 	
-		List<CategoryEntity> categoryEntities=categoryRepository.findAll();
+		List<Category> categoryEntities=categoryRepository.findAll();
 //		List<Category> categories = convert(categoryEntities);
 //		return categories;
 //	}
@@ -57,10 +57,10 @@ public class CategoryServiceImplementation implements CategoryService{
 	
 	
 	@Override
-	public void update(Integer categoryId, CategoryEntity entity) throws CategoryNotFoundException {
-		Optional<CategoryEntity> optional =categoryRepository.findById(categoryId);
+	public void updateCategory(Integer categoryId, Category entity) throws CategoryNotFoundException {
+		Optional<Category> optional =categoryRepository.findById(categoryId);
 		if(optional.isPresent()) {
-		CategoryEntity categoryEntity=optional.get();	
+		Category categoryEntity=optional.get();	
 	     categoryRepository.save(entity);
 		}
 		else {
@@ -72,10 +72,10 @@ public class CategoryServiceImplementation implements CategoryService{
 	
 
 	@Override
-	public void delete(Integer categoryId) throws CategoryNotFoundException {
-	Optional<CategoryEntity> optional =categoryRepository.findById(categoryId);
+	public void deleteCategory(Integer categoryId) throws CategoryNotFoundException {
+	Optional<Category> optional =categoryRepository.findById(categoryId);
 	if(optional.isPresent()) {
-	CategoryEntity categoryEntity=optional.get();	
+	Category categoryEntity=optional.get();	
      categoryRepository.deleteById(categoryId);
      
 	}

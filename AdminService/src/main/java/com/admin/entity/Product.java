@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "product")
-public class ProductEntity {
+public class Product {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,15 +47,15 @@ public class ProductEntity {
 	
 	@ManyToOne
     @JoinColumn(name="category_id", referencedColumnName = "category_id")
-	private CategoryEntity category;
+	private Category category;
 	
 	private String status;
 	
 	@OneToMany(fetch = FetchType.EAGER)
 //	@JoinColumn(name="composition_id", referencedColumnName = "composition_id")
-	private List<CompositionEntity> compositions;
+	private List<Composition> compositions;
 	
-	public ProductEntity() {
+	public Product() {
 		
 	}
 
@@ -99,11 +99,11 @@ public class ProductEntity {
 		this.description = description;
 	}
 
-	public CategoryEntity getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(CategoryEntity category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 
@@ -135,7 +135,7 @@ public class ProductEntity {
 		this.status = status;
 	}
 	
-	public List<CompositionEntity> getCompositions() {
+	public List<Composition> getCompositions() {
 		return compositions;
 	}
 
@@ -143,7 +143,7 @@ public class ProductEntity {
 
 
 
-	public void setCompositions(List<CompositionEntity> compositions) {
+	public void setCompositions(List<Composition> compositions) {
 		this.compositions = compositions;
 	}
 
@@ -162,7 +162,7 @@ public class ProductEntity {
 	        return true;
 	    if (obj == null || getClass() != obj.getClass())
 	        return false;
-	    ProductEntity other = (ProductEntity) obj;
+	    Product other = (Product) obj;
 	    return Objects.equals(productId, other.productId);
 	}
 

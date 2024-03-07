@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.admin.bean.Composition;
-import com.admin.entity.CompositionEntity;
+import com.admin.bean.CompositionBean;
+import com.admin.entity.Composition;
 
 @Service
 public interface CompositionService {
    
-	public void insert(Composition composition);
+	public CompositionBean insertComposition(CompositionBean composition);
 	
-	public List<CompositionEntity> getAll();
+	public List<Composition> getAllCompositions();
 }

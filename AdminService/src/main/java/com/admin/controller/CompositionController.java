@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.admin.bean.Composition;
-import com.admin.entity.CompositionEntity;
+import com.admin.bean.CompositionBean;
+import com.admin.entity.Composition;
 import com.admin.service.CompositionService;
 
 @RestController
@@ -29,19 +29,19 @@ public class CompositionController {
 	
 	
 	@PostMapping("/insert")
-	public ResponseEntity<Composition> insert(@RequestBody Composition composition){
+	public ResponseEntity<CompositionBean> insertComposition(@RequestBody CompositionBean composition){
 		log.info("Start CompositionController::insert()");
-		compositionService.insert(composition);
+	CompositionBean composition2=compositionService.insertComposition(composition);
 		log.info("End CompositionController::insert()");
-		return new ResponseEntity<Composition>(composition,HttpStatus.CREATED);
+		return new ResponseEntity<CompositionBean>(composition2,HttpStatus.CREATED);
 		
 	}
 	
 	@GetMapping("/getAll")
-	public ResponseEntity<List<CompositionEntity>> getAll(){
+	public ResponseEntity<List<Composition>> getAllCompositions(){
 		log.info("Start CompositionController::getAll()");
-		List<CompositionEntity> compositionEntities=compositionService.getAll();
+		List<Composition> compositionEntities=compositionService.getAllCompositions();
 		log.info("End CompositionController::getAll()");
-		return new ResponseEntity<List<CompositionEntity>>(compositionEntities,HttpStatus.OK);
+		return new ResponseEntity<List<Composition>>(compositionEntities,HttpStatus.OK);
 	}
 }

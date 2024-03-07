@@ -1,15 +1,15 @@
 package com.admin.bean;
 
-public class Composition {
+public class CompositionBean {
 
 	private Integer compositionId;
 	private String compositionName;
 	
-	public Composition() {
+	public CompositionBean() {
 		super();
 	}
 
-	public Composition(Integer compositionId, String compositionName) {
+	public CompositionBean(Integer compositionId, String compositionName) {
 		super();
 		this.compositionId = compositionId;
 		this.compositionName = compositionName;

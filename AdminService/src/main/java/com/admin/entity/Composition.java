@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "composition")
-public class CompositionEntity {
+public class Composition {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +19,10 @@ public class CompositionEntity {
 	@Column(name="composition_name")
 	private String compositionName;
 	
-	public CompositionEntity() {
+	public Composition() {
 	}
 
-	public CompositionEntity(Integer compositionId, String compositionName) {
+	public Composition(Integer compositionId, String compositionName) {
 		this.compositionId = compositionId;
 		this.compositionName = compositionName;
 	}
