@@ -1,15 +1,42 @@
-package com.order.bean;
+package com.order.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="feedback")
 public class Feedback {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="feedback_id")
 	private Integer feedbackId;
+	
+	@Column(name="user_id")
 	private Integer userId;
+	
+	@OneToOne
+	@JoinColumn(name = "order_id", referencedColumnName = "order_id")
+	@JsonIgnore
 	private Orders order;
+	
+	@Column(name="feedback")
 	private String feedback;
+	
+	@Column(name="ratings")
 	private Double ratings;
+	
+	@Column(name="feedback_date")
 	private LocalDateTime feedbackDate;
 
 	public Feedback() {
@@ -77,7 +104,7 @@ public class Feedback {
 
 	@Override
 	public String toString() {
-		return "Feedback [feedbackId=" + feedbackId + ", userId=" + userId + ", order=" + order + ", feedback="
+		return "FeedbackEntity [feedbackId=" + feedbackId + ", userId=" + userId + ", order=" + order + ", feedback="
 				+ feedback + ", ratings=" + ratings + ", feedbackDate=" + feedbackDate + "]";
 	}
 

@@ -23,74 +23,73 @@ import com.admin.service.CartService;
 
 @RestController
 public class CartController {
-	
-	private static Logger log = LoggerFactory
-			.getLogger(CartController.class.getSimpleName());
-	
-	
+
+	private static Logger log = LoggerFactory.getLogger(CartController.class.getSimpleName());
+
 	@Autowired
 	private CartService service;
-	
-	
+
 	@PostMapping("/cart")
-	public ResponseEntity<Cart> saveCart(@RequestBody Cart cart) throws UserIdNotFoundException{		
-		log.info("CartController saveCart Start => {} ",cart);
+	public ResponseEntity<Cart> saveCart(@RequestBody Cart cart) throws UserIdNotFoundException {
+		log.info("CartController saveCart Start => {} ", cart);
 		try {
-		  cart = service.save(cart);
-		}catch (IllegalArgumentException e) {			
+			cart = service.save(cart);
+		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		log.info("CartController End => {} ",cart);
-		return 	ResponseEntity.status(HttpStatus.OK).body(cart);
-	}	
-	
+		log.info("CartController End => {} ", cart);
+		return ResponseEntity.status(HttpStatus.OK).body(cart);
+	}
+
 	@GetMapping("/cart/{userId}")
-	public ResponseEntity<Cart>  getCartById(@PathVariable Integer userId) throws CartIdNotFoundException, UserIdNotFoundException, CartListNotFoundException {
-		log.info("CartController getCartById Start => {} ",userId);
-		Cart cart=null; 
+	public ResponseEntity<Cart> getCartById(@PathVariable Integer userId)
+			throws CartIdNotFoundException, UserIdNotFoundException, CartListNotFoundException {
+		log.info("CartController getCartById Start => {} ", userId);
+		Cart cart = null;
 		try {
-			  cart = service.getCartById(userId);
-		}catch (IllegalArgumentException e) {
+			cart = service.getCartById(userId);
+		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		log.info("CartController getCartById End => {} ",userId);
-		return 	ResponseEntity.status(HttpStatus.OK).body(cart) ;
+		log.info("CartController getCartById End => {} ", userId);
+		return ResponseEntity.status(HttpStatus.OK).body(cart);
 
 	}
-	
+
 	@DeleteMapping("/cart/delete/{cartId}/{productId}")
-	public ResponseEntity<Cart> delete(@PathVariable Integer cartId,@PathVariable Integer productId) throws CartIdNotFoundException {
-		
-		log.info("Cart controller delete cart method start "+cartId,productId);
+	public ResponseEntity<Cart> delete(@PathVariable Integer cartId, @PathVariable Integer productId)
+			throws CartIdNotFoundException {
+
+		log.info("Cart controller delete cart method start " + cartId, productId);
 		try {
-			Cart cart=service.delete(cartId,productId);
-			log.info("Cart controller delete produtc in cart method end try block {} "+cartId);
+			Cart cart = service.delete(cartId, productId);
+			log.info("Cart controller delete produtc in cart method end try block {} " + cartId);
 			return ResponseEntity.status(HttpStatus.OK).body(cart);
-		}catch (IllegalArgumentException e) {
-			log.info("Cart controller delete cart method end catch block {} "+e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.info("Cart controller delete cart method end catch block {} " + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
+
 	}
-	
+
 	@GetMapping("/cart")
-	public ResponseEntity<List<Cart>> getCartDetails() throws CartListNotFoundException{
+	public ResponseEntity<List<Cart>> getCartDetails() throws CartListNotFoundException {
 		log.info("Cart controller getCartDetails method start");
-		List<Cart> cartDetails =service.getCartDetails();
+		List<Cart> cartDetails = service.getCartDetails();
 		log.info("Cart controller getCartDetails method End");
 		return ResponseEntity.status(HttpStatus.OK).body(cartDetails);
 	}
 
-	
 	@PutMapping("/cart/update/{productId}")
-	public ResponseEntity<Cart> update(@RequestBody Cart cart,@PathVariable int productId) throws CartIdNotFoundException{
-		
-		log.info("Cart contoller  update method {}  "+cart);
-		cart  = service.update(cart, productId);
+	public ResponseEntity<Cart> update(@RequestBody Cart cart, @PathVariable int productId)
+			throws CartIdNotFoundException {
+
+		log.info("Cart contoller  update method {}  " + cart);
+		cart = service.update(cart, productId);
 		return ResponseEntity.status(HttpStatus.OK).body(cart);
-	
+
 	}
-	
+
 	@PutMapping("/cart/updateStatus")
 	public ResponseEntity<Cart> updateCartStatus(@RequestBody Cart cart) throws CartIdNotFoundException {
 		log.info("Cart Controller Update Cart Status Method Start");
@@ -98,8 +97,8 @@ public class CartController {
 			cart = service.updateCartStatus(cart);
 			log.info("Cart Controller Update Cart Status Method End");
 			return ResponseEntity.status(HttpStatus.OK).body(cart);
-		}catch (IllegalArgumentException e) {
-			log.info("Cart controller Update Cart Status Method End "+e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.info("Cart controller Update Cart Status Method End " + e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 

@@ -1,7 +1,6 @@
 package com.order.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,7 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "payment")
-public class PaymentEntity implements Serializable{
+public class Payment implements Serializable{
 	
 	private static final long serialVersionUID = 5167861301694073857L;
 
@@ -41,15 +40,15 @@ public class PaymentEntity implements Serializable{
 	@OneToOne
 	@JoinColumn(name = "order_id", referencedColumnName = "order_id")
 	@JsonIgnore
-	private OrderEntity order;
+	private Orders order;
 
 
-	public PaymentEntity() {
+	public Payment() {
 		super();
 	}
 
-	public PaymentEntity(Integer paymentId, String paymentMode, Double amount, String status, LocalDateTime paymentDate,
-			OrderEntity order) {
+	public Payment(Integer paymentId, String paymentMode, Double amount, String status, LocalDateTime paymentDate,
+			Orders order) {
 		super();
 		this.paymentId = paymentId;
 		this.paymentMode = paymentMode;
@@ -99,11 +98,11 @@ public class PaymentEntity implements Serializable{
 		this.paymentDate = paymentDate;
 	}
 
-	public OrderEntity getOrder() {
+	public Orders getOrder() {
 		return order;
 	}
 
-	public void setOrder(OrderEntity order) {
+	public void setOrder(Orders order) {
 		this.order = order;
 	}
 

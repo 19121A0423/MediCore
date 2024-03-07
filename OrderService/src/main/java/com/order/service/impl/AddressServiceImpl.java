@@ -1,11 +1,5 @@
 package com.order.service.impl;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,160 +7,96 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import com.order.bean.Address;
-import com.order.controller.AddressController;
-import com.order.entity.AddressEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.order.bean.AddressBean;
+import com.order.constants.CommonConstants;
+import com.order.entity.Address;
 import com.order.exceptions.AddressNotFoundException;
 import com.order.repository.AddressRepository;
 import com.order.service.AddressService;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 public class AddressServiceImpl implements AddressService {
 
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private ObjectMapper mapper;
 
 	private static Logger log = LoggerFactory.getLogger(AddressServiceImpl.class.getSimpleName());
 
 
 	@Override
-	public Address saveAddress(Address address) {
+	public AddressBean saveAddress(AddressBean addressBean) {
 		log.info("AddressServiceImpl::SaveAddress::Started");
-		if (address.getCity() == null || address.getStreetName() == null || address.getState() == null ||
-				address.getPinCode() == null || address.getUserId() <=0) {
-			throw new IllegalArgumentException("Address properties cannot be null");
+		if (addressBean.getCity().isEmpty() || addressBean.getStreetName().isEmpty() || addressBean.getState().isEmpty() ||
+				addressBean.getPinCode()<=0 || addressBean.getUserId() <=0) {
+			throw new IllegalArgumentException("Address properties cannot be empty");
 		}
-
-		AddressEntity addressEntity = new AddressEntity();
-		beanToEntity(address, addressEntity);
-		addressRepository.save(addressEntity);
-		entityToBean(address, addressEntity);
-		log.info("AddressServiceImpl::SaveAddress::Ended");
-		return address;
+		else {
+			Address address = new Address();
+			address = mapper.convertValue(addressBean, Address.class);
+			address.setStatus(CommonConstants.STATUS);
+			addressRepository.save(address);
+			addressBean = mapper.convertValue(address, AddressBean.class);
+			log.info("AddressServiceImpl::SaveAddress::Ended");
+			return addressBean;
+		}
+		
 
 	}
 
 	@Override
-	public Address getAddressById(int id) throws AddressNotFoundException {
+	public AddressBean getAddressById(int id) throws AddressNotFoundException {
 		log.info("AddressServiceImpl::getAddressById::Started");
-		AddressEntity addressEntity = addressRepository.findById(id)
+		Address address = addressRepository.findById(id)
 				.orElseThrow(() -> new AddressNotFoundException("Address not found with ID: " + id));
 
-		Address address = new Address();
-		entityToBean(address, addressEntity);
+		AddressBean addressBean = new AddressBean();
+		addressBean = mapper.convertValue(address, AddressBean.class);
 		log.info("AddressServiceImpl::getAddressById::Ended");
-		return address;
+		return addressBean;
 	}
 
 	@Override
-	public List<Address> getAllAddresses() throws AddressNotFoundException {
-		log.info("AddressServiceImpl::getAllAddresses::Started");
-		List<AddressEntity> addressEntities = addressRepository.findAll();
-		if(addressEntities.isEmpty()) {
-			throw new AddressNotFoundException("No addresses found");
-		}
-		else {
-			List<Address> addresses = new ArrayList<>();
-			entitiesToBeans(addresses, addressEntities);
-			log.info("AddressServiceImpl::getAllAddresses::Ended");
-			return addresses;
-		}
-
-	}
-
-	@Override
-	public void updateAddress(int id, Address updatedAddress) throws AddressNotFoundException {
+	public AddressBean updateAddress(int id, AddressBean updatedAddress) throws AddressNotFoundException {
 		log.info("AddressServiceImpl::updateAddress::Started");
-		Optional<AddressEntity> optionalAddressEntity = addressRepository.findById(id);
+		Optional<Address> optionalAddressEntity = addressRepository.findById(id);
 
 		if (optionalAddressEntity.isPresent()) {
-			AddressEntity addressEntity = optionalAddressEntity.get();
-			addressEntity.setAddressId(id);
-			beanToEntity(updatedAddress, addressEntity);
-			addressRepository.save(addressEntity);
+			Address address = optionalAddressEntity.get();
+			address = mapper.convertValue(updatedAddress, Address.class);
+			address.setAddressId(id);
+			addressRepository.save(address);
+			updatedAddress = mapper.convertValue(address, AddressBean.class);
+			log.info("AddressServiceImpl::updateAddress::Ended");
+			return updatedAddress;
 		} else {
 			throw new AddressNotFoundException("Address not found with ID: " + id);
 		}
-		log.info("AddressServiceImpl::updateAddress::Ended");
+		
 	}
 
 	@Override
-	public void deactivateAddress(int id) throws AddressNotFoundException {
-		log.info("AddressServiceImpl::deactivateAddress::Started");
-		if (addressRepository.existsById(id)) {
-			addressRepository.updateStatusById(id);
-		} else {
-			throw new AddressNotFoundException("Address not found with ID: " + id);
-		}
-		log.info("AddressServiceImpl::deactivateAddress::Ended");
-
-	}
-	
-	@Override
-	public List<Address> getAddressByUserId(int userId) throws AddressNotFoundException {
+	public List<AddressBean> getAddressByUserId(int userId) throws AddressNotFoundException {
 		log.info("AddressServiceImpl::getAddressByUserId::Started");
-		List<AddressEntity> addressEntities = addressRepository.getAddressByUserId(userId);
-		if(addressEntities.isEmpty()) {
+		List<Address> addresses = addressRepository.getAddressByUserId(userId);
+		if(addresses.isEmpty()) {
 			throw new AddressNotFoundException("No addresses found");
 		}
 		else {
-			List<Address> addresses = new ArrayList<>();
-			entitiesToBeans(addresses, addressEntities);
+			List<AddressBean> addressBeans = new ArrayList<>();
+			addresses.stream().forEach(address -> {
+				AddressBean addressBean = new AddressBean();
+				addressBean = mapper.convertValue(address, AddressBean.class);
+				addressBeans.add(addressBean);
+			});
 			log.info("AddressServiceImpl::getAddressByUserId::Ended");
-			return addresses;
+			return addressBeans;
 		}
-	}
-
-
-	@Override
-	public void beanToEntity(Address address, AddressEntity addressEntity) {
-		log.info("AddressServiceImpl::beanToEntity::Started");
-		addressEntity.setAddressId(address.getAddressId());
-		addressEntity.setStreetName(address.getStreetName());
-		addressEntity.setCity(address.getCity());
-		addressEntity.setState(address.getState());
-		addressEntity.setPinCode(address.getPinCode());
-		addressEntity.setUserId(address.getUserId());
-		addressEntity.setStatus("active");
-		log.info("AddressServiceImpl::beanToEntity::Ended");
-
-	}
-
-	@Override
-	public void entityToBean(Address address, AddressEntity addressEntity) {
-		log.info("AddressServiceImpl::entityToBean::Started");
-		address.setAddressId(addressEntity.getAddressId());
-		address.setStreetName(addressEntity.getStreetName());
-		address.setCity(addressEntity.getCity());
-		address.setState(addressEntity.getState());
-		address.setPinCode(addressEntity.getPinCode());
-		address.setUserId(addressEntity.getUserId());
-		address.setStatus(addressEntity.getStatus());
-		log.info("AddressServiceImpl::entityToBean::Ended");
-	}
-
-	@Override
-	public void entitiesToBeans(List<Address> addresses, List<AddressEntity> addressEntities) {
-		log.info("AddressServiceImpl::entitiesToBeans::Started");
-		addressEntities.stream().forEach(addressEntity -> {
-			Address address = new Address();
-			address.setAddressId(addressEntity.getAddressId());
-			address.setStreetName(addressEntity.getStreetName());
-			address.setCity(addressEntity.getCity());
-			address.setState(addressEntity.getState());
-			address.setPinCode(addressEntity.getPinCode());
-			address.setUserId(addressEntity.getUserId());
-			address.setStatus(addressEntity.getStatus());
-			addresses.add(address);
-		});
-		log.info("AddressServiceImpl::entitiesToBeans::Ended");
-
 	}
 
 }

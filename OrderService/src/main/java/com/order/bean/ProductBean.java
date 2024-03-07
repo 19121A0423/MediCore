@@ -1,19 +1,19 @@
 package com.order.bean;
 
-public class Product {
+public class ProductBean {
 	private Integer productId;
 	private String name;
 	private Double price;
 	private Integer quantity;
 	private String description;
-	private Category category;
+	private CategoryBean category;
 
-	public Product() {
+	public ProductBean() {
 
 	}
 
-	public Product(Integer productId, String name, Double price, Integer quantity, String description,
-			Category category) {
+	public ProductBean(Integer productId, String name, Double price, Integer quantity, String description,
+			CategoryBean category) {
 		super();
 		this.productId = productId;
 		this.name = name;
@@ -63,11 +63,11 @@ public class Product {
 		this.description = description;
 	}
 
-	public Category getCategory() {
+	public CategoryBean getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(CategoryBean category) {
 		this.category = category;
 	}
 

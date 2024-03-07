@@ -3,14 +3,14 @@ package com.user.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-import com.user.entity.UserEntity;
+import com.user.entity.User;
 
-public interface UserRepository extends JpaRepository<UserEntity, Integer>  {
+public interface UserRepository extends JpaRepository<User, Integer>  {
 
-	UserEntity findByUserEmailAndUserPassword(String userEmail, String userPassword);
+	User findByUserEmailAndUserPassword(String userEmail, String userPassword);
 	
-	UserEntity findByUserEmail(String userEmail);
+	User findByUserEmail(String userEmail);
 	
-	public UserEntity findByUserEmailOrUserMobileNumber(String userEmail,Long userMobileNumber);
+	public User findByUserEmailOrUserMobileNumber(String userEmail,Long userMobileNumber);
 	
 }

@@ -1,54 +1,22 @@
-package com.order.entity;
+package com.order.bean;
 
+public class AddressBean {
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "address")
-public class AddressEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "address_id")
 	private Integer addressId;
-
-	@Column(name = "street_name")
 	private String streetName;
-
-	@Column(name = "city")
 	private String city;
-
-	@Column(name = "state")
 	private String state;
-
-	@Column(name = "pinCode")
 	private Long pinCode;
-
-	@Column(name="user_id")
 	private Integer userId;
-
-	@Column(name = "status")
+	private OrderBean order;
 	private String status;
 
-	@Override
-	public String toString() {
-		return "AddressEntity [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state="
-				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + "]";
-	}
-
-	public AddressEntity() {
+	public AddressBean() {
 		super();
 	}
 
-	public AddressEntity(Integer addressId, String streetName, String city, String state, Long pinCode, Integer userId,
-			String status) {
+	public AddressBean(Integer addressId, String streetName, String city, String state, Long pinCode, Integer userId,
+			OrderBean order, String status) {
 		super();
 		this.addressId = addressId;
 		this.streetName = streetName;
@@ -56,6 +24,7 @@ public class AddressEntity {
 		this.state = state;
 		this.pinCode = pinCode;
 		this.userId = userId;
+		this.order = order;
 		this.status = status;
 	}
 
@@ -107,6 +76,14 @@ public class AddressEntity {
 		this.userId = userId;
 	}
 
+	public OrderBean getOrder() {
+		return order;
+	}
+
+	public void setOrder(OrderBean order) {
+		this.order = order;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -115,10 +92,13 @@ public class AddressEntity {
 		this.status = status;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Address [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state=" + state
+				+ ", pinCode=" + pinCode + ", userId=" + userId + ", order=" + order + ", status=" + status + "]";
+	}
 
 	
-
 	
 
 }

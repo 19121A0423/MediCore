@@ -1,22 +1,51 @@
-package com.order.bean;
+package com.order.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "address")
 public class Address {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "address_id")
 	private Integer addressId;
+
+	@Column(name = "street_name")
 	private String streetName;
+
+	@Column(name = "city")
 	private String city;
+
+	@Column(name = "state")
 	private String state;
+
+	@Column(name = "pin_code")
 	private Long pinCode;
+
+	@Column(name = "user_id")
 	private Integer userId;
-	private Orders order;
+
+	@Column(name = "status")
 	private String status;
+
+	@Override
+	public String toString() {
+		return "AddressEntity [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state="
+				+ state + ", pinCode=" + pinCode + ", userId=" + userId + ", status=" + status + "]";
+	}
 
 	public Address() {
 		super();
 	}
 
 	public Address(Integer addressId, String streetName, String city, String state, Long pinCode, Integer userId,
-			Orders order, String status) {
+			String status) {
 		super();
 		this.addressId = addressId;
 		this.streetName = streetName;
@@ -24,7 +53,6 @@ public class Address {
 		this.state = state;
 		this.pinCode = pinCode;
 		this.userId = userId;
-		this.order = order;
 		this.status = status;
 	}
 
@@ -76,14 +104,6 @@ public class Address {
 		this.userId = userId;
 	}
 
-	public Orders getOrder() {
-		return order;
-	}
-
-	public void setOrder(Orders order) {
-		this.order = order;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -91,14 +111,5 @@ public class Address {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	@Override
-	public String toString() {
-		return "Address [addressId=" + addressId + ", streetName=" + streetName + ", city=" + city + ", state=" + state
-				+ ", pinCode=" + pinCode + ", userId=" + userId + ", order=" + order + ", status=" + status + "]";
-	}
-
-	
-	
 
 }

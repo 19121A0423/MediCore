@@ -1,10 +1,7 @@
 package com.admin.entity;
 
-
 import java.util.List;
 import java.util.Objects;
-
-import org.hibernate.annotations.Cascade;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,32 +28,31 @@ public class ProductEntity {
 
 	@Column(name = "price")
 	private Double price;
-	
+
 	@Column(name = "quantity")
 	private Integer quantity;
-	
+
 	@Column(name = "description")
 	private String description;
-	 
-	@Column(name="product_quantity")
+
+	@Column(name = "product_quantity")
 	private Integer quantityProduct;
-	
-	@Column(name="image")
+
+	@Column(name = "image")
 	private String image;
-	
-	
+
 	@ManyToOne
-    @JoinColumn(name="category_id", referencedColumnName = "category_id")
+	@JoinColumn(name = "category_id", referencedColumnName = "category_id")
 	private CategoryEntity category;
-	
+
 	private String status;
-	
+
 	@OneToMany(fetch = FetchType.EAGER)
 //	@JoinColumn(name="composition_id", referencedColumnName = "composition_id")
 	private List<CompositionEntity> compositions;
-	
+
 	public ProductEntity() {
-		
+
 	}
 
 	public Integer getProductId() {
@@ -107,8 +103,6 @@ public class ProductEntity {
 		this.category = category;
 	}
 
-	
-	
 	public Integer getQuantityProduct() {
 		return quantityProduct;
 	}
@@ -124,8 +118,6 @@ public class ProductEntity {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
-	
 
 	public String getStatus() {
 		return status;
@@ -134,20 +126,14 @@ public class ProductEntity {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public List<CompositionEntity> getCompositions() {
 		return compositions;
 	}
 
-
-
-
-
 	public void setCompositions(List<CompositionEntity> compositions) {
 		this.compositions = compositions;
 	}
-
-
 
 	@Override
 	public String toString() {
@@ -158,17 +144,17 @@ public class ProductEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-	    if (this == obj)
-	        return true;
-	    if (obj == null || getClass() != obj.getClass())
-	        return false;
-	    ProductEntity other = (ProductEntity) obj;
-	    return Objects.equals(productId, other.productId);
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		ProductEntity other = (ProductEntity) obj;
+		return Objects.equals(productId, other.productId);
 	}
 
 	@Override
 	public int hashCode() {
-	    return Objects.hash(productId);
+		return Objects.hash(productId);
 	}
-	
+
 }

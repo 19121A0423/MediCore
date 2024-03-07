@@ -1,50 +1,21 @@
-package com.order.entity;
+package com.order.bean;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+public class FeedbackBean {
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name="feedback")
-public class FeedbackEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="feedback_id")
 	private Integer feedbackId;
-	
-	@Column(name="user_id")
 	private Integer userId;
-	
-	@OneToOne
-	@JoinColumn(name = "order_id", referencedColumnName = "order_id")
-	@JsonIgnore
-	private OrderEntity order;
-	
-	@Column(name="feedback")
+	private OrderBean order;
 	private String feedback;
-	
-	@Column(name="ratings")
 	private Double ratings;
-	
-	@Column(name="feedback_date")
 	private LocalDateTime feedbackDate;
 
-	public FeedbackEntity() {
+	public FeedbackBean() {
 		super();
 	}
 
-	public FeedbackEntity(Integer feedbackId, Integer userId, OrderEntity order, String feedback, Double ratings,
+	public FeedbackBean(Integer feedbackId, Integer userId, OrderBean order, String feedback, Double ratings,
 			LocalDateTime feedbackDate) {
 		super();
 		this.feedbackId = feedbackId;
@@ -71,11 +42,11 @@ public class FeedbackEntity {
 		this.userId = userId;
 	}
 
-	public OrderEntity getOrder() {
+	public OrderBean getOrder() {
 		return order;
 	}
 
-	public void setOrder(OrderEntity order) {
+	public void setOrder(OrderBean order) {
 		this.order = order;
 	}
 
@@ -105,7 +76,7 @@ public class FeedbackEntity {
 
 	@Override
 	public String toString() {
-		return "FeedbackEntity [feedbackId=" + feedbackId + ", userId=" + userId + ", order=" + order + ", feedback="
+		return "Feedback [feedbackId=" + feedbackId + ", userId=" + userId + ", order=" + order + ", feedback="
 				+ feedback + ", ratings=" + ratings + ", feedbackDate=" + feedbackDate + "]";
 	}
 

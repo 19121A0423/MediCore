@@ -13,16 +13,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.user.bean.PasswordUpdateRequest;
-import com.user.bean.User;
+import com.user.bean.UserBean;
 import com.user.exception.DuplicateMobileNumberException;
+import com.user.exception.EmailNotFoundException;
+import com.user.exception.InvalidOTPException;
 import com.user.exception.DuplicateEmailIdException;
 import com.user.exception.UserNotFoundByIdException;
 import com.user.service.UserService;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 	
 	private static Logger log = LoggerFactory
@@ -31,10 +36,10 @@ public class UserController {
 	@Autowired
 	private UserService service;
 
-	@PostMapping("/users/save")
-	public ResponseEntity<User> saveUserDetails(@RequestBody User user) throws DuplicateEmailIdException, DuplicateMobileNumberException {
+	@PostMapping("/save")
+	public ResponseEntity<UserBean> saveUserDetails(@RequestBody UserBean user) throws DuplicateEmailIdException, DuplicateMobileNumberException {
 		log.info("UserController save method start {}"+user);	
-		User userBean=null;
+		UserBean userBean=null;
 		try {
 			 userBean = service.saveUserDetails(user);
 		}catch (IllegalArgumentException e) {
@@ -44,10 +49,10 @@ public class UserController {
 		 return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
-	@PutMapping("/users/update")
-	public ResponseEntity<User> updateUserDetails(@RequestBody User user) throws UserNotFoundByIdException {
+	@PutMapping("/update")
+	public ResponseEntity<UserBean> updateUserDetails(@RequestBody UserBean user) throws UserNotFoundByIdException {
 		log.info("UserController update method start {}"+user);	
-		User userBean=null;
+		UserBean userBean=null;
 		try {
 			 userBean = service.updateUserDetails(user);
 		}catch (IllegalArgumentException e) {
@@ -57,11 +62,11 @@ public class UserController {
 		 return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
-	@GetMapping("/users/{userId}")
-	public ResponseEntity<User> getUserDetailsByUserId(@PathVariable int userId) throws UserNotFoundByIdException {
+	@GetMapping("/{userId}")
+	public ResponseEntity<UserBean> getUserDetailsByUserId(@PathVariable int userId) throws UserNotFoundByIdException {
 		
 		log.info("UserController getById method start {}"+userId);	
-		User userBean=null;
+		UserBean userBean=null;
 		try {
 			 userBean = service.getUserDetailsByUserId(userId);
 		}catch (IllegalArgumentException e) {
@@ -72,10 +77,10 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
-	@DeleteMapping("/users/delete/{userId}")
-	public ResponseEntity<User> deleteUserDetailsByUserId(@PathVariable int userId) throws UserNotFoundByIdException {
+	@DeleteMapping("/delete/{userId}")
+	public ResponseEntity<UserBean> deleteUserDetailsByUserId(@PathVariable int userId) throws UserNotFoundByIdException {
 		log.info("UserController delete method start {}"+userId);	
-		User userBean=null;
+		UserBean userBean=null;
 		try {
 			  userBean = service.deleteUserDetailsByUserId(userId);
 		}catch (IllegalArgumentException e) {
@@ -85,23 +90,23 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
-	@GetMapping("/users")
-	public ResponseEntity<List<User>> getAllUserDetails() {
+	@GetMapping()
+	public ResponseEntity<List<UserBean>> getAllUserDetails() {
 		log.info("UserController getAll method start");	
-		 List<User> usersList = service.getAllUserDetails();
+		 List<UserBean> usersList = service.getAllUserDetails();
 		log.info("UserController getAll method end");	
 		return ResponseEntity.status(HttpStatus.OK).body(usersList);
 	}
 
 	
-	@GetMapping("/users/validate/{userEmail}/{userPassword}")
-	public ResponseEntity<User> userValiadtion(@PathVariable String userEmail, @PathVariable String userPassword) {
+	@GetMapping("/validate/{userEmail}/{userPassword}")
+	public ResponseEntity<UserBean> userValiadtion(@PathVariable String userEmail, @PathVariable String userPassword) {
 		log.info("UserController userValiadtion method start");	
-		User user =null;
+		UserBean user =null;
 		try {
 			user = service.validateUser(userEmail,userPassword);
 			log.info("UserController userValiadtion method end");	
-			return new ResponseEntity<User>(user,HttpStatus.OK);
+			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
 		}
 		catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -109,15 +114,15 @@ public class UserController {
 		
 	}
 	
-	@PutMapping("/users/updatepassword")
-	public ResponseEntity<User> updateUserPassword(@RequestBody PasswordUpdateRequest request){
+	@PutMapping("/updatepassword")
+	public ResponseEntity<UserBean> updateUserPassword(@RequestBody PasswordUpdateRequest request){
 		log.info("UserController updateUserPassword method start");	
 		log.info("Update User password : "+request);
-		User user =null;
+		UserBean user =null;
 		try {
 			user = service.updatePassword(request.getEmail(),request.getNewPassword());
 			log.info("UserController updateUserPassword method end");	
-			return new ResponseEntity<User>(user,HttpStatus.OK);
+			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
 		}
 		catch(Exception e) {
 			
@@ -125,6 +130,50 @@ public class UserController {
 		}
 	}
 	
-	
+	@GetMapping("/generateotp/{email}")
+	public ResponseEntity<UserBean> generateOtpAndSendEmail(@PathVariable("email") String email) {
+		log.info("UserController generateOtpAndSendEmail method start");
+		try {
+			UserBean user = service.forgetPassword(email);
+			if (user != null) {
+				log.info("UserController generateOtpAndSendEmail method start");
+				return new ResponseEntity<UserBean>(user, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<UserBean>(HttpStatus.UNAUTHORIZED);
+			}
+
+		} catch (EmailNotFoundException e) {
+			log.info("UserController generateOtpAndSendEmail method end");
+			return new ResponseEntity<UserBean>(HttpStatus.NOT_FOUND);
+
+		}
+	}
+
+	@GetMapping("/verify")
+	public ResponseEntity<String> verifyOtp(@RequestParam String email, @RequestParam String enteredOtp) {
+		log.info("UserController verifyOtp method start");
+		try {
+			if (service.verifyOtp(email, enteredOtp)) {
+				String jsonString = "{\"message\":\"Verified Successfully\"}";
+				log.info("verify the otp by using email is done");
+				log.info("UserController verifyOtp method end");
+				return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(jsonString);
+			} else {
+				log.info("Sending  the invalid otp");
+				String jsonString = "{\"message\":\"Invalid OTP\"}";
+				log.info("UserController verifyOtp method end");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", "application/json")
+						.body(jsonString);
+			}
+		} catch (InvalidOTPException e) {
+
+			String jsonString = "{\"message\":\"wrong otp\"}";
+			log.error("error handled");
+			log.info("UserController verifyOtp method end");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", "application/json")
+					.body(jsonString);
+
+		}
+	}
 
 }

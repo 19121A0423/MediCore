@@ -1,7 +1,6 @@
 package com.order.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "orders")
-public class OrderEntity implements Serializable{
+public class Orders implements Serializable{
 
 	private static final long serialVersionUID = -4194911857077683391L;
 
@@ -35,25 +34,25 @@ public class OrderEntity implements Serializable{
 	
 	@ManyToOne
     @JoinColumn(name = "address_id")
-	private AddressEntity address;
+	private Address address;
 
 	@Column(name = "cart_id")
 	private Integer cartId;
 
 	@OneToOne(mappedBy = "order")
 	@JsonIgnore
-	private PaymentEntity payment;
+	private Payment payment;
 	
 	@OneToOne(mappedBy = "order")
 	@JsonIgnore
-	private FeedbackEntity feedback;
+	private Feedback feedback;
 
-	public OrderEntity() {
+	public Orders() {
 		super();
 	}
 
-	public OrderEntity(Integer orderId, LocalDateTime orderedDate, String status, AddressEntity address, Integer cartId,
-			PaymentEntity payment, FeedbackEntity feedback) {
+	public Orders(Integer orderId, LocalDateTime orderedDate, String status, Address address, Integer cartId,
+			Payment payment, Feedback feedback) {
 		super();
 		this.orderId = orderId;
 		this.orderedDate = orderedDate;
@@ -88,11 +87,11 @@ public class OrderEntity implements Serializable{
 		this.status = status;
 	}
 
-	public AddressEntity getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(AddressEntity address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 
@@ -104,19 +103,19 @@ public class OrderEntity implements Serializable{
 		this.cartId = cartId;
 	}
 
-	public PaymentEntity getPayment() {
+	public Payment getPayment() {
 		return payment;
 	}
 
-	public void setPayment(PaymentEntity payment) {
+	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
 
-	public FeedbackEntity getFeedback() {
+	public Feedback getFeedback() {
 		return feedback;
 	}
 
-	public void setFeedback(FeedbackEntity feedback) {
+	public void setFeedback(Feedback feedback) {
 		this.feedback = feedback;
 	}
 

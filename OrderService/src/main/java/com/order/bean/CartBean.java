@@ -1,6 +1,6 @@
 package com.order.bean;
 
-public class Cart {
+public class CartBean {
 	
 	private int cartId;
 	private int quantity;

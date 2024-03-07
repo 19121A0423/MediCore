@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.user.bean.User;
+import com.user.bean.UserBean;
 import com.user.exception.DuplicateMobileNumberException;
 import com.user.exception.DuplicateEmailIdException;
 import com.user.exception.UserNotFoundByIdException;
@@ -35,11 +35,11 @@ public class UserControllerTest {
 	@InjectMocks
 	private UserController userController;
 	
-	private User userBean;
+	private UserBean userBean;
 
 	@BeforeEach
 	public void setUp() {
-		userBean = new User();
+		userBean = new UserBean();
 		userBean.setUserGender('F');
 		userBean.setUserId(1);
 		userBean.setUserEmail("anushauppar1998@gmail.com");
@@ -48,8 +48,8 @@ public class UserControllerTest {
 	@Test
 	public void testSave() throws DuplicateEmailIdException, DuplicateMobileNumberException {
 		
-		when(userService.saveUserDetails(any(User.class))).thenReturn(userBean);		
-		ResponseEntity<User> response = userController.saveUserDetails(userBean);
+		when(userService.saveUserDetails(any(UserBean.class))).thenReturn(userBean);		
+		ResponseEntity<UserBean> response = userController.saveUserDetails(userBean);
 		assertEquals(HttpStatus.OK,response.getStatusCode());
 		assertEquals(userBean,response.getBody());		
 	}
@@ -58,7 +58,7 @@ public class UserControllerTest {
 	public void getById() throws UserNotFoundByIdException  {
 		
 		when(userService.getUserDetailsByUserId(1)).thenReturn(userBean);		
-		ResponseEntity<User> response = userController.getUserDetailsByUserId(1);
+		ResponseEntity<UserBean> response = userController.getUserDetailsByUserId(1);
 		assertEquals(HttpStatus.OK,response.getStatusCode());
 		assertEquals(userBean,response.getBody());		
 	}
@@ -66,10 +66,10 @@ public class UserControllerTest {
 	
 	@Test
 	public void getUserDetails() throws UserNotFoundByIdException  {				
-		List<User> userList = new ArrayList<>();
+		List<UserBean> userList = new ArrayList<>();
 		userList.add(userBean);
 		when(userService.getAllUserDetails()).thenReturn(userList);
-		ResponseEntity<List<User>> response = userController.getAllUserDetails();
+		ResponseEntity<List<UserBean>> response = userController.getAllUserDetails();
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(userList, response.getBody());			
 	}
@@ -77,7 +77,7 @@ public class UserControllerTest {
 	@Test
 	public void deleteUserById() throws UserNotFoundByIdException {		
 		when(userService.deleteUserDetailsByUserId(1)).thenReturn(userBean);
-		ResponseEntity<User> response = userController.deleteUserDetailsByUserId(1);
+		ResponseEntity<UserBean> response = userController.deleteUserDetailsByUserId(1);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(userBean, response.getBody());	
 	}
@@ -85,7 +85,7 @@ public class UserControllerTest {
 	@Test
 	public void validateUser() throws UserNotFoundByIdException {		
 		when(userService.validateUser("anushauppar1998@gmail.com", "anuwith.com")).thenReturn(userBean);
-		ResponseEntity<User> response = userController.userValiadtion("anushauppar1998@gmail.com", "anuwith.com");
+		ResponseEntity<UserBean> response = userController.userValiadtion("anushauppar1998@gmail.com", "anuwith.com");
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(userBean, response.getBody());
 	}
@@ -93,7 +93,7 @@ public class UserControllerTest {
 	@Test
 	public void updatePassword() throws UserNotFoundByIdException {		
 		when(userService.updatePassword("anushauppar1998@gmail.com", "anuwith.com")).thenReturn(userBean);
-		ResponseEntity<User> response = userController.userValiadtion("anushauppar1998@gmail.com", "anuwith.com");
+		ResponseEntity<UserBean> response = userController.userValiadtion("anushauppar1998@gmail.com", "anuwith.com");
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(userBean, response.getBody());
 	}

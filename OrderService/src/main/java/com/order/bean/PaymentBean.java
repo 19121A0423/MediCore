@@ -1,10 +1,9 @@
 package com.order.bean;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Payment implements Serializable {
+public class PaymentBean implements Serializable {
 
 	private static final long serialVersionUID = -1318822591980769570L;
 	
@@ -13,14 +12,13 @@ public class Payment implements Serializable {
 	private Double amount;
 	private String status;
 	private LocalDateTime paymentDate;
-//	private int orderId;
-	private Orders order;
+	private OrderBean order;
 
-	public Payment() {
+	public PaymentBean() {
 		super();
 	}
 	
-	public Payment(Integer paymentId, String paymentMode, Double amount, String status, LocalDateTime paymentDate, Orders order) {
+	public PaymentBean(Integer paymentId, String paymentMode, Double amount, String status, LocalDateTime paymentDate, OrderBean order) {
 		super();
 		this.paymentId = paymentId;
 		this.paymentMode = paymentMode;
@@ -70,11 +68,11 @@ public class Payment implements Serializable {
 		this.paymentDate = paymentDate;
 	}
 
-	public Orders getOrder() {
+	public OrderBean getOrder() {
 		return order;
 	}
 
-	public void setOrder(Orders order) {
+	public void setOrder(OrderBean order) {
 		this.order = order;
 	}
 
