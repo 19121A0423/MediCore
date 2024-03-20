@@ -1,0 +1,108 @@
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+
+<body>
+    <div class="nav">
+        <app-main-nav></app-main-nav>
+        <h1 id="header">My Cart</h1>
+    </div>
+    <div id="container" *ngIf="dialogueBox;else endblock ">
+        <div>  
+            <section class="innersec"  >
+                    <div>
+                        <div>
+                            <h1> Image</h1>
+                        </div>
+                        <div>
+                            <h1> Name</h1>
+                        </div>    
+                        <div>
+                            <h1>Price</h1>
+                        </div>
+                        <div>
+                            <h1>Quantity</h1>
+                        </div>
+                        <div>
+                            <h1>Total</h1>
+                        </div> 
+                        <div>
+                            <h1>Remove</h1>
+                        </div> 
+                                
+                    </div>
+                </section>
+            
+        
+            <section id="values" *ngFor="let product of productsList; let i = index"> 
+                <div id="image">
+                    <img   [routerLink]="['/medicine/details', product.productId]" [src]="[product.image]" width="100px" height="100px" alt="">
+                </div> 
+                <div id="name">
+                    <span>{{product.name}}</span>
+                </div>
+                <div id="price">
+                    <span class="bi bi-currency-rupee">{{product.price}}</span>
+                </div>
+                <div id="Quantity">
+                                
+                        <select [(ngModel)]="product.quantityProduct" (change)="onSelectChange($event, product)">
+                            <span>QTY : </span>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">Max 5</option>
+                        </select>
+                    
+                </div>
+                <div id="func">
+                    <span>{{product.price * product.quantityProduct}}</span>
+                </div>
+                <div id="remove">  
+                    <a (click)="removeProduct(product)" style="color: red; font-size: 20px;">
+                        <i class="fas fa-trash-alt ml-2"></i>
+                    </a>
+                </div>
+            </section>
+            <div class="btn">
+                <button routerLink="/medicine" class="btn btn-primary">Add More Products</button>
+            </div>  
+        </div>
+        <div class="Bill" *ngIf="cart.amount>0">
+          <div>
+            <h1>Order Summary</h1>
+          </div>
+          <div></div>
+          <div id="items">
+            <span>Items  {{cart.quantity}}</span>
+            <span class="bi bi-currency-rupee">{{cart.amount}}</span>
+          </div>
+          <div></div>
+          <h1>Free Shipping</h1>
+          <div>     
+            <h1>Total Cost</h1>
+            <h1 class="bi bi-currency-rupee">{{cart.amount}}</h1>
+          </div>
+         
+        <button id="btn" class="btn btn-primary" routerLink="/order/{{cart.user.userId}}">Checkout</button>
+       
+        </div>     
+    </div>
+    
+   
+
+<ng-template #endblock>
+      <div id="empty">
+        <div>
+            <div>
+            </div>
+            <h1>Your Cart Is Empty</h1>
+            <h1>Looks Like You Have Nothing In Your Cart : (</h1>
+            <button routerLink="/medicine">Continue Shopping</button>
+        </div>
+      </div>
+</ng-template>
+  
+
+
+</body>

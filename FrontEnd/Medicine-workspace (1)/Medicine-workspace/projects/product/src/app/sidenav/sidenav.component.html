@@ -1,0 +1,24 @@
+
+<div class="main">
+    <div class="fluid">
+      <section  class="fluid-left">
+        <div id="left">
+          <div class="filter-2">
+            Product Details
+          </div>
+          <div id="AddProducts">
+          <a  routerLink="/admin/AddProduct"><fa-icon [icon]="plus" class="icons"></fa-icon>Add Product</a>
+        </div>
+        <div id="GetProducts">
+            <a routerLink="/admin/GetProduct"><fa-icon [icon]="get" class="icons"></fa-icon>Get Product</a>
+        </div>
+        </div>
+      </section>
+        <section class="fluid-right" >
+      <div id="right">
+        <router-outlet></router-outlet>
+      </div>
+    </section>
+    </div>
+   
+    </div>

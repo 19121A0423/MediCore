@@ -1,0 +1,79 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.background{
+  width: 100vw;
+  height: 100vh;
+  background: url(/assets/Address.jpeg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+.main{
+  width: 100vw;
+  height: 100vh
+}
+.navBar{
+  position: absolute;
+}
+.container{
+  max-width: 400px;
+  position: relative;
+  top: 100px;
+  padding: 20px;
+  border: 1px solid grey;
+  border-radius: 20px;
+  margin-left: 80px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+input{
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+label{
+  margin-bottom: 5px;
+}
+
+.heading > p {
+  margin: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 30px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label{
+  font-size: medium;
+}
+
+button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+  color: rgb(29, 26, 26);
+  cursor: not-allowed;
+}
+
+.custom-snackbar {
+  background-color: white;
+  color: black;
+  border-radius: 15px;
+}

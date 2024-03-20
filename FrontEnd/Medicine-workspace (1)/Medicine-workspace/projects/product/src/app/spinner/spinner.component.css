@@ -1,0 +1,92 @@
+#spinner{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+ 
+    background-image: linear-gradient(darkblue ,skyblue);
+ 
+    animation-name: example;
+    animation-timing-function: linear;
+    animation-duration:0.75s;
+    animation-iteration-count: infinite;
+    
+ }
+ 
+ 
+ #secondspinner{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-image: linear-gradient(darkgreen,lightgreen);
+ 
+    animation-name: example1;
+    animation-timing-function: linear;
+    animation-duration:0.75s;
+    animation-iteration-count: infinite;
+ }
+ #thirdspinner{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-image: linear-gradient(rgba(18, 14, 6, 0.517),red);
+ 
+    animation-name: example2;
+    animation-timing-function: linear;
+    animation-duration:0.75s;
+    animation-iteration-count: infinite;
+ }
+ @keyframes main {
+    0%{
+       transform: scale(0);    
+    }
+    100% { 
+        transform: scale(1);
+       }
+ }
+ 
+ @keyframes example {
+    0%{
+      
+       transform: scale(0);
+    }
+ 
+  
+    100% { 
+     
+        transform: scale(1);
+       }
+ }
+ 
+ 
+ @keyframes example1 {
+    0%   {
+ 
+       transform: scale(0);
+    }
+ 
+    50%{
+       transform: scale(0.75);
+    }
+    100% { 
+ 
+        transform: scale(0);
+ 
+       }
+ }
+ 
+ 
+ @keyframes example2 {
+    0%   {
+ 
+       transform: scale(0);
+ 
+    }
+ 
+    50%{
+       transform: scale(0.33);
+    }
+    100% { 
+ 
+        transform: scale(0);
+       }
+ }

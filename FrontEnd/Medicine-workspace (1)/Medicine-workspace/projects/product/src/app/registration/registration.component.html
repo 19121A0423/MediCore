@@ -1,0 +1,96 @@
+<body>
+
+    <div>
+         <div *ngIf="isLoading" >
+            <app-spinner></app-spinner>
+         </div>
+        <form #frmRegister="ngForm" (submit)="sendUserDetails(frmRegister.value)">
+            <div class="parent" *ngIf="dialogue">
+                <div>
+                    <span *ngIf="loginSuccessful; else error">{{user.userName | titlecase}} Yours Registration Is Successful : )</span>
+                     <!-- <button id="ifbtn" *ngIf="loginSuccessful" routerLink="/login">ok</button> -->
+                    <ng-template #error>
+                        <span style="color: red;">{{errorType}} Try Again</span>
+                       <!-- <button id="btn" (click)="reloadPage()">Try Again</button> -->
+                    </ng-template>
+                </div>
+            </div>
+            <section>
+                <div>
+                    <h1>Sign Up Page</h1>
+                    <div>
+                        <span>User Name :</span>
+                        <div>
+                            <input type="text" [(ngModel)]="user.userName" name="userName" required  />
+                            <span *ngIf="frmRegister.controls['userName']?.invalid && (frmRegister.controls['userName']?.dirty || frmRegister.controls['userName']?.touched)">
+                                <span *ngIf="frmRegister.controls['userName']?.errors?.['required']">User name is required.</span>
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <div>
+                        <span>User Gender :</span>
+                        <div>
+                            <select name="userGender" id="opt" [(ngModel)]="user.userGender" required>
+                                <option disabled [ngValue]="null">Select</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                                <option value="O">Others</option>
+                            </select>
+                            <span *ngIf="frmRegister.controls['userGender']?.invalid && (frmRegister.controls['userGender']?.dirty || frmRegister.controls['userGender']?.touched)">
+                                <span *ngIf="frmRegister.controls['userGender']?.errors?.['required']">Please select your gender.</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <span>User Mobile Number :</span>
+                        <div>
+                            <input type="number" [(ngModel)]="user.userMobileNumber" name="userMobileNumber" [required]="true" pattern="[6-9][0-9]{9}" />
+                            <span *ngIf="frmRegister.controls['userMobileNumber']?.invalid && (frmRegister.controls['userMobileNumber']?.dirty || frmRegister.controls['userMobileNumber']?.touched)">
+                                <span *ngIf="frmRegister.controls['userMobileNumber']?.errors?.['required']">Mobile number is required.</span>
+                                <span *ngIf="frmRegister.controls['userMobileNumber']?.errors?.['pattern']">Should not start with 0,1,2,3,4,5 and must have 10 digits</span>
+                            </span> 
+                        </div>
+                        
+                    </div>
+                    <div>
+                        <span>User Email :</span>
+                        <div>
+                            <input type="email" [(ngModel)]="user.userEmail" name="userEmail" [required]="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
+                         <span *ngIf="frmRegister.controls['userEmail']?.invalid && (frmRegister.controls['userEmail']?.dirty || frmRegister.controls['userEmail']?.touched)">
+                            <span *ngIf="frmRegister.controls['userEmail']?.errors?.['required']">Email is required.</span>
+                            <span *ngIf="frmRegister.controls['userEmail']?.errors?.['pattern']">Invalid email format.</span>
+                        </span>  
+                         
+                        </div>
+                    </div>
+                    <div>
+                        <span>User Password :</span>
+                        <div>
+                            <input type="password" [(ngModel)]="user.userPassword" name="userPassword" required minlength="8" />
+                            <span *ngIf="frmRegister.controls['userPassword']?.invalid && (frmRegister.controls['userPassword']?.dirty || frmRegister.controls['userPassword']?.touched)">
+                                <span *ngIf="frmRegister.controls['userPassword']?.errors?.['required']">Password is required.</span>
+                                <span *ngIf="frmRegister.controls['userPassword']?.errors?.['minlength']">Password must be at least 8 characters long.</span>
+                            </span>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <button type="submit"[disabled]="frmRegister.invalid">Sign Up</button>
+                </div>
+
+                <div>
+                    <p  style="text-align: center; margin:10px;font-size:17px;font-weight:bolder">If Account Is Already Exists? <a routerLink="/login">Login</a>
+                    </p>
+                </div>
+            </section>
+
+        </form>
+
+        
+    </div>
+   
+</body>
