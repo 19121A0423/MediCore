@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserBean getUserBean(int id) throws UserNotFoundException {
 
-		String url = "http://localhost:8084/medicine/users/"+id ;
+		String url = "http://localhost:8084/userservice/users/"+id ;
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);

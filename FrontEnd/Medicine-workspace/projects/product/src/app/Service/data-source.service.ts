@@ -13,8 +13,8 @@ export class DataSourceService {
 
   constructor(private http:HttpClient) { }
   
-  private baseUrl="http://localhost:8081/medicine";
-  private baseUrlOrder="http://localhost:8083/medicine";
+  private baseUrl="http://localhost:8081/adminservice";
+  private baseUrlOrder="http://localhost:8083/orderservice";
 
   getProductByCategoryName(categoryName:any):Observable<any[]>{
     return this.http.get<any[]>(`${this.baseUrl}/products/searchproductbycategoryname/${categoryName}`);  
@@ -69,11 +69,11 @@ export class DataSourceService {
   }
 
   getCartDetails(cartId: any): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/cart/${cartId}`);
+    return this.http.get<any>(`${this.baseUrl}/cartcontroller/cart/${cartId}`);
   }
  
   updateCartStatus(cart:Cart):Observable<Cart>{
-    return this.http.put<Cart>(`${this.baseUrl}/cart/updateStatus`,cart );
+    return this.http.put<Cart>(`${this.baseUrl}/cartcontroller/cart/updateStatus`,cart );
   }
 
 

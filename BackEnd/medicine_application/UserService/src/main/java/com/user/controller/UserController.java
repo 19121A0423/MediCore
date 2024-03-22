@@ -30,7 +30,7 @@ import com.user.service.UserService;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin("localhost:4200/")
+@CrossOrigin("*")
 public class UserController {
 	
 	private static Logger log = LoggerFactory
@@ -99,7 +99,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(userBean);
 	}
 
-	@GetMapping()
+	@GetMapping("/getall")
 	public ResponseEntity<List<UserBean>> getAllUserDetails() {
 		log.info("UserController getAll method start");	
 		 List<UserBean> usersList = service.getAllUserDetails();

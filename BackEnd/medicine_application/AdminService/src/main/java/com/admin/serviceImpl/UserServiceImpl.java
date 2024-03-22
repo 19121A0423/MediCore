@@ -25,9 +25,7 @@ public class UserServiceImpl  implements UserService{
 	@Override
 	public UserBean getUserBean(int id) {
 		
-		System.out.println("user service");
-		
-		String url = "http://localhost:8084/medicine/users/"+id;
+		String url = "http://localhost:8084/userservice/users/"+id;
 		
 		ParameterizedTypeReference<UserBean> responseType =
 		        new ParameterizedTypeReference<UserBean>() {};

@@ -9,9 +9,9 @@ import { CompositionEntity } from "../Model/composition.model";
 export class DataSource{
     constructor(private http:HttpClient) { }
 
-    private baseUrl="http://localhost:8081/medicine/products";
-    private categoryUrl="http://localhost:8081/medicine/categories";
-    private compositionUrl="http://localhost:8081/medicine/compositions";
+    private baseUrl="http://localhost:8081/adminservice/products";
+    private categoryUrl="http://localhost:8081/adminservice/categories";
+    private compositionUrl="http://localhost:8081/adminservice/compositions";
 
     insertProduct(Product:Product):Observable<Product>{
     return this.http.post<Product>(`${this.baseUrl}/insertproduct`,Product);

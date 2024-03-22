@@ -6,23 +6,22 @@ import { Cart } from "./cart.model";
 @Injectable({providedIn: 'root'})
 export class DataSource {
 
-
 constructor(private http:HttpClient) { }
     
 saveCartDetails(cart:Cart):Observable<Cart>{
-   return this.http.post<Cart>(`http://localhost:8081/medicine/cart`,cart)
+   return this.http.post<Cart>(`http://localhost:8081/adminservice/cartcontroller/cart/save`,cart)
  }
 
  getCartDetailsBasedOnId(userId:number):Observable<Cart>{
-  return this.http.get<Cart>(`http://localhost:8081/medicine/cart/${userId}`)
+  return this.http.get<Cart>(`http://localhost:8081/adminservice/cartcontroller/cart/${userId}`)
 }
 
 deleteBasedOnId(cartId:number, userId:number):Observable<Cart>{
-  return this.http.delete<Cart>(`http://localhost:8081/medicine/cart/delete/${cartId}/${userId}`)
+  return this.http.delete<Cart>(`http://localhost:8081/adminservice/cartcontroller/cart/delete/${cartId}/${userId}`)
 }
 
 updateProductDetails(cart:Cart,productId:number):Observable<Cart>{
-  return this.http.put<Cart>(`http://localhost:8081/medicine/cart/update/${productId}`,cart);
+  return this.http.put<Cart>(`http://localhost:8081/adminservice/cartcontroller/cart/update/${productId}`,cart);
 }
 
 }
