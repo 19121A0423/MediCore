@@ -7,21 +7,23 @@ import { Cart } from "./cart.model";
 export class DataSource {
 
 constructor(private http:HttpClient) { }
+
+private baseUrlAdmin="http://13.48.82.196:8201/adminservice/cartcontroller/cart";
     
 saveCartDetails(cart:Cart):Observable<Cart>{
-   return this.http.post<Cart>(`http://localhost:8081/adminservice/cartcontroller/cart/save`,cart)
+   return this.http.post<Cart>(`${this.baseUrlAdmin}/save`,cart)
  }
 
  getCartDetailsBasedOnId(userId:number):Observable<Cart>{
-  return this.http.get<Cart>(`http://localhost:8081/adminservice/cartcontroller/cart/${userId}`)
+  return this.http.get<Cart>(`${this.baseUrlAdmin}/${userId}`)
 }
 
 deleteBasedOnId(cartId:number, userId:number):Observable<Cart>{
-  return this.http.delete<Cart>(`http://localhost:8081/adminservice/cartcontroller/cart/delete/${cartId}/${userId}`)
+  return this.http.delete<Cart>(`${this.baseUrlAdmin}/delete/${cartId}/${userId}`)
 }
 
 updateProductDetails(cart:Cart,productId:number):Observable<Cart>{
-  return this.http.put<Cart>(`http://localhost:8081/adminservice/cartcontroller/cart/update/${productId}`,cart);
+  return this.http.put<Cart>(`${this.baseUrlAdmin}/update/${productId}`,cart);
 }
 
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../CartModel/cart.service';
 
 import { Router } from '@angular/router';
-import { DataSource } from '../CartModel/datastore';
+import { DataSource } from '../CartModel/datasource';
 import { Cart, User } from '../CartModel/cart.model';
 import { Product } from './../Model/product.model';
 import { CookieService } from 'ngx-cookie-service';

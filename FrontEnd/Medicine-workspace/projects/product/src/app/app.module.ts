@@ -34,7 +34,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { DataSource } from './Service/datastore';
+import { DataSource } from './Service/datasource';
 import { TipsComponent } from './tips/tips.component';
 import { WellnessProductsComponent } from './wellness-products/wellness-products.component';
 import { DoyouknowComponent } from './doyouknow/doyouknow.component';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faHome, faUser, faInfoCircle, faUserPlus, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../AuthService.service (1)';
-import { DataSource } from '../CartModel/datastore';
+import { DataSource } from '../CartModel/datasource';
 import { CookieService } from 'ngx-cookie-service';
 import { MainServiceService } from '../main-service.service ';
 @Component({

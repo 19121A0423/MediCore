@@ -9,7 +9,7 @@ export class DataSource {
 
   constructor(private http: HttpClient) { }
 
-  private baseUrl="http://localhost:8084/userservice/users"
+  private baseUrl="http://13.48.82.196:8203/userservice/users"
 
   saveUser(User: User): Observable<User> {
     return this.http.post<User>(`${this.baseUrl}/save`, User);

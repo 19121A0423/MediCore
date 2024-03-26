@@ -77,7 +77,7 @@ public class CartController {
 		
 	}
 	
-	@GetMapping("/cart")
+	@GetMapping("/cart/getall")
 	public ResponseEntity<List<CartBean>> getCartDetails() throws CartListNotFoundException{
 		log.info("Cart controller getCartDetails method start");
 		List<CartBean> cartDetails =service.getCartDetails();

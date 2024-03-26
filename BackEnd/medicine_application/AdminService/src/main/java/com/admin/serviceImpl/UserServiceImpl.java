@@ -9,11 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.admin.bean.UserBean;
 import com.admin.service.UserService;
-import com.admin.structure.ResponseStructure;
-
 
 @Service
 public class UserServiceImpl  implements UserService{
@@ -25,7 +22,7 @@ public class UserServiceImpl  implements UserService{
 	@Override
 	public UserBean getUserBean(int id) {
 		
-		String url = "http://localhost:8084/userservice/users/"+id;
+		String url = "http://13.48.82.196:8203/userservice/users/"+id;
 		
 		ParameterizedTypeReference<UserBean> responseType =
 		        new ParameterizedTypeReference<UserBean>() {};
@@ -33,7 +30,7 @@ public class UserServiceImpl  implements UserService{
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-
+ 
 		ResponseEntity<UserBean> responseEntity = template.exchange(url, HttpMethod.GET, httpEntity,responseType);
 		
 		UserBean data = responseEntity.getBody();

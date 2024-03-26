@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Product } from "../Model/product.model";
-import { DataSource } from "./datastore";
+import { DataSource } from "./datasource";
 import { Cart, User } from "./cart.model";
 
 import { Router } from "@angular/router";

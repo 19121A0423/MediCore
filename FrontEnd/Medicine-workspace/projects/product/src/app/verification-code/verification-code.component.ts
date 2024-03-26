@@ -5,7 +5,7 @@ import emailjs, { EmailJSResponseStatus } from 'emailjs-com';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { RandomCodeService } from '../RandomCodeService';
-import { DataSource } from '../Service/datastore';
+import { DataSource } from '../Service/datasource';
 
 @Component({
   selector: 'app-verification-code',

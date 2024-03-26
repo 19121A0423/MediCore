@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { PasswordUpdateRequest } from '../Model/PasswordUpdateRequest.model';
-import { DataSource } from '../Service/datastore';
+import { DataSource } from '../Service/datasource';
 
 @Component({
   selector: 'app-forgot',

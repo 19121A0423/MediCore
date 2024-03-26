@@ -4,7 +4,7 @@ import { DataSourceService } from '../Service/data-source.service';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { AuthService } from '../AuthService.service (1)';
-import { DataSource } from '../Service/datastore';
+import { DataSource } from '../Service/datasource';
 
 @Component({
   selector: 'app-loginservice',

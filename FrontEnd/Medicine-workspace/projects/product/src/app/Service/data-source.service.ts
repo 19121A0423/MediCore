@@ -13,8 +13,8 @@ export class DataSourceService {
 
   constructor(private http:HttpClient) { }
   
-  private baseUrl="http://localhost:8081/adminservice";
-  private baseUrlOrder="http://localhost:8083/orderservice";
+  private baseUrl="http://13.48.82.196:8201/adminservice";
+  private baseUrlOrder="http://13.48.82.196:8202/orderservice";
 
   getProductByCategoryName(categoryName:any):Observable<any[]>{
     return this.http.get<any[]>(`${this.baseUrl}/products/searchproductbycategoryname/${categoryName}`);  
