@@ -16,4 +16,4 @@
 FROM docker.io/library/openjdk:17
 VOLUME /tmp
 COPY target/userservice.jar /userservice.jar
-ENTRYPOINT ["java","-jar","/crm.jar"]
+ENTRYPOINT ["java","-jar","/userservice.jar"]
