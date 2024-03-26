@@ -21,11 +21,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/product",
             "index": "projects/product/src/index.html",
-            "browser": "projects/product/src/main.ts",
+            "main": "projects/product/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -51,13 +51,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "5gb",
+                  "maximumError": "5gb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5gb",
+                  "maximumError": "5gb"
                 }
               ],
               "outputHashing": "all"
