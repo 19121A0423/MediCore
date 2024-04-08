@@ -24,37 +24,46 @@ import com.order.service.OrderService;
 @CrossOrigin("*")
 public class OrderController {
 
-	@Autowired
-	private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-	private static Logger log = LoggerFactory.getLogger(OrderController.class.getSimpleName());
+    private static Logger log = LoggerFactory.getLogger(OrderController.class.getSimpleName());
 
-	@PostMapping("/save")
-	public ResponseEntity<OrderBean> saveOrder(@RequestBody OrderBean order) {
-		log.info("OrderController::saveOrder::Started");
-		try {
-			order = orderService.placeOrder(order);
-			log.info("OrderController::saveOrder::Ended");
-			return new ResponseEntity<OrderBean>(order, HttpStatus.CREATED);
-		} catch (IllegalArgumentException | AddressNotFoundException e) {
-			log.error("OrderController::saveOrder::" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
+    /**
+     * Saves an order.
+     * 
+     * @param order The order to be saved.
+     * @return The saved order.
+     */
+    @PostMapping("/save")
+    public ResponseEntity<OrderBean> saveOrder(@RequestBody OrderBean order) {
+        log.info("OrderController::saveOrder::Started");
+        try {
+            order = orderService.placeOrder(order);
+            log.info("OrderController::saveOrder::Ended");
+            return new ResponseEntity<OrderBean>(order, HttpStatus.CREATED);
+        } catch (IllegalArgumentException | AddressNotFoundException e) {
+            log.error("OrderController::saveOrder::" + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
-	@GetMapping("/get/all")
-	public ResponseEntity<List<OrderBean>> getOrders() {
-		log.info("OrderController::getOrders::Started");
-		List<OrderBean> orders;
-		try {
-			orders = orderService.getAllOrders();
-			log.info("OrderController::getOrders::Ended");
-			return new ResponseEntity<List<OrderBean>>(orders, HttpStatus.OK);
-		} catch (OrderNotFoundException e) {
-			log.error("OrderController::getOrders::" + e.getMessage());
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-	}
-	
+    /**
+     * Retrieves all orders.
+     * 
+     * @return A list of all orders.
+     */
+    @GetMapping("/get/all")
+    public ResponseEntity<List<OrderBean>> getOrders() {
+        log.info("OrderController::getOrders::Started");
+        List<OrderBean> orders;
+        try {
+            orders = orderService.getAllOrders();
+            log.info("OrderController::getOrders::Ended");
+            return new ResponseEntity<List<OrderBean>>(orders, HttpStatus.OK);
+        } catch (OrderNotFoundException e) {
+            log.error("OrderController::getOrders::" + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

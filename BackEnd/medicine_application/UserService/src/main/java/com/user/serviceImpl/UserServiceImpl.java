@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private OTPRepository otpRepository;
 
@@ -53,13 +53,27 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ObjectMapper mapper;
-	
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	/**
+	 * Saves user details.
+	 * 
+	 * @param userBean The UserBean object containing user details.
+	 * @return The UserBean object representing the saved user.
+	 * @throws DuplicateEmailIdException                  if the email ID already
+	 *                                                    exists.
+	 * @throws DuplicateMobileNumberException             if the mobile number
+	 *                                                    already exists.
+	 * @throws BothEmailIdAndMobileNumberIsExistException if both email ID and
+	 *                                                    mobile number already
+	 *                                                    exist.
+	 */
 
 	@Override
-	public UserBean saveUserDetails(UserBean userBean)
-			throws DuplicateEmailIdException, DuplicateMobileNumberException, BothEmailIdAndMobileNumberIsExistException {
+	public UserBean saveUserDetails(UserBean userBean) throws DuplicateEmailIdException, DuplicateMobileNumberException,
+			BothEmailIdAndMobileNumberIsExistException {
 		log.info("UserServiceImpl save method start {} " + userBean);
 
 		if (userBean.getUserEmail() == null || userBean.getUserPassword() == null) {
@@ -68,10 +82,9 @@ public class UserServiceImpl implements UserService {
 		List<User> existingUser = userRepository.findByUserEmailOrUserMobileNumber(userBean.getUserEmail(),
 				userBean.getUserMobileNumber());
 		Optional<User> user = existingUser.stream().findFirst();
-		if(existingUser.size()>1) {
+		if (existingUser.size() > 1) {
 			throw new BothEmailIdAndMobileNumberIsExistException("Both Email Id And Mobile Number is Exist Excepton");
-		}
-		else if (user.isPresent()) {
+		} else if (user.isPresent()) {
 			if (user.get().getUserEmail().equalsIgnoreCase(userBean.getUserEmail())) {
 				throw new DuplicateEmailIdException("Duplicate Emaild");
 			}
@@ -81,7 +94,7 @@ public class UserServiceImpl implements UserService {
 		}
 		User userEntity = new User();
 		userEntity = mapper.convertValue(userBean, User.class);
-        userEntity.setUserPassword(passwordEncoder.encode(userEntity.getUserPassword()));
+		userEntity.setUserPassword(passwordEncoder.encode(userEntity.getUserPassword()));
 
 		userEntity = userRepository.save(userEntity);
 		userBean = mapper.convertValue(userEntity, UserBean.class);
@@ -91,6 +104,14 @@ public class UserServiceImpl implements UserService {
 
 		return userBean;
 	}
+
+	/**
+	 * Updates user details.
+	 * 
+	 * @param userBean The UserBean object containing updated user details.
+	 * @return The UserBean object representing the updated user.
+	 * @throws UserNotFoundByIdException if the user is not found.
+	 */
 
 	@Override
 	public UserBean updateUserDetails(UserBean userBean) throws UserNotFoundByIdException {
@@ -113,6 +134,13 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * Retrieves user details by user ID.
+	 * 
+	 * @param userId The ID of the user.
+	 * @return The UserBean object representing the retrieved user.
+	 * @throws UserNotFoundByIdException if the user is not found.
+	 */
 	@Override
 	public UserBean getUserDetailsByUserId(Integer userId) throws UserNotFoundByIdException {
 
@@ -137,6 +165,13 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * Deletes user details by user ID.
+	 * 
+	 * @param userId The ID of the user to delete.
+	 * @return The UserBean object representing the deleted user.
+	 * @throws UserNotFoundByIdException if the user is not found.
+	 */
 	@Override
 	public UserBean deleteUserDetailsByUserId(Integer userId) throws UserNotFoundByIdException {
 		log.info("User  service implementation delete method start {} " + userId);
@@ -157,6 +192,11 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * Retrieves all user details.
+	 * 
+	 * @return A list of UserBean objects representing all users.
+	 */
 	@Override
 	public List<UserBean> getAllUserDetails() {
 
@@ -173,43 +213,57 @@ public class UserServiceImpl implements UserService {
 		return usersList;
 	}
 
+	/**
+	 * Validates user login.
+	 * 
+	 * @param authRequest The AuthRequest object containing login credentials.
+	 * @return The User object if login is successful.
+	 */
 	@Override
-    public User validateLogin(AuthRequest authRequest) {
-        Optional<User> user = userRepository.findByUserEmail(authRequest.getEmail());
-        User details=user.get();
-        log.info("login by using email and password");
+	public User validateLogin(AuthRequest authRequest) {
+		Optional<User> user = userRepository.findByUserEmail(authRequest.getEmail());
+		User details = user.get();
+		log.info("login by using email and password");
 
-        if (details != null) {
-            log.info("email is valid");
+		if (details != null) {
+			log.info("email is valid");
 
-            if (details.getUserPassword().equals(authRequest.getPassword())) {
-                log.info("login successful");
-                return details;
-            } else {
-                try {
-                    log.info("login failed");
-                    throw new PasswordMismatchException("Password is wrong");
-                } catch (PasswordMismatchException exception) {
-                    log.error("password is mismatch");
-                }
-            }
-        } else {
-        	 try {
-                 log.info("login failed");
-                 throw new EmailNotFoundException("Email not found");
-             } catch (EmailNotFoundException exception) {
-                 log.error("password is mismatch");
-             }
-            
-        }
-        return details;
-    }
+			if (details.getUserPassword().equals(authRequest.getPassword())) {
+				log.info("login successful");
+				return details;
+			} else {
+				try {
+					log.info("login failed");
+					throw new PasswordMismatchException("Password is wrong");
+				} catch (PasswordMismatchException exception) {
+					log.error("password is mismatch");
+				}
+			}
+		} else {
+			try {
+				log.info("login failed");
+				throw new EmailNotFoundException("Email not found");
+			} catch (EmailNotFoundException exception) {
+				log.error("password is mismatch");
+			}
 
+		}
+		return details;
+	}
+
+	/**
+	 * Updates user password.
+	 * 
+	 * @param userEmail    The email of the user.
+	 * @param userPassword The new password.
+	 * @return The UserBean object representing the updated user.
+	 * @throws UserNotFoundByIdException if the user is not found.
+	 */
 	@Override
 	public UserBean updatePassword(String userEmail, String userPassword) throws UserNotFoundByIdException {
 		log.info("User Service implementation updatePassword method start ");
 		Optional<User> userOptinal = null;
-		User user =null;
+		User user = null;
 		if (userEmail != null) {
 			userOptinal = userRepository.findByUserEmail(userEmail);
 			user = userOptinal.get();
@@ -217,7 +271,7 @@ public class UserServiceImpl implements UserService {
 
 		if (user != null && userPassword != null) {
 			user.setUserPassword(userPassword);
-	        user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			userRepository.save(user);
 			UserBean userBean = new UserBean();
 			userBean = mapper.convertValue(user, UserBean.class);
@@ -241,6 +295,11 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	/**
+	 * Generates a random OTP.
+	 * 
+	 * @return The generated OTP.
+	 */
 	@Override
 	public String generateOtp() {
 		log.info("User service implementation generateOtp method start {} ");
@@ -250,6 +309,12 @@ public class UserServiceImpl implements UserService {
 		return String.valueOf(otp);
 	}
 
+	/**
+	 * Sends OTP to the user's email.
+	 * 
+	 * @param email The email of the user.
+	 * @param otp   The OTP to send.
+	 */
 	@Override
 	public void sendOtpEmail(String email, String otp) {
 		log.info("User service implementation sendOtpEmail method start {} ");
@@ -261,6 +326,14 @@ public class UserServiceImpl implements UserService {
 		javaMailSender.send(message);
 		log.info("User service implementation sendOtpEmail method end {} ");
 	}
+
+	/**
+	 * Initiates the forget password process.
+	 * 
+	 * @param email The email of the user.
+	 * @return The UserBean object representing the user.
+	 * @throws EmailNotFoundException if the email is not found.
+	 */
 
 	@Override
 	public UserBean forgetPassword(String email) throws EmailNotFoundException {
@@ -289,6 +362,14 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * Saves OTP details.
+	 * 
+	 * @param email          The email of the user.
+	 * @param otp            The OTP.
+	 * @param expirationTime The expiration time of the OTP.
+	 */
+
 	@Override
 	public void saveOtp(String email, String otp, Timestamp expirationTime) {
 		log.info("User service implementation saveOtp method start {} ");
@@ -308,6 +389,14 @@ public class UserServiceImpl implements UserService {
 		log.info("User service implementation saveOtp method end {} ");
 	}
 
+	/**
+	 * Verifies the entered OTP.
+	 * 
+	 * @param email      The email of the user.
+	 * @param enteredOtp The entered OTP.
+	 * @return true if OTP is valid, false otherwise.
+	 * @throws InvalidOTPException if the OTP is invalid.
+	 */
 	@Override
 	public boolean verifyOtp(String email, String enteredOtp) throws InvalidOTPException {
 		log.info("User service implementation verifyOtp method start {} ");
@@ -330,15 +419,18 @@ public class UserServiceImpl implements UserService {
 			return true;
 		}
 	}
-	
-	@Scheduled(fixedRate = 300000) 
+
+	/**
+	 * Cleans up expired OTPs.
+	 */
+	@Scheduled(fixedRate = 300000)
 	public void cleanupExpiredOtps() {
 		log.info("User service implementation cleanupExpiredOtps method start {} ");
 		try {
 			otpRepository.deleteExpiredOtps();
 			log.info("User service implementation cleanupExpiredOtps method end {} ");
 		} catch (Exception e) {
-			log.error("User service implementation cleanupExpiredOtps method end {} " , e.getMessage());
+			log.error("User service implementation cleanupExpiredOtps method end {} ", e.getMessage());
 		}
 	}
 

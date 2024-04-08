@@ -42,191 +42,224 @@ import com.user.serviceImpl.RefreshTokenService;
 @RequestMapping("/users")
 @CrossOrigin("*")
 public class UserController {
-	
-	private static Logger log = LoggerFactory
-			.getLogger(UserController.class.getSimpleName());
+    
+    private static Logger log = LoggerFactory.getLogger(UserController.class.getSimpleName());
 
-	@Autowired
-	private UserService service;
-	
-	@Autowired
-	private JwtService jwtService;
+    @Autowired
+    private UserService service;
+    
+    @Autowired
+    private JwtService jwtService;
 
-	@Autowired
-	private RefreshTokenService refreshTokenService;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
+    /**
+     * Saves user details.
+     * 
+     * @param user The user details to be saved.
+     * @return The saved user details.
+     */
+    @PostMapping("/save")
+    public ResponseEntity<UserBean> saveUserDetails(@RequestBody UserBean user) throws DuplicateEmailIdException, DuplicateMobileNumberException, BothEmailIdAndMobileNumberIsExistException {
+        log.info("UserController save method start {}", user);
+        UserBean userBean=null;
+        try {
+             userBean = service.saveUserDetails(user);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.info("UserController save method end{}", user);   
+         return ResponseEntity.status(HttpStatus.OK).body(userBean);
+    }
 
-	@PostMapping("/save")
-	public ResponseEntity<UserBean> saveUserDetails(@RequestBody UserBean user) throws DuplicateEmailIdException, DuplicateMobileNumberException, BothEmailIdAndMobileNumberIsExistException {
-		log.info("UserController save method start {}"+user);	
-		UserBean userBean=null;
-		try {
-			 userBean = service.saveUserDetails(user);
-		}catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		log.info("UserController save method end{}"+user);	
-		 return ResponseEntity.status(HttpStatus.OK).body(userBean);
-	}
+    /**
+     * Updates user details.
+     * 
+     * @param user The updated user details.
+     * @return The updated user details.
+     */
+    @PutMapping("/update")
+    public ResponseEntity<UserBean> updateUserDetails(@RequestBody UserBean user) throws UserNotFoundByIdException {
+        log.info("UserController update method start {}", user);
+        UserBean userBean=null;
+        try {
+             userBean = service.updateUserDetails(user);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.info("UserController update method end {}", user);   
+         return ResponseEntity.status(HttpStatus.OK).body(userBean);
+    }
 
-	/**
-	 * 
-	 * @param user
-	 * @return 
-	 * @throws UserNotFoundByIdException
-	 */
-	@PutMapping("/update")
-	public ResponseEntity<UserBean> updateUserDetails(@RequestBody UserBean user) throws UserNotFoundByIdException {
-		log.info("UserController update method start {}"+user);	
-		UserBean userBean=null;
-		try {
-			 userBean = service.updateUserDetails(user);
-		}catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		log.info("UserController update method 	end {}"+user);	
-		 return ResponseEntity.status(HttpStatus.OK).body(userBean);
-	}
+    /**
+     * Retrieves user details by user ID.
+     * 
+     * @param userId The ID of the user to retrieve.
+     * @return The user details with the specified ID.
+     */
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserBean> getUserDetailsByUserId(@PathVariable int userId) throws UserNotFoundByIdException {
+        
+        log.info("UserController getById method start {}", userId);
+        UserBean userBean=null;
+        try {
+             userBean = service.getUserDetailsByUserId(userId);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.info("UserController getById method end {}", userId);  
+        
+        return ResponseEntity.status(HttpStatus.OK).body(userBean);
+    }
 
-	@GetMapping("/{userId}")
-	public ResponseEntity<UserBean> getUserDetailsByUserId(@PathVariable int userId) throws UserNotFoundByIdException {
-		
-		log.info("UserController getById method start {}"+userId);	
-		UserBean userBean=null;
-		try {
-			 userBean = service.getUserDetailsByUserId(userId);
-		}catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		log.info("UserController getById method 	end {}"+userId);	
-		
-		return ResponseEntity.status(HttpStatus.OK).body(userBean);
-	}
+    /**
+     * Deletes user details by user ID.
+     * 
+     * @param userId The ID of the user to delete.
+     * @return The deleted user details.
+     */
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<UserBean> deleteUserDetailsByUserId(@PathVariable int userId) throws UserNotFoundByIdException {
+        log.info("UserController delete method start {}", userId);
+        UserBean userBean=null;
+        try {
+              userBean = service.deleteUserDetailsByUserId(userId);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.info("UserController delete method end {}", userId);         
+        return ResponseEntity.status(HttpStatus.OK).body(userBean);
+    }
 
-	@DeleteMapping("/delete/{userId}")
-	public ResponseEntity<UserBean> deleteUserDetailsByUserId(@PathVariable int userId) throws UserNotFoundByIdException {
-		log.info("UserController delete method start {}"+userId);	
-		UserBean userBean=null;
-		try {
-			  userBean = service.deleteUserDetailsByUserId(userId);
-		}catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		log.info("UserController delete method 	end {}"+userId);			
-		return ResponseEntity.status(HttpStatus.OK).body(userBean);
-	}
+    /**
+     * Retrieves all user details.
+     * 
+     * @return List of all user details.
+     */
+    @GetMapping("/getall")
+    public ResponseEntity<List<UserBean>> getAllUserDetails() {
+        log.info("UserController getAll method start");    
+         List<UserBean> usersList = service.getAllUserDetails();
+        log.info("UserController getAll method end");  
+        return ResponseEntity.status(HttpStatus.OK).body(usersList);
+    }
 
-	@GetMapping("/getall")
-	public ResponseEntity<List<UserBean>> getAllUserDetails() {
-		log.info("UserController getAll method start");	
-		 List<UserBean> usersList = service.getAllUserDetails();
-		log.info("UserController getAll method end");	
-		return ResponseEntity.status(HttpStatus.OK).body(usersList);
-	}
-//
-//	
-//	@GetMapping("/validate/{userEmail}/{userPassword}")
-//	public ResponseEntity<UserBean> userValiadtion(@PathVariable String userEmail, @PathVariable String userPassword) {
-//		log.info("UserController userValiadtion method start");	
-//		UserBean user =null;
-//		try {
-//			user = service.validateUser(userEmail,userPassword);
-//			log.info("UserController userValiadtion method end");	
-//			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
-//		}
-//		catch(Exception e) {
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//		
-//	}
-	
-	@PostMapping("/login")
-	public JwtResponse authenticateAndGetToken(@RequestBody AuthRequest authRequest) throws UserNotFoundByIdException  {
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
-		if (authentication.isAuthenticated()) {
-			User user = service.validateLogin(authRequest);
-			RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequest.getEmail());
-			return JwtResponse.builder().accessToken(jwtService.generateToken(authRequest.getEmail()))
-					.token(refreshToken.getToken()).user(user).build();
-		} else {
-			throw new UsernameNotFoundException("invalid user request !");
-		}
-	}
+    /**
+     * Authenticates user and generates JWT token.
+     * 
+     * @param authRequest The authentication request containing email and password.
+     * @return JWT token response.
+     */
+    @PostMapping("/login")
+    public JwtResponse authenticateAndGetToken(@RequestBody AuthRequest authRequest) throws UserNotFoundByIdException  {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        if (authentication.isAuthenticated()) {
+            User user = service.validateLogin(authRequest);
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequest.getEmail());
+            return JwtResponse.builder().accessToken(jwtService.generateToken(authRequest.getEmail()))
+                    .token(refreshToken.getToken()).user(user).build();
+        } else {
+            throw new UsernameNotFoundException("invalid user request !");
+        }
+    }
 
-	
-	@PutMapping("/updatepassword")
-	public ResponseEntity<UserBean> updateUserPassword(@RequestBody PasswordUpdateRequest request){
-		log.info("UserController updateUserPassword method start");	
-		log.info("Update User password : "+request);
-		UserBean user =null;
-		try {
-			user = service.updatePassword(request.getEmail(),request.getNewPassword());
-			log.info("UserController updateUserPassword method end");	
-			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
-		}
-		catch(Exception e) {
-			
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@GetMapping("/generateotp/{email}")
-	public ResponseEntity<UserBean> generateOtpAndSendEmail(@PathVariable("email") String email) {
-		log.info("UserController generateOtpAndSendEmail method start");
-		try {
-			UserBean user = service.forgetPassword(email);
-			if (user != null) {
-				log.info("UserController generateOtpAndSendEmail method start");
-				return new ResponseEntity<UserBean>(user, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<UserBean>(HttpStatus.UNAUTHORIZED);
-			}
+    /**
+     * Updates user password.
+     * 
+     * @param request The password update request containing email and new password.
+     * @return The updated user details.
+     */
+    @PutMapping("/updatepassword")
+    public ResponseEntity<UserBean> updateUserPassword(@RequestBody PasswordUpdateRequest request){
+        log.info("UserController updateUserPassword method start");    
+        log.info("Update User password : " + request);
+        UserBean user =null;
+        try {
+            user = service.updatePassword(request.getEmail(),request.getNewPassword());
+            log.info("UserController updateUserPassword method end");    
+            return new ResponseEntity<UserBean>(user,HttpStatus.OK);
+        } catch (Exception e) {
+            
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
-		} catch (EmailNotFoundException e) {
-			log.info("UserController generateOtpAndSendEmail method end");
-			return new ResponseEntity<UserBean>(HttpStatus.NOT_FOUND);
+    /**
+     * Generates OTP and sends email for password reset.
+     * 
+     * @param email The email address for which OTP is to be generated.
+     * @return The user details for the specified email.
+     */
+    @GetMapping("/generateotp/{email}")
+    public ResponseEntity<UserBean> generateOtpAndSendEmail(@PathVariable("email") String email) {
+        log.info("UserController generateOtpAndSendEmail method start");
+        try {
+            UserBean user = service.forgetPassword(email);
+            if (user != null) {
+                log.info("UserController generateOtpAndSendEmail method start");
+                return new ResponseEntity<UserBean>(user, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<UserBean>(HttpStatus.UNAUTHORIZED);
+            }
 
-		}
-	}
+        } catch (EmailNotFoundException e) {
+            log.info("UserController generateOtpAndSendEmail method end");
+            return new ResponseEntity<UserBean>(HttpStatus.NOT_FOUND);
 
-	@GetMapping("/verify/{email}/{enteredOtp}")
-	public ResponseEntity<String> verifyOtp(@PathVariable String email, @PathVariable String enteredOtp) {
-		log.info("UserController verifyOtp method start");
-		try {
-			if (service.verifyOtp(email, enteredOtp)) {
-				String jsonString = "{\"message\":\"Verified Successfully\"}";
-				log.info("verify the otp by using email is done");
-				log.info("UserController verifyOtp method end");
-				return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(jsonString);
-			} else {
-				log.info("Sending  the invalid otp");
-				String jsonString = "{\"message\":\"Invalid OTP\"}";
-				log.info("UserController verifyOtp method end");
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", "application/json")
-						.body(jsonString);
-			}
-		} catch (InvalidOTPException e) {
+        }
+    }
 
-			String jsonString = "{\"message\":\"wrong otp\"}";
-			log.error("error handled");
-			log.info("UserController verifyOtp method end");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", "application/json")
-					.body(jsonString);
+    /**
+     * Verifies OTP for password reset.
+     * 
+     * @param email The email address for which OTP is generated.
+     * @param enteredOtp The OTP entered by the user.
+     * @return Success or failure message.
+     */
+    @GetMapping("/verify/{email}/{enteredOtp}")
+    public ResponseEntity<String> verifyOtp(@PathVariable String email, @PathVariable String enteredOtp) {
+        log.info("UserController verifyOtp method start");
+        try {
+            if (service.verifyOtp(email, enteredOtp)) {
+                String jsonString = "{\"message\":\"Verified Successfully\"}";
+                log.info("verify the otp by using email is done");
+                log.info("UserController verifyOtp method end");
+                return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(jsonString);
+            } else {
+                log.info("Sending  the invalid otp");
+                String jsonString = "{\"message\":\"Invalid OTP\"}";
+                log.info("UserController verifyOtp method end");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", "application/json")
+                        .body(jsonString);
+            }
+        } catch (InvalidOTPException e) {
 
-		}
-	}
+            String jsonString = "{\"message\":\"wrong otp\"}";
+            log.error("error handled");
+            log.info("UserController verifyOtp method end");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Content-Type", "application/json")
+                    .body(jsonString);
 
-	
-	@PostMapping("/refreshToken")
-	public JwtResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-		return refreshTokenService.findByToken(refreshTokenRequest.getToken())
-				.map(refreshTokenService::verifyExpiration).map(RefreshToken::getUser).map(userInfo -> {
-					String accessToken = jwtService.generateToken(userInfo.getUserName());
-					return JwtResponse.builder().accessToken(accessToken).token(refreshTokenRequest.getToken()).build();
-				}).orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
-	}
+        }
+    }
+
+    /**
+     * Refreshes JWT token.
+     * 
+     * @param refreshTokenRequest The refresh token request containing refresh token.
+     * @return JWT token response.
+     */
+    @PostMapping("/refreshToken")
+    public JwtResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return refreshTokenService.findByToken(refreshTokenRequest.getToken())
+                .map(refreshTokenService::verifyExpiration).map(RefreshToken::getUser).map(userInfo -> {
+                    String accessToken = jwtService.generateToken(userInfo.getUserName());
+                    return JwtResponse.builder().accessToken(accessToken).token(refreshTokenRequest.getToken()).build();
+                }).orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
+    }
 }

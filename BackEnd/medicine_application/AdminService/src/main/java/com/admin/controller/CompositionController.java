@@ -23,27 +23,35 @@ import com.admin.service.CompositionService;
 @CrossOrigin("*")
 public class CompositionController {
 
-	private static Logger log = LoggerFactory
-			.getLogger(ProductController.class.getSimpleName());
-	
-	@Autowired
-	private CompositionService compositionService;
-	
-	
-	@PostMapping("/insert")
-	public ResponseEntity<CompositionBean> insertComposition(@RequestBody CompositionBean composition){
-		log.info("Start CompositionController::insert()");
-	CompositionBean composition2=compositionService.insertComposition(composition);
-		log.info("End CompositionController::insert()");
-		return new ResponseEntity<CompositionBean>(composition2,HttpStatus.CREATED);
-		
-	}
-	
-	@GetMapping("/getcomposition")
-	public ResponseEntity<List<Composition>> getAllCompositions(){
-		log.info("Start CompositionController::getAll()");
-		List<Composition> compositionEntities=compositionService.getAllCompositions();
-		log.info("End CompositionController::getAll()");
-		return new ResponseEntity<List<Composition>>(compositionEntities,HttpStatus.OK);
-	}
+    private static Logger log = LoggerFactory.getLogger(CompositionController.class.getSimpleName());
+
+    @Autowired
+    private CompositionService compositionService;
+
+    /**
+     * Inserts a new composition.
+     * 
+     * @param composition The composition to be inserted.
+     * @return The inserted composition.
+     */
+    @PostMapping("/insert")
+    public ResponseEntity<CompositionBean> insertComposition(@RequestBody CompositionBean composition) {
+        log.info("Start CompositionController::insert()");
+        CompositionBean composition2 = compositionService.insertComposition(composition);
+        log.info("End CompositionController::insert()");
+        return new ResponseEntity<CompositionBean>(composition2, HttpStatus.CREATED);
+    }
+
+    /**
+     * Retrieves all compositions.
+     * 
+     * @return A list of all compositions.
+     */
+    @GetMapping("/getcomposition")
+    public ResponseEntity<List<Composition>> getAllCompositions() {
+        log.info("Start CompositionController::getAll()");
+        List<Composition> compositionEntities = compositionService.getAllCompositions();
+        log.info("End CompositionController::getAll()");
+        return new ResponseEntity<List<Composition>>(compositionEntities, HttpStatus.OK);
+    }
 }

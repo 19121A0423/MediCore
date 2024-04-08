@@ -19,6 +19,14 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	/**
+     * Retrieves user details by user ID.
+     * 
+     * @param id The ID of the user to retrieve.
+     * @return The user details with the specified ID.
+     */
+
+	
 	@Override
 	public UserBean getUserBean(int id) throws UserNotFoundException {
 

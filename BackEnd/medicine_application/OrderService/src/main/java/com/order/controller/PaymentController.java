@@ -21,25 +21,27 @@ import com.order.service.PaymentService;
 @CrossOrigin("*")
 public class PaymentController {
 
-	@Autowired
-	private PaymentService paymentService;
-	
-	private static Logger log = LoggerFactory.getLogger(PaymentController.class.getSimpleName());
+    @Autowired
+    private PaymentService paymentService;
+    
+    private static Logger log = LoggerFactory.getLogger(PaymentController.class.getSimpleName());
 
-	@GetMapping("/get/all")
-	public ResponseEntity<List<PaymentBean>> getAllPayments() {
-		log.info("PaymentController::getPayments::Started");
-		List<PaymentBean> payments;
-		try {
-			payments = paymentService.getAllPayments();
-			log.info("PaymentController::getPayments::Ended");
-			return new ResponseEntity<List<PaymentBean>>(payments, HttpStatus.FOUND);
-		} catch (PaymentNotFoundException e) {
-			log.error("PaymentController::getPayments::"+e.getMessage());
-			return new ResponseEntity<>( HttpStatus.NOT_FOUND);
-		}
-		
-
-	}
-
+    /**
+     * Retrieves all payments.
+     * 
+     * @return A list of all payments.
+     */
+    @GetMapping("/get/all")
+    public ResponseEntity<List<PaymentBean>> getAllPayments() {
+        log.info("PaymentController::getAllPayments::Started");
+        List<PaymentBean> payments;
+        try {
+            payments = paymentService.getAllPayments();
+            log.info("PaymentController::getAllPayments::Ended");
+            return new ResponseEntity<List<PaymentBean>>(payments, HttpStatus.FOUND);
+        } catch (PaymentNotFoundException e) {
+            log.error("PaymentController::getAllPayments::" + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

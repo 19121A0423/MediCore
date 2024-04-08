@@ -26,63 +26,86 @@ import com.admin.service.CategoryService;
 @CrossOrigin("*")
 public class CategoryController {
 
-	private static Logger log = LoggerFactory
-			.getLogger(ProductController.class.getSimpleName());
-	 
+	private static Logger log = LoggerFactory.getLogger(ProductController.class.getSimpleName());
+
 	@Autowired
 	private CategoryService categoryService;
-	
+
+	/**
+	 * Inserts a new category.
+	 * 
+	 * @param category The category to be inserted.
+	 * @return The inserted category.
+	 */
 	@PostMapping("/insertcategory")
-	public ResponseEntity<CategoryBean> saveCategory(@RequestBody CategoryBean category){
+	public ResponseEntity<CategoryBean> saveCategory(@RequestBody CategoryBean category) {
 		categoryService.insertCategory(category);
-		log.info("Category details inserting {}",category);
-		ResponseEntity<CategoryBean> entity=new ResponseEntity<CategoryBean>
-		(category,HttpStatus.CREATED);
-	    return entity;	
+		log.info("Category details inserting {}", category);
+		ResponseEntity<CategoryBean> entity = new ResponseEntity<CategoryBean>(category, HttpStatus.CREATED);
+		return entity;
 	}
-	
+
+	/**
+	 * Retrieves a category by its ID.
+	 * 
+	 * @param categoryId The ID of the category to retrieve.
+	 * @return The category with the specified ID.
+	 */
 	@GetMapping("/getbycategoryid/{categoryId}")
-	public ResponseEntity<Category> getByCategoryId(@PathVariable Integer categoryId){
-		Category category=categoryService.getByCategoryId(categoryId);
-		log.info("Category details{}",category);
-		ResponseEntity<Category> entity=new ResponseEntity<Category>
-		(category,HttpStatus.OK);
+	public ResponseEntity<Category> getByCategoryId(@PathVariable Integer categoryId) {
+		Category category = categoryService.getByCategoryId(categoryId);
+		log.info("Category details{}", category);
+		ResponseEntity<Category> entity = new ResponseEntity<Category>(category, HttpStatus.OK);
 		return entity;
 	}
-	
+
+	/**
+	 * Retrieves all categories.
+	 * 
+	 * @return A list of all categories.
+	 */
 	@GetMapping("/getallcategories")
-	public ResponseEntity<List<Category>> getAllCategories(){
-		List<Category> categories=categoryService.getAllCategories();
-		log.info("Category details{}",categories);
-		ResponseEntity<List<Category>> entity=new ResponseEntity<List<Category>>(categories,HttpStatus.OK);
+	public ResponseEntity<List<Category>> getAllCategories() {
+		List<Category> categories = categoryService.getAllCategories();
+		log.info("Category details{}", categories);
+		ResponseEntity<List<Category>> entity = new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
 		return entity;
 	}
-	
-	
+
+	/**
+	 * Deletes a category by its ID.
+	 * 
+	 * @param categoryId The ID of the category to delete.
+	 * @return A message indicating successful deletion.
+	 */
 	@DeleteMapping("/delete/{categoryId}")
-	public ResponseEntity<String> deleteById(@PathVariable Integer categoryId){
-	
-	try {
-		categoryService.deleteCategory(categoryId);
-		return new ResponseEntity<String>
-		("Category record deleted successfuly ",HttpStatus.OK); 
-	} catch (CategoryNotFoundException e) {
-		return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+	public ResponseEntity<String> deleteById(@PathVariable Integer categoryId) {
+
+		try {
+			categoryService.deleteCategory(categoryId);
+			return new ResponseEntity<String>("Category record deleted successfully ", HttpStatus.OK);
+		} catch (CategoryNotFoundException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+
 	}
-		
-	}
-	
+
+	/**
+	 * Updates a category by its ID.
+	 * 
+	 * @param categoryEntity The updated category information.
+	 * @param categoryId     The ID of the category to be updated.
+	 * @return A message indicating successful update.
+	 */
 	@PutMapping("/update/{categoryId}")
 	public ResponseEntity<String> updateCategoryById(@RequestBody Category categoryEntity,
 			@PathVariable Integer categoryId) {
-	        try {
-				categoryService.updateCategory(categoryId, categoryEntity);
-				log.info("Category details{}",categoryEntity);
-				return new ResponseEntity<String>("category record updated successfilly ",HttpStatus.OK);
-			} catch (CategoryNotFoundException e) {
-				return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
-			}
-			
-			
+		try {
+			categoryService.updateCategory(categoryId, categoryEntity);
+			log.info("Category details{}", categoryEntity);
+			return new ResponseEntity<String>("Category record updated successfully ", HttpStatus.OK);
+		} catch (CategoryNotFoundException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
+	}
 }

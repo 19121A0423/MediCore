@@ -22,42 +22,47 @@ import com.order.service.FeedbackService;
 @RequestMapping("/feedback")
 @CrossOrigin("*")
 public class FeedbackController {
-	
-	@Autowired
-	private FeedbackService feedbackService;
-	
-	private static Logger log = LoggerFactory.getLogger(FeedbackController.class.getSimpleName());
-	
-	@PostMapping("/save")
-	public ResponseEntity<FeedbackBean> saveFeedback(@RequestBody FeedbackBean feedback){
-		log.info("FeedbackController::saveFeedback::Started " , feedback);
-		try {
-			feedback = feedbackService.saveFeedback(feedback);
-			log.info("FeedbackController::saveFeedback::Ended");
-			return new ResponseEntity<FeedbackBean>(feedback, HttpStatus.CREATED);
-		}
-		catch(IllegalArgumentException e) {
-			log.error("FeedbackController::saveFeedback::"+e.getMessage());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-	}
+    
+    @Autowired
+    private FeedbackService feedbackService;
+    
+    private static Logger log = LoggerFactory.getLogger(FeedbackController.class.getSimpleName());
+    
+    /**
+     * Saves a feedback.
+     * 
+     * @param feedback The feedback to be saved.
+     * @return The saved feedback.
+     */
+    @PostMapping("/save")
+    public ResponseEntity<FeedbackBean> saveFeedback(@RequestBody FeedbackBean feedback) {
+        log.info("FeedbackController::saveFeedback::Started ", feedback);
+        try {
+            feedback = feedbackService.saveFeedback(feedback);
+            log.info("FeedbackController::saveFeedback::Ended");
+            return new ResponseEntity<FeedbackBean>(feedback, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            log.error("FeedbackController::saveFeedback::" + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
-	@GetMapping("/get/all")
-	public ResponseEntity<List<FeedbackBean>> getAllFeedbacks() {
-		log.info("FeedbackController::getAllFeedbacks::Started");
-		List<FeedbackBean> feedbacks;
-		try {
-			feedbacks = feedbackService.getAllFeedbacks();
-			log.info("FeedbackController::getAllFeedbacks::Ended");
-			return new ResponseEntity<>(feedbacks, HttpStatus.OK);
-		} catch (FeedbackNotFoundException e) {
-			log.error("FeedbackController::getAllFeedbacks::"+e.getMessage());
-			return new ResponseEntity<>( HttpStatus.NOT_FOUND);
-		}
-	    	
-	}
-	
-
-	
+    /**
+     * Retrieves all feedbacks.
+     * 
+     * @return A list of all feedbacks.
+     */
+    @GetMapping("/get/all")
+    public ResponseEntity<List<FeedbackBean>> getAllFeedbacks() {
+        log.info("FeedbackController::getAllFeedbacks::Started");
+        List<FeedbackBean> feedbacks;
+        try {
+            feedbacks = feedbackService.getAllFeedbacks();
+            log.info("FeedbackController::getAllFeedbacks::Ended");
+            return new ResponseEntity<>(feedbacks, HttpStatus.OK);
+        } catch (FeedbackNotFoundException e) {
+            log.error("FeedbackController::getAllFeedbacks::" + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
