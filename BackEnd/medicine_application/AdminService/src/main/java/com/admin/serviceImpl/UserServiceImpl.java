@@ -22,12 +22,13 @@ public class UserServiceImpl  implements UserService{
 	@Override
 	public UserBean getUserBean(int id) {
 		
-		String url = "http://13.48.82.196:8203/userservice/users/"+id;
+		String url = "http://localhost:8203/userservice/users/"+id;
 		
 		ParameterizedTypeReference<UserBean> responseType =
 		        new ParameterizedTypeReference<UserBean>() {};
 		
 		HttpHeaders headers = new HttpHeaders();
+//		headers.setBearerAuth(bearerToken);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> httpEntity = new HttpEntity<>(headers);
  

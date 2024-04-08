@@ -1,6 +1,6 @@
 package com.user.exception;
 
-public class EmailNotFoundException extends RuntimeException {
+public class PasswordMismatchException extends Exception {
 	
 	/**
 	 * 
@@ -8,7 +8,7 @@ public class EmailNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	private String message;
 
-	public EmailNotFoundException(String message) {
+	public PasswordMismatchException(String message) {
 		super();
 		this.message = message;
 	}

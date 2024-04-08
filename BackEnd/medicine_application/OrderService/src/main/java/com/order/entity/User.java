@@ -1,4 +1,4 @@
-package com.user.entity;
+package com.order.entity;
 
 
 import jakarta.persistence.Column;

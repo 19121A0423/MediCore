@@ -7,6 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +19,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.user.bean.AuthRequest;
+import com.user.bean.JwtResponse;
 import com.user.bean.PasswordUpdateRequest;
+import com.user.bean.RefreshTokenRequest;
 import com.user.bean.UserBean;
+import com.user.entity.RefreshToken;
+import com.user.entity.User;
+import com.user.exception.BothEmailIdAndMobileNumberIsExistException;
+import com.user.exception.DuplicateEmailIdException;
 import com.user.exception.DuplicateMobileNumberException;
 import com.user.exception.EmailNotFoundException;
 import com.user.exception.InvalidOTPException;
-import com.user.exception.BothEmailIdAndMobileNumberIsExistException;
-import com.user.exception.DuplicateEmailIdException;
 import com.user.exception.UserNotFoundByIdException;
 import com.user.service.UserService;
+import com.user.serviceImpl.JwtService;
+import com.user.serviceImpl.RefreshTokenService;
 
 @RestController
 @RequestMapping("/users")
@@ -38,6 +48,16 @@ public class UserController {
 
 	@Autowired
 	private UserService service;
+	
+	@Autowired
+	private JwtService jwtService;
+
+	@Autowired
+	private RefreshTokenService refreshTokenService;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
 
 	@PostMapping("/save")
 	public ResponseEntity<UserBean> saveUserDetails(@RequestBody UserBean user) throws DuplicateEmailIdException, DuplicateMobileNumberException, BothEmailIdAndMobileNumberIsExistException {
@@ -106,22 +126,37 @@ public class UserController {
 		log.info("UserController getAll method end");	
 		return ResponseEntity.status(HttpStatus.OK).body(usersList);
 	}
-
+//
+//	
+//	@GetMapping("/validate/{userEmail}/{userPassword}")
+//	public ResponseEntity<UserBean> userValiadtion(@PathVariable String userEmail, @PathVariable String userPassword) {
+//		log.info("UserController userValiadtion method start");	
+//		UserBean user =null;
+//		try {
+//			user = service.validateUser(userEmail,userPassword);
+//			log.info("UserController userValiadtion method end");	
+//			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
+//		}
+//		catch(Exception e) {
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//		
+//	}
 	
-	@GetMapping("/validate/{userEmail}/{userPassword}")
-	public ResponseEntity<UserBean> userValiadtion(@PathVariable String userEmail, @PathVariable String userPassword) {
-		log.info("UserController userValiadtion method start");	
-		UserBean user =null;
-		try {
-			user = service.validateUser(userEmail,userPassword);
-			log.info("UserController userValiadtion method end");	
-			return new ResponseEntity<UserBean>(user,HttpStatus.OK);
+	@PostMapping("/login")
+	public JwtResponse authenticateAndGetToken(@RequestBody AuthRequest authRequest) throws UserNotFoundByIdException  {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+		if (authentication.isAuthenticated()) {
+			User user = service.validateLogin(authRequest);
+			RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequest.getEmail());
+			return JwtResponse.builder().accessToken(jwtService.generateToken(authRequest.getEmail()))
+					.token(refreshToken.getToken()).user(user).build();
+		} else {
+			throw new UsernameNotFoundException("invalid user request !");
 		}
-		catch(Exception e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
 	}
+
 	
 	@PutMapping("/updatepassword")
 	public ResponseEntity<UserBean> updateUserPassword(@RequestBody PasswordUpdateRequest request){
@@ -185,4 +220,13 @@ public class UserController {
 		}
 	}
 
+	
+	@PostMapping("/refreshToken")
+	public JwtResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+		return refreshTokenService.findByToken(refreshTokenRequest.getToken())
+				.map(refreshTokenService::verifyExpiration).map(RefreshToken::getUser).map(userInfo -> {
+					String accessToken = jwtService.generateToken(userInfo.getUserName());
+					return JwtResponse.builder().accessToken(accessToken).token(refreshTokenRequest.getToken()).build();
+				}).orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
+	}
 }

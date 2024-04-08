@@ -64,11 +64,11 @@ public class OrderServiceImpl implements OrderService {
 			order.setOrderedDate(LocalDateTime.now());
 			order.setStatus(CommonConstants.ORDERSTATUS);
 			orderRepository.save(order);
-//			orderBean = mapper.convertValue(order, OrderBean.class);
 			orderBean.setOrderId(order.getOrderId());
 			PaymentBean payment = orderBean.getPayment();
 //			payment.setOrder(orderBean);
 			payment = paymentService.savePayment(payment,order);
+			orderBean = mapper.convertValue(order, OrderBean.class);
 			orderBean.setPayment(payment);
 			log.info("OrderServiceImpl::placeOrder::Ended");
 			return orderBean;

@@ -17,10 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.user.bean.AuthRequest;
 import com.user.bean.UserBean;
 import com.user.constants.CommonConstants;
 import com.user.entity.OTPEntity;
@@ -30,6 +31,7 @@ import com.user.exception.DuplicateEmailIdException;
 import com.user.exception.DuplicateMobileNumberException;
 import com.user.exception.EmailNotFoundException;
 import com.user.exception.InvalidOTPException;
+import com.user.exception.PasswordMismatchException;
 import com.user.exception.UserNotFoundByIdException;
 import com.user.repository.OTPRepository;
 import com.user.repository.UserRepository;
@@ -51,6 +53,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ObjectMapper mapper;
+	
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserBean saveUserDetails(UserBean userBean)
@@ -76,6 +81,8 @@ public class UserServiceImpl implements UserService {
 		}
 		User userEntity = new User();
 		userEntity = mapper.convertValue(userBean, User.class);
+        userEntity.setUserPassword(passwordEncoder.encode(userEntity.getUserPassword()));
+
 		userEntity = userRepository.save(userEntity);
 		userBean = mapper.convertValue(userEntity, UserBean.class);
 		sendMail(userBean);
@@ -167,33 +174,50 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean validateUser(String userEmail, String userPassword) throws UserNotFoundByIdException {
-		log.info("User Service implementation validateUser method start");
-		User user = null;
-		if (userEmail != null && userPassword != null) {
-			user = userRepository.findByUserEmailAndUserPassword(userEmail, userPassword);
-		}
+    public User validateLogin(AuthRequest authRequest) {
+        Optional<User> user = userRepository.findByUserEmail(authRequest.getEmail());
+        User details=user.get();
+        log.info("login by using email and password");
 
-		if (user != null) {
-			UserBean userBean = new UserBean();
-			userBean = mapper.convertValue(user, UserBean.class);
-			log.info("User Service implementation validateUser method end");
-			return userBean;
-		} else {
-			throw new UserNotFoundByIdException("User not found ");
-		}
-	}
+        if (details != null) {
+            log.info("email is valid");
+
+            if (details.getUserPassword().equals(authRequest.getPassword())) {
+                log.info("login successful");
+                return details;
+            } else {
+                try {
+                    log.info("login failed");
+                    throw new PasswordMismatchException("Password is wrong");
+                } catch (PasswordMismatchException exception) {
+                    log.error("password is mismatch");
+                }
+            }
+        } else {
+        	 try {
+                 log.info("login failed");
+                 throw new EmailNotFoundException("Email not found");
+             } catch (EmailNotFoundException exception) {
+                 log.error("password is mismatch");
+             }
+            
+        }
+        return details;
+    }
 
 	@Override
 	public UserBean updatePassword(String userEmail, String userPassword) throws UserNotFoundByIdException {
 		log.info("User Service implementation updatePassword method start ");
-		User user = null;
+		Optional<User> userOptinal = null;
+		User user =null;
 		if (userEmail != null) {
-			user = userRepository.findByUserEmail(userEmail);
+			userOptinal = userRepository.findByUserEmail(userEmail);
+			user = userOptinal.get();
 		}
 
 		if (user != null && userPassword != null) {
 			user.setUserPassword(userPassword);
+	        user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			userRepository.save(user);
 			UserBean userBean = new UserBean();
 			userBean = mapper.convertValue(user, UserBean.class);
@@ -243,7 +267,8 @@ public class UserServiceImpl implements UserService {
 		log.info("User service implementation forgetPassword method end {} ");
 		try {
 			log.info("Checking if email is present or not");
-			User user = userRepository.findByUserEmail(email);
+			Optional<User> userOptional = userRepository.findByUserEmail(email);
+			User user = userOptional.get();
 
 			if (user != null) {
 				log.info("Email is valid");

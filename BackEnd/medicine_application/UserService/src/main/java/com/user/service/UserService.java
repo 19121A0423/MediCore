@@ -3,7 +3,9 @@ package com.user.service;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.user.bean.AuthRequest;
 import com.user.bean.UserBean;
+import com.user.entity.User;
 import com.user.exception.DuplicateMobileNumberException;
 import com.user.exception.EmailNotFoundException;
 import com.user.exception.InvalidOTPException;
@@ -23,8 +25,6 @@ public interface UserService {
 
 	public List<UserBean> getAllUserDetails();
 
-	public UserBean validateUser(String email, String password) throws UserNotFoundByIdException;
-
 	public UserBean updatePassword(String email, String password) throws UserNotFoundByIdException;
 
 	public String generateOtp();
@@ -36,5 +36,7 @@ public interface UserService {
 	public UserBean forgetPassword(String email) throws EmailNotFoundException;
 
 	public boolean verifyOtp(String email, String enteredOtp) throws InvalidOTPException;
+
+	public User validateLogin(AuthRequest authRequest);
 
 }
