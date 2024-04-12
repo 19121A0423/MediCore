@@ -124,23 +124,7 @@ public class OrderServiceImpl implements OrderService {
             return orderBeans;
         }
     }
-
-    /**
-     * Updates the status of an order by its ID.
-     * 
-     * @param id The ID of the order to be updated.
-     * @throws OrderNotFoundException if the order is not found.
-     */
-    @Override
-    public void updateStatusById(int id) throws OrderNotFoundException {
-        log.info("OrderServiceImpl::updateStatusById::Started");
-        if (orderRepository.existsById(id)) {
-            orderRepository.updateStatusById(id);
-        } else {
-            throw new OrderNotFoundException("Order not found with ID: " + id);
-        }
-        log.info("OrderServiceImpl::updateStatusById::Ended");
-    }
+  
 
     /**
      * Scheduled method to check orders and update their status if needed.
@@ -152,12 +136,12 @@ public class OrderServiceImpl implements OrderService {
 	@Scheduled(fixedRate = 600000) // Check every 10 minutes, with an initial delay of 10 minutes
     public void checkProducts() throws OrderNotFoundException, AddressNotFoundException {
 		log.info("OrderServiceImpl::checkProducts::Started");
-		List<OrderBean> orders = getAllOrders();
+		List<Orders> orders = orderRepository.getOrdersWhichAreNotDelivered();
         LocalDateTime currentTime = LocalDateTime.now();
 
-        for (OrderBean order : orders) {
+        for (Orders order : orders) {
             if ("Ordered".equals(order.getStatus()) && currentTime.isAfter(order.getOrderedDate().plusMinutes(15))) {
-            	updateStatusById(order.getOrderId());
+            	orderRepository.updateStatusById(order.getOrderId());
             }
         }
         log.info("OrderServiceImpl::checkProducts::Ended");

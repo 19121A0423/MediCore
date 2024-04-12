@@ -30,12 +30,13 @@ public class AddressServiceImpl implements AddressService {
     private ObjectMapper mapper;
 
     private static Logger log = LoggerFactory.getLogger(AddressServiceImpl.class.getSimpleName());
-
+    
     /**
-     * Saves a new address.
-     * 
-     * @param addressBean The AddressBean object containing address details.
-     * @return The AddressBean object representing the saved address.
+     * Saves an address.
+     *
+     * @param addressBean The AddressBean object containing the address information to be saved.
+     * @return AddressBean The saved AddressBean object.
+     * @throws IllegalArgumentException if any of the address properties (city, street name, state, pin code, user ID) is empty or invalid.
      */
     @Override
     public AddressBean saveAddress(AddressBean addressBean) {

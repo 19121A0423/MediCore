@@ -37,10 +37,12 @@ public class AddressController {
     private static Logger log = LoggerFactory.getLogger(AddressController.class.getSimpleName());
     
     /**
-     * Saves an address.
+     * Saves the provided address using a POST request.
      * 
-     * @param address The address to be saved.
-     * @return The saved address.
+     * @param address The AddressBean object containing the address information to be saved.
+     * @return ResponseEntity<AddressBean> A ResponseEntity containing the saved AddressBean object and HTTP status code.
+     *         If the address is successfully saved, returns HttpStatus.CREATED (201). If an IllegalArgumentException
+     *         occurs during the save operation, returns HttpStatus.NOT_ACCEPTABLE (406).
      */
     @PostMapping("/save")
     public ResponseEntity<AddressBean> saveAddress(@RequestBody AddressBean address) {
@@ -57,11 +59,13 @@ public class AddressController {
     }
     
     /**
-     * Updates an address.
+     * Updates an existing address with the provided information.
      * 
-     * @param address The updated address.
-     * @param id The ID of the address to be updated.
-     * @return The updated address.
+     * @param address The AddressBean object containing the updated address information.
+     * @param id      The ID of the address to be updated.
+     * @return ResponseEntity<AddressBean> A ResponseEntity containing the updated AddressBean object and HTTP status code.
+     *         If the address is successfully updated, returns HttpStatus.OK (200). If the specified address ID is not found,
+     *         returns HttpStatus.NOT_FOUND (404).
      */
     @PutMapping("/update/{id}")
     public ResponseEntity<AddressBean> updateAddress(@RequestBody AddressBean address, @PathVariable(value = "id") int id) {
@@ -77,10 +81,12 @@ public class AddressController {
     }
     
     /**
-     * Retrieves an address by ID.
+     * Retrieves an address by its ID.
      * 
      * @param id The ID of the address to retrieve.
-     * @return The address with the specified ID.
+     * @return ResponseEntity<AddressBean> A ResponseEntity containing the retrieved AddressBean object and HTTP status code.
+     *         If the address with the specified ID is found, returns HttpStatus.OK (200). If the address is not found,
+     *         returns HttpStatus.NOT_FOUND (404).
      */
     @GetMapping("/get/{id}")
     public ResponseEntity<AddressBean> getAddressById(@PathVariable(value = "id") int id) {
@@ -94,12 +100,13 @@ public class AddressController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
     /**
-     * Retrieves a user by ID.
+     * Retrieves a user by their ID.
      * 
      * @param id The ID of the user to retrieve.
-     * @return The user with the specified ID.
+     * @return ResponseEntity<UserBean> A ResponseEntity containing the retrieved UserBean object and HTTP status code.
+     *         If the user with the specified ID is found, returns HttpStatus.FOUND (302). If the user is not found,
+     *         returns HttpStatus.NOT_FOUND (404).
      */
     @GetMapping("getuser/{id}")
     public ResponseEntity<UserBean> getUser(@PathVariable(value = "id") int id) {
@@ -117,10 +124,12 @@ public class AddressController {
     }
     
     /**
-     * Retrieves addresses by user ID.
+     * Retrieves addresses associated with a user ID.
      * 
      * @param id The ID of the user whose addresses are to be retrieved.
-     * @return A list of addresses associated with the specified user ID.
+     * @return ResponseEntity<List<AddressBean>> A ResponseEntity containing a list of retrieved AddressBean objects and HTTP status code.
+     *         If addresses associated with the specified user ID are found, returns HttpStatus.OK (200). If no addresses are found,
+     *         returns HttpStatus.NOT_FOUND (404).
      */
     @GetMapping("/getbyuserid/{id}")
     public ResponseEntity<List<AddressBean>> getAddressByUserId(@PathVariable(value = "id") int id) {

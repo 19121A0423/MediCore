@@ -1,5 +1,7 @@
 package com.order.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +17,7 @@ public interface OrderRepository extends JpaRepository<Orders, Integer>{
 	@Query(value="UPDATE orders SET status='delivered' where order_id=:id" , nativeQuery = true)
 	void updateStatusById(@Param("id") int id);
 
+	@Query(value="SELECT * FROM orders where status='Ordered'" , nativeQuery = true)
+	List<Orders> getOrdersWhichAreNotDelivered();
 	
 }

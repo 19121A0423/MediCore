@@ -14,6 +14,4 @@ public interface OrderService {
 
 	List<OrderBean> getAllOrders() throws OrderNotFoundException;
 
-	void updateStatusById(int id) throws OrderNotFoundException;
-
 }

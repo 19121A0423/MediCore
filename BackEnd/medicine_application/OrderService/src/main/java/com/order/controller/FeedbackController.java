@@ -32,7 +32,9 @@ public class FeedbackController {
      * Saves a feedback.
      * 
      * @param feedback The feedback to be saved.
-     * @return The saved feedback.
+     * @return ResponseEntity<FeedbackBean> A ResponseEntity containing the saved FeedbackBean object and HTTP status code.
+     *         If the feedback is successfully saved, returns HttpStatus.CREATED (201). If an IllegalArgumentException occurs
+     *         during the save operation, returns HttpStatus.BAD_REQUEST (400).
      */
     @PostMapping("/save")
     public ResponseEntity<FeedbackBean> saveFeedback(@RequestBody FeedbackBean feedback) {
@@ -50,7 +52,8 @@ public class FeedbackController {
     /**
      * Retrieves all feedbacks.
      * 
-     * @return A list of all feedbacks.
+     * @return ResponseEntity<List<FeedbackBean>> A ResponseEntity containing a list of all retrieved FeedbackBean objects and HTTP status code.
+     *         If feedbacks are successfully retrieved, returns HttpStatus.OK (200). If no feedbacks are found, returns HttpStatus.NOT_FOUND (404).
      */
     @GetMapping("/get/all")
     public ResponseEntity<List<FeedbackBean>> getAllFeedbacks() {
